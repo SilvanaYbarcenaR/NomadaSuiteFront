@@ -1,2 +1,3 @@
 # NomadaSuiteFront
-NomadaSuite Frontend
+
+NomadaSuite **Frontend**
