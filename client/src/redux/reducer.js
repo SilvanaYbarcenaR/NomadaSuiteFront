@@ -2,7 +2,7 @@ const initialState = () => { };
 
 const rootReducer = (state = initialState, { type, payload }) => {
     switch (type) {
-        case value:
+        // case value:
                 
         default:
             return {
