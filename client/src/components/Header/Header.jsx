@@ -5,8 +5,8 @@ function Header() {
   return (
     <div>
       <header className='p-4 flex justify-between'>
-        <a href='' className='flex items-center gap-1'>     
-          <img src={NSlogo2} width={220} height={70} alt="Nomada Suite Logo"/>
+        <a href='' className='flex items-center gap-1'>
+          <img src={NSlogo2} width={220} height={70} alt="Nomada Suite Logo" />
         </a>
         <div className='flex gap-2 border border-gray-300 rounded-full py-4 px-4 shadow-md shadow-gray-400'>
           <div>Ubicación</div>
@@ -20,7 +20,7 @@ function Header() {
           </button>
         </div>
         <div>
-          
+
         </div>
       </header>
     </div>
