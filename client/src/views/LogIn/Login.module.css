@@ -1,0 +1,11 @@
+.background {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.formBox {
+  width: 600px;
+  max-width: 95%;
+  border: 1px solid black;
+}
