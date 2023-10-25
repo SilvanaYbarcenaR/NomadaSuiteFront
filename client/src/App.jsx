@@ -5,7 +5,6 @@ import Login from './views/LogIn/Login';
 import User from './views/Register/User/User.jsx';
 import './App.css'
 
-
 function App() {
   return (
     <div>
