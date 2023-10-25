@@ -11,17 +11,20 @@
     "scanTailwind": "npx tailwindcss -i ./src/css/config.css -o ./src/css/estilos.css --watch"
   },
   "dependencies": {
+    "antd": "^5.10.2",
     "autoprefixer": "^10.4.16",
+    "axios": "^1.5.1",
     "date-fns": "^2.29.3",
     "postcss": "^8.4.31",
-    "axios": "^1.5.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.11.0",
     "react-redux": "^8.1.3",
     "react-router-dom": "^6.16.0",
+    "react-slick": "^0.29.0",
     "redux": "^4.2.1",
     "redux-thunk": "^2.4.2",
+    "slick-carousel": "^1.8.1",
     "styled-components": "^6.0.8"
   },
   "devDependencies": {
