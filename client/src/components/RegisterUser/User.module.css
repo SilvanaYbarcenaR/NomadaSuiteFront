@@ -1,0 +1,95 @@
+.userBox {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.okBtn {
+  display: none;
+}
+
+.cancelBtn {
+  display: none;
+}
+
+.nameField h3 {
+  text-align: center;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.nameField {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.nameField Input {
+  border-radius: 4px;
+  height: 3rem;
+}
+
+.surnamesField {
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-bottom: .5rem;
+}
+
+.surnamesField Input {
+  border-radius: 4px;
+  height: 3rem;
+}
+
+.ageField {
+  padding-left: 2rem;
+  padding-top: .5rem;
+  padding-right: 2rem;
+  padding-bottom: .5rem;
+}
+
+.ageField p {
+  font-size: .8rem;
+}
+
+.datePicker {
+  height: 3rem;
+  width: 100%;
+}
+
+.emailField {
+  padding-left: 2rem;
+  padding-top: .5rem;
+  padding-right: 2rem;
+  padding-bottom: .5rem;
+}
+
+.emailField Input {
+  border-radius: 4px;
+  height: 3rem;
+}
+
+.emailField p {
+  font-size: .8rem;
+}
+
+.passwordField {
+  padding-left: 2rem;
+  padding-top: .5rem;
+  padding-right: 2rem;
+  padding-bottom: 1rem;
+}
+
+.passwordField Input {
+  height: 2.4rem;
+}
+
+.submitBtn {
+  padding-left: 2rem;
+  padding-top: .5rem;
+  padding-right: 2rem;
+  padding-bottom: 1.5rem;
+}
+
+.submitBtn Button {
+  border-radius: 4px;
+  height: 3rem;
+}

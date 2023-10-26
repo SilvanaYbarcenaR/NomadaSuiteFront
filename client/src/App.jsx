@@ -1,8 +1,9 @@
 import { Route, Routes } from 'react-router-dom';
 import Header from './components/Header/Header.jsx';
 import Home from './views/Home/Home';
-import Login from './views/LogIn/Login';
-import User from './views/Register/User/User.jsx';
+import Login from './components/LogIn/Login.jsx';
+import User from './components/RegisterUser/User.jsx';
+import Welcome from './components/Modals/Welcome/Welcome.jsx';
 import './App.css'
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/registerUser" element={<User />} />
+        <Route path="/welcome" element={<Welcome />} />
       </Routes>
     </div>
   )

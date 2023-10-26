@@ -1,0 +1,34 @@
+.icon {
+    padding-top: 1rem;
+    width: 3rem;
+}
+
+button[type='button'] {
+    background: #231CA7;
+    color: white;
+}
+
+.cancelBtn {
+    border-radius: 4px;
+    height: 3rem;
+    width: 100%;
+}
+
+.okBtn {
+    display: none;
+}
+
+.welcomeText {
+    font-size: 1.3rem;
+    font-weight: 700;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+}
+
+.modalBox {
+    text-align: -webkit-center;
+}
+
+.modalBox hr {
+    margin-top: 1rem;
+}
