@@ -4,8 +4,8 @@ import Home from './views/Home/Home';
 import Login from './components/LogIn/Login.jsx';
 import User from './components/RegisterUser/User.jsx';
 import Welcome from './components/Modals/Welcome/Welcome.jsx';
-import './App.css'
 import Footer from './components/Footer/Footer.jsx';
+import './App.css'
 
 function App() {
   return (

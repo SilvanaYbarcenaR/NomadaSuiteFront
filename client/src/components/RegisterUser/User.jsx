@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { Button, DatePicker, Input, Modal } from 'antd';
-
-import dayjs from 'dayjs';
 import style from "./User.module.css";
+import Welcome from '../Modals/Welcome/Welcome';
 
 const buttonStyle = {
   background: "#231CA7",
@@ -14,6 +13,7 @@ const buttonStyle = {
 const dateFormatList = ['DD/MM/YYYY'];
 
 const User = () => {
+  const [isWelcomeModalOpen, setIsWelcomeModalOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
     setIsModalOpen(true);
@@ -29,8 +29,7 @@ const User = () => {
       <Modal
         open={isModalOpen}
         onCancel={handleCancel}
-        okButtonProps={{ className: style.okBtn }}
-        cancelButtonProps={{ className: style.cancelBtn }}
+        footer={null}
       >
         <form>
           <div className={style.nameField}>
@@ -53,7 +52,7 @@ const User = () => {
           </div>
 
           <div className={style.ageField}>
-            <DatePicker className={style.datePicker} name="age" defaultValue={dayjs('01/01/2015', dateFormatList[0])} format={dateFormatList} placeholder="Fecha de nacimiento" />
+            <DatePicker className={style.datePicker} name="age" format={dateFormatList} placeholder="Fecha de nacimiento" />
             <p>Para registrarte, debes tener al menos 18 años. Tu fecha de nacimiento no se compartirá con otras personas que utilicen nuestra app.</p>
           </div>
 
@@ -79,12 +78,20 @@ const User = () => {
             <Button
               style={buttonStyle}
               type="submit"
+              onClick={() => setIsWelcomeModalOpen(true)}
               block
             >
               Ingresar
             </Button>
           </div>
         </form >
+      </Modal>
+      <Modal
+        open={isWelcomeModalOpen}
+        onCancel={() => setIsWelcomeModalOpen(false)} // Close the Welcome modal
+        footer={null} // Hide the default modal footer
+      >
+        <Welcome />
       </Modal>
     </div >
   )

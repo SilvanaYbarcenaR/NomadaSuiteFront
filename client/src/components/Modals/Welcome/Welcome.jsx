@@ -1,20 +1,20 @@
-import { useState } from 'react';
-import { Button, Modal } from 'antd';
+import { useEffect, useState } from 'react';
+import { Modal } from 'antd';
 import style from "./Welcome.module.css"
 
 const Welcome = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
+  const [isModalOpen, setIsModalOpen] = useState(true);
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+  useEffect(() => {
+    showModal();
+  }, []);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
   return (
     <div>
-      <Button type="primary" onClick={showModal}>
-        Open Modal
-      </Button>
       <Modal
         className={style.modalBox}
         title="Crea tu perfil"

@@ -1,26 +1,9 @@
-.loginBox {
-  align-items: center;
-  display: flex;
-  justify-content: center;
-}
-
 .formBox {
   border: none;
-  border-radius: 1rem;
-  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-  max-width: 95%;
-  width: 550px;
 }
 
 .emailField h3 {
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
-}
-
-.emailField {
-  padding-left: 2rem;
-  padding-right: 2rem;
-  padding-bottom: .5rem;
+  padding-bottom: 1rem;
 }
 
 .emailField Input {
@@ -28,20 +11,8 @@
   height: 3rem;
 }
 
-.passwordField {
-  padding-left: 2rem;
-  padding-top: .5rem;
-  padding-right: 2rem;
-  padding-bottom: 2rem;
-}
-
 .passwordField Input {
   height: 2.4rem;
-}
-
-.formBox hr {
-  margin: 0 auto;
-  width: 80%;
 }
 
 .formBox p {
@@ -54,9 +25,7 @@
 }
 
 .googleBtn {
-  padding-left: 2rem;
   padding-top: 2rem;
-  padding-right: 2rem;
   padding-bottom: .5rem;
 }
 
@@ -65,9 +34,7 @@
 }
 
 .submitBtn {
-  padding-left: 2rem;
   padding-top: .5rem;
-  padding-right: 2rem;
   padding-bottom: .5rem;
 }
 
