@@ -1,28 +1,32 @@
-import Card from '../Card/Card';
+import CardBox from '../CardBox/CardBox';
 import CardsStyles from '../CardsContainer/CardsContainer.module.css';
+import { Row } from 'antd';
 
 const CardsContainer = ({ accommodations }) => {
-    return (
-        <div className={CardsStyles.cardsContainer}>
+  console.log(accommodations);
+  return (
+    <div className={CardsStyles.cardsContainer}>
+      <Row gutter={24}>
         {!accommodations?.length ? 
           <p className={CardsStyles.notFound}>No se encontraron alojamientos.</p> 
           :
-          accommodations?.map(({ id, title, images, dateRange, valoration, price }) => {
+          accommodations?.map(({ id, name, photos, rating, price, idLocation }, index) => {
             return (
-              <Card
-                key={id} 
+              <CardBox
+                key={index} 
                 id={id}
-                images={images}
-                title={title}
-                dateRange={dateRange}
-                valoration={valoration}
+                photos={photos}
+                name={name}
+                rating={rating}
                 price={price}
+                location={`${idLocation.city}, ${idLocation.country}`}
               />
             )
           })
         }
-      </div>
-    )
+      </Row>
+    </div>
+  )
 };
 
 export default CardsContainer;
