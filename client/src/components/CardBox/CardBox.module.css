@@ -1,5 +1,12 @@
-.card {
+.columnCard {
   margin-bottom: 2.5rem;
+}
+.columnCard .card {
+  height: 100%;
+}
+.columnCard .card a {
+  display: flex;
+  height: 100%;
 }
 .card :global(.slick-dots li button:before) {
   display: none;
@@ -14,6 +21,16 @@
 .card :global(.ant-carousel:hover .slick-prev), .card :global(.ant-carousel:hover .slick-next) {
   visibility: visible;
   opacity: 0.5;
+}
+.card :global(.ant-carousel .slick-prev::before), .card :global(.ant-carousel .slick-next::before) {
+  background: #ffffff;
+  border-radius: 50%;
+  color: #222222;
+  display: block;
+  font-size: 1rem;
+  height: 100%;
+  line-height: 1.3rem;
+  width: 100%;
 }
 .card :global(.ant-carousel .slick-prev:hover), .card :global(.ant-carousel .slick-next:hover) {
   opacity: 0.8;
@@ -36,12 +53,20 @@
 }
 .card :global(.ant-card ) {
   border-radius: 1rem;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.06), 0 1px 8px -1px rgba(0, 0, 0, 0.04), 0 2px 6px 0 rgba(0, 0, 0, 0.04);
   overflow: hidden;
 }
 .card :global(.ant-card .ant-card-body) {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
   padding: 0;
 }
 .card .cardDescription {
+  display: flex;
+  flex:  1 1 50%;
+  flex-direction: column;
+  justify-content: space-between;
   padding: 1rem;
 }
 .card .cardTitle {
@@ -49,9 +74,6 @@
   font-weight: 700;
   line-height: 1.2rem;
   margin-bottom: 0.4rem;
-}
-.card .price {
-  
 }
 .card .price span {
   font-weight: bold;
