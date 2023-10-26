@@ -3,23 +3,22 @@ import CardsStyles from '../CardsContainer/CardsContainer.module.css';
 import { Row } from 'antd';
 
 const CardsContainer = ({ accommodations }) => {
-  console.log(accommodations);
   return (
     <div className={CardsStyles.cardsContainer}>
-      <Row gutter={24}>
+      <Row gutter={24} align={'stretch'}>
         {!accommodations?.length ? 
           <p className={CardsStyles.notFound}>No se encontraron alojamientos.</p> 
           :
-          accommodations?.map(({ id, name, photos, rating, price, idLocation }, index) => {
+          accommodations?.map((accommodations, index) => {
             return (
               <CardBox
                 key={index} 
-                id={id}
-                photos={photos}
-                name={name}
-                rating={rating}
-                price={price}
-                location={`${idLocation.city}, ${idLocation.country}`}
+                id={accommodations?._id}
+                photos={accommodations?.photos}
+                name={accommodations?.name}
+                rating={accommodations?.rating}
+                price={accommodations?.price}
+                location={`${accommodations?.idLocation.city}, ${accommodations?.idLocation.country}`}
               />
             )
           })
