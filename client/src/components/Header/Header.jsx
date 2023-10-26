@@ -62,7 +62,6 @@ function Header() {
 
 
   
-
   return (
     <div>
      <nav className=" bg-white w-full navBar relative justify-between items-center mx-auto px-1">
