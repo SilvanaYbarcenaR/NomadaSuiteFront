@@ -6,7 +6,7 @@ import { AiFillStar } from 'react-icons/ai';
 const CardBox = ({ id, name, photos, rating, price, location }) => {
   
   return (
-    <Col xs={12} sm={8} xl={6} xxl={4} className={CardStyles.columnCard}>
+    <Col xs={24} sm={8} xl={6} xxl={4} className={CardStyles.columnCard}>
       <div className={CardStyles.card}>
         <NavLink to={`/detail/${id}`}>
           <Card bordered={false}>
