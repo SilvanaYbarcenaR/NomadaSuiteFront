@@ -5,6 +5,7 @@ import Login from './components/LogIn/Login.jsx';
 import User from './components/RegisterUser/User.jsx';
 import Welcome from './components/Modals/Welcome/Welcome.jsx';
 import './App.css'
+import Footer from './components/Footer/Footer.jsx';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/registerUser" element={<User />} />
         <Route path="/welcome" element={<Welcome />} />
       </Routes>
+      <Footer></Footer>
     </div>
   )
 };

@@ -8,6 +8,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
 }
+
+body * {
+  font-family: 'Roboto', sans-serif!important;
+}
   
 input:focus-visible {
   outline: none;
