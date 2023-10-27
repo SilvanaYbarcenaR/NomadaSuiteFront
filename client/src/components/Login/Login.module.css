@@ -2,7 +2,9 @@
   border: none;
 }
 
-.emailField h3 {
+.formBox h3 {
+  font-size: 1rem;
+  font-weight: 700;
   padding-bottom: 1rem;
 }
 
@@ -15,8 +17,13 @@
   height: 2.4rem;
 }
 
-.formBox p {
-  text-align: center;
+.span {
+  display: table;
+  margin: -25px auto 0;
+  padding: 0 8px;
+  background: white;
+  position: relative;
+  top: 11px;
 }
 
 .icon {
@@ -35,7 +42,6 @@
 
 .submitBtn {
   padding-top: .5rem;
-  padding-bottom: .5rem;
 }
 
 .submitBtn Button {
@@ -43,6 +49,6 @@
 }
 
 .textRegister p {
-  padding-top: 1rem;
-  padding-bottom: 1.5rem;
+  text-align: center;
+  padding-bottom: .5rem;
 }

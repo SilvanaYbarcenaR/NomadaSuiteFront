@@ -67,7 +67,7 @@ const Login = () => {
             span: 8,
           }}
           wrapperCol={{
-            span: 16,
+            span: 24,
           }}
           style={{
             maxWidth: 600,
@@ -84,13 +84,14 @@ const Login = () => {
             rules={[
               {
                 required: true,
-                message: 'Please input your username!',
+                message: 'Por favor ingrese su email',
               },
             ]}
           >
             <div className={style.emailField}>
               <Input
-                // value={userData.email}
+                name="email"
+                value={userData.email}
                 type="email"
                 onChange={handleChange}
                 autoComplete="true"
@@ -104,12 +105,14 @@ const Login = () => {
             rules={[
               {
                 required: true,
-                message: 'Please input your password!',
+                message: 'Por favor ingrese su contraseña',
               },
             ]}
           >
             <div className={style.passwordField}>
               <Input.Password
+                name="password"
+                value={userData.password}
                 onChange={handleChange}
                 placeholder="Password"
               />
@@ -120,20 +123,18 @@ const Login = () => {
             name="remember"
             valuePropName="checked"
             wrapperCol={{
-              offset: 8,
               span: 16,
             }}
           >
-            <Checkbox>Remember me</Checkbox>
+            <Checkbox>Recuérdame</Checkbox>
           </Form.Item>
 
-          <p>or</p>
+          <span className={style.span}>or</span>
           <hr />
 
           <Form.Item
             wrapperCol={{
-              offset: 8,
-              span: 16,
+              span: 24,
             }}
           >
             <div className={style.googleBtn}>

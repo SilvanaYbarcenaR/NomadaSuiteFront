@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
-import { Button, DatePicker, Input, Modal } from 'antd';
+import { Button, DatePicker, Form, Input, Modal } from 'antd';
 import style from "./User.module.css";
 import Welcome from '../Modals/Welcome/Welcome';
 
@@ -10,9 +9,68 @@ const buttonStyle = {
   height: "3rem",
 };
 
+const onFinish = (values) => {
+  console.log('Success:', values);
+};
+
+const onFinishFailed = (errorInfo) => {
+  console.log('Failed:', errorInfo);
+};
+
+const formItemLayout = {
+  labelCol: {
+    xs: {
+      span: 24,
+    },
+    sm: {
+      span: 8,
+    },
+  },
+  wrapperCol: {
+    xs: {
+      span: 24,
+    },
+    sm: {
+      span: 16,
+    },
+  },
+};
+const config = {
+  rules: [
+    {
+      type: 'object',
+      required: true,
+      message: 'Please select time!',
+    },
+  ],
+};
+
 const dateFormatList = ['DD/MM/YYYY'];
 
+
 const User = () => {
+  const [form, setForm] = useState({
+    names: '',
+    surnames: '',
+    birthdate: '',
+    email: '',
+    password: ''
+  });
+
+  const handleChange = (event) => {
+    const property = event.target.name;
+    const value = event.target.value;
+
+    setForm({
+      ...form,
+      [property]: value
+    });
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+  };
+
   const [isWelcomeModalOpen, setIsWelcomeModalOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
@@ -22,40 +80,93 @@ const User = () => {
     setIsModalOpen(false);
   };
   return (
-    <div className={style.userBox}>
+    <div>
       <Button type="primary" onClick={showModal}>
         Open Modal
       </Button>
       <Modal
+        className={style.formBox}
         open={isModalOpen}
         onCancel={handleCancel}
         footer={null}
       >
-        <form>
-          <div className={style.nameField}>
-            <h3>Registro</h3>
-            <Input
-              type="text"
-              name="name"
-              autoComplete="true"
-              placeholder="Nombres"
-            />
-          </div>
+        <Form
+          onSubmit={handleSubmit}
+          name="time_related_controls"
+          {...formItemLayout}
+          labelCol={{
+            span: 8,
+          }}
+          wrapperCol={{
+            span: 24,
+          }}
+          style={{
+            maxWidth: 600,
+          }}
+          initialValues={{
+            remember: true,
+          }}
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+        >
+          <h3>Registro</h3>
+          <Form.Item
+            name="names"
+            rules={[
+              {
+                required: true,
+                message: 'Por favor ingrese su nombre',
+              },
+            ]}
+          >
+            <div className={style.namesField}>
+              <Input
+                name="names"
+                value={form.names}
+                type="text"
+                onChange={handleChange}
+                autoComplete="true"
+                placeholder="Nombres"
+              />
+            </div>
+          </Form.Item>
 
-          <div className={style.surnamesField}>
-            <Input
-              type="text"
-              name="surnames"
-              autoComplete="true"
-              placeholder="Apellidos"
-            />
-          </div>
+          <Form.Item
+            name="surnames"
+            rules={[
+              {
+                required: true,
+                message: 'Por favor ingrese sus apellidos',
+              },
+            ]}
+          >
+            <div className={style.surnamesField}>
+              <Input
+                name="surnames"
+                value={form.surnames}
+                type="text"
+                onChange={handleChange}
+                autoComplete="true"
+                placeholder="Apellidos"
+              />
+            </div>
+          </Form.Item>
 
-          <div className={style.ageField}>
-            <DatePicker className={style.datePicker} name="age" format={dateFormatList} placeholder="Fecha de nacimiento" />
-            <p>Para registrarte, debes tener al menos 18 años. Tu fecha de nacimiento no se compartirá con otras personas que utilicen nuestra app.</p>
-          </div>
-
+          <Form.Item name="date-picker" {...config}>
+            <div className={style.ageField}>
+              <DatePicker
+                className={style.datePicker}
+                type="date"
+                name='birthdate'
+                value={form.birthdate}
+                onChange={handleChange}
+                placeholder='Fecha de nacimiento'
+              />
+              <p>Para registrarte, debes tener al menos 18 años. Tu fecha de nacimiento no se compartirá con otras personas que utilicen nuestra app.</p>
+            </div>
+          </Form.Item>
+        </Form>
+        {/* 
           <div className={style.emailField}>
             <Input
               type="email"
@@ -91,7 +202,7 @@ const User = () => {
         onCancel={() => setIsWelcomeModalOpen(false)} // Close the Welcome modal
         footer={null} // Hide the default modal footer
       >
-        <Welcome />
+        <Welcome /> */}
       </Modal>
     </div >
   )
