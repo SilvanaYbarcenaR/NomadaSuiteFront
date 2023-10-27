@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
+import AccommodationDetail from './views/Detail/AccommodationDetail/AccommodationDetail';
 import Header from './components/Header/Header.jsx';
 import Home from './views/Home/Home';
 import Login from './components/Modals/Login/Login.jsx';
@@ -14,6 +15,7 @@ function App() {
       <Header />
       <Routes>
         <Route path="/home" element={<Home />} />
+        <Route path="/detail/:id" element={<AccommodationDetail />} />
         <Route path="/login" element={<Login />} />
         <Route path="/registerUser" element={<User />} />
         <Route path="/welcome" element={<Welcome />} />
