@@ -17,7 +17,7 @@ const Welcome = () => {
     <div>
       <Modal
         className={style.modalBox}
-        title="Crea tu perfil"
+        title="Registro exitoso"
         open={isModalOpen}
         onCancel={handleCancel}
         cancelButtonProps={{ className: style.cancelBtn }}

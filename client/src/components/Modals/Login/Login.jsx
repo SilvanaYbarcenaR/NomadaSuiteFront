@@ -15,14 +15,6 @@ const googleBtnStyle = {
   height: "3rem",
 };
 
-const onFinish = (values) => {
-  console.log('Success:', values);
-};
-
-const onFinishFailed = (errorInfo) => {
-  console.log('Failed:', errorInfo);
-};
-
 const Login = () => {
   const [userData, setUserData] = useState({
     email: '',
@@ -61,23 +53,7 @@ const Login = () => {
         onCancel={handleCancel}
         footer={null}
       >
-        <Form
-          onSubmit={handleSubmit}
-          labelCol={{
-            span: 8,
-          }}
-          wrapperCol={{
-            span: 24,
-          }}
-          style={{
-            maxWidth: 600,
-          }}
-          initialValues={{
-            remember: true,
-          }}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-        >
+        <Form onSubmit={handleSubmit}>
           <h3>Bienvenido a NómadaSuite</h3>
           <Form.Item
             name="email"
@@ -151,7 +127,8 @@ const Login = () => {
             <div className={style.submitBtn}>
               <Button
                 style={buttonStyle}
-                type="submit"
+                type="primary"
+                htmlType="submit"
                 block
               >
                 Ingresar
