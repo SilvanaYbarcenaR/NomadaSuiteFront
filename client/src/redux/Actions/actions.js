@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID } from "./actions-types";
+import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, ORDER_BY_RATING } from "./actions-types";
 
 const getAccommodations = () => {
   const endpoint = "http://localhost:3001/api/accommodation/";
@@ -29,9 +29,23 @@ const getAccommodationById = (id) => {
       console.log(error.response.data.error);
     }
   }
+};
+
+const orderByRating = (order) => {
+  return async (dispatch) => {
+    try {
+      dispatch({
+        type: ORDER_BY_RATING,
+        payload: order,
+      });
+    } catch (error) {
+      console.log(error.response.data.error);
+    }
+  }
 }
 
 export {
   getAccommodations,
-  getAccommodationById
+  getAccommodationById,
+  orderByRating
 }
