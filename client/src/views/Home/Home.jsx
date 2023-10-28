@@ -7,14 +7,14 @@ import SecundaryFilters from '../../components/SecundaryFilters/SecundaryFilters
 const Home = () => {
   const dispatch = useDispatch();
   const accommodations = useSelector((state) => state.accommodations);
- 
+
   useEffect(() => {
     dispatch(getAccommodations());
   }, [])
 
   return (
     <div>
-      <SecundaryFilters/>
+      <SecundaryFilters />
       <Cards accommodations={accommodations}></Cards>
     </div>
   )
