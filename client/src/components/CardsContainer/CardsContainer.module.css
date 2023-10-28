@@ -1,7 +1,16 @@
 .cardsContainer {
-  padding: 4rem 5%;
+  padding: 2.5rem 5%;
 }
-@media screen and (max-width:640px) {
+.cardsContainer .noScroll {
+  overflow: hidden;
+}
+.cardsContainer :global(.infinite-scroll-component) {
+  min-height: 20rem;
+}
+.cardsContainer :global(.ant-skeleton) {
+  margin: 16px;
+}
+@media screen and (max-width: 640px) {
   .cardsContainer {
     padding: 1.5rem 1.5rem 1rem;
   }
