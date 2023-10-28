@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Form, Modal, Upload } from 'antd';
 import { Link } from 'react-router-dom';
 import style from './Photo.module.css';
+import Welcome from '../Welcome/Welcome';
 
 const buttonStyle = {
   background: "#231CA7",
@@ -52,64 +53,83 @@ const Photo = () => {
     </div>
   );
 
-  const [isModalOpen, setIsModalOpen] = useState(true);
-  const handleModalCancel = () => {
-    setIsModalOpen(false);
+  const onFinish = (values) => {
+    console.log('Success:', values);
   };
-  useEffect(() => {
-    showModal();
-  }, []);
-  const showModal = () => {
-    setIsModalOpen(true);
+
+  const [showWelcomeModal, setShowWelcomeModal] = useState(false);
+
+  const handleWelcomeClick = () => {
+    setShowWelcomeModal(true);
   };
+
   return (
     <div>
+      <Form className={style.formBox}
+        name="photo"
+        labelCol={{
+          span: 4,
+        }}
+        wrapperCol={{
+          span: 24,
+        }}
+        layout="horizontal"
+        style={{
+          maxWidth: 600,
+        }}
+        onFinish={onFinish}
+      >
+        <hr />
+        <h1>Añade una foto</h1>
+        <p>Elige una imagen que muestre tu rostro. Los anfitriones no podrán ver tu foto de perfil hasta que se confirme tu reserva.</p>
+        <Form.Item valuePropName="fileList" getValueFromEvent={normFile}>
+          <Upload
+            accept='image/png, image/jpeg'
+            action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+            className={style.upload}
+            fileList={fileList}
+            listType="picture-circle"
+            name='image'
+            onPreview={handlePreview}
+            onChange={handleChange}
+            type='file'
+          >
+            {fileList.length >= 1 ? null : uploadButton}
+          </Upload>
+          <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
+            <img
+              alt="example"
+              style={{
+                width: '100%',
+              }}
+              src={previewImage}
+            />
+          </Modal>
+        </Form.Item>
+        <Form.Item>
+          <Button
+            type="primary"
+            htmlType="submit"
+            style={buttonStyle}
+            onClick={handleWelcomeClick}
+            block
+          >
+            Finalizar
+          </Button>
+        </Form.Item>
+        <Link>
+          <p>Lo haré más tarde</p>
+        </Link>
+      </Form>
       <Modal
-        className={style.formBox}
-        open={isModalOpen}
-        onCancel={handleModalCancel}
+        className={style.welcome}
+        title="Registro exitoso."
+        open={showWelcomeModal}
+        onOk={() => setShowWelcomeModal(false)}
+        onCancel={() => setShowWelcomeModal(false)}
         footer={null}
       >
-        <Form>
-          <h3>Registro</h3>
-          <hr />
-          <h1>Añade una foto</h1>
-          <p>Elige una imagen que muestre tu rostro. Los anfitriones no podrán ver tu foto de perfil hasta que se confirme tu reserva.</p>
-          <Form.Item valuePropName="fileList" getValueFromEvent={normFile}>
-            <Upload
-              className={style.upload}
-              action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-              listType="picture-circle"
-              fileList={fileList}
-              onPreview={handlePreview}
-              onChange={handleChange}
-            >
-              {fileList.length >= 1 ? null : uploadButton}
-            </Upload>
-            <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
-              <img
-                alt="example"
-                style={{
-                  width: '100%',
-                }}
-                src={previewImage}
-              />
-            </Modal>
-          </Form.Item>
-          <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              style={buttonStyle}
-              block
-            >
-              Finalizar
-            </Button>
-          </Form.Item>
-          <Link>
-            <p>Lo haré más tarde</p>
-          </Link>
-        </Form>
+        <Welcome />
       </Modal>
     </div>
   )

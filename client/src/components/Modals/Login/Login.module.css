@@ -1,14 +1,9 @@
-.formBox {
-  border: none;
-}
-
-.formBox h3 {
-  font-size: 1rem;
-  font-weight: 700;
-  padding-bottom: 1rem;
+.welcome {
+  text-align: center;
 }
 
 .emailField Input {
+  margin-top: .5rem;
   border-radius: 4px;
   height: 3rem;
 }

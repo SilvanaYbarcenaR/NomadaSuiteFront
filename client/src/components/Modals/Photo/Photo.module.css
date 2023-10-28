@@ -1,3 +1,13 @@
+.formBox {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.welcome {
+    text-align: center;
+}
+
 .formBox h3 {
     font-size: .9rem;
     font-weight: 600;

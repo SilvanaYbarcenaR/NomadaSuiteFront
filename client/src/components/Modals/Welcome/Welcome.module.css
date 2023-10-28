@@ -4,18 +4,9 @@
 }
 
 button[type='button'] {
+    margin-top: .5rem;
     background: #231CA7;
     color: white;
-}
-
-.cancelBtn {
-    border-radius: 4px;
-    height: 3rem;
-    width: 100%;
-}
-
-.okBtn {
-    display: none;
 }
 
 .welcomeText {

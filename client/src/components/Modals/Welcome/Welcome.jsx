@@ -1,34 +1,36 @@
-import { useEffect, useState } from 'react';
-import { Modal } from 'antd';
+import React from 'react';
+import { Button } from 'antd';
 import style from "./Welcome.module.css"
 
+const buttonStyle = {
+  background: "#231CA7",
+  color: "white",
+  height: "3rem",
+};
+
 const Welcome = () => {
-  const [isModalOpen, setIsModalOpen] = useState(true);
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-  useEffect(() => {
-    showModal();
-  }, []);
-  const showModal = () => {
-    setIsModalOpen(true);
+  const handleReload = () => {
+    window.location.reload();
   };
   return (
     <div>
-      <Modal
-        className={style.modalBox}
-        title="Registro exitoso"
-        open={isModalOpen}
-        onCancel={handleCancel}
-        cancelButtonProps={{ className: style.cancelBtn }}
-        cancelText="Continuar"
-        okButtonProps={{ className: style.okBtn }}
-      >
+      <div className={style.modalBox}>
         <hr />
         <img className={style.icon} src='../../src/assets/image/favicon.png' />
         <p className={style.welcomeText}>Bienvenido a NómadaSuite</p>
         <p>Descubre lugares donde quedarte y trabajar desde cualquier parte del mundo.</p>
-      </Modal>
+
+        <div className={style.submitBtn}>
+          <Button
+            block style={buttonStyle}
+            type="primary"
+            onClick={handleReload}
+          >
+            Ingresar
+          </Button>
+        </div>
+
+      </div>
     </div>
   )
 };

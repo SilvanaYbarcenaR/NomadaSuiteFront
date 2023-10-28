@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Button, DatePicker, Form, Input, Modal } from 'antd';
+import React, { useRef, useState } from 'react';
+import { Button, Carousel, DatePicker, Form, Input } from 'antd';
 import style from "./User.module.css";
-// import Welcome from '../Modals/Welcome/Welcome';
+import Photo from '../Photo/Photo';
 
 const buttonStyle = {
   background: "#231CA7",
@@ -9,23 +9,15 @@ const buttonStyle = {
   height: "3rem",
 };
 
-const config = {
-  rules: [
-    {
-      type: 'object',
-      required: true,
-      message: 'Please select time!',
-    },
-  ],
-};
-
 const User = () => {
   const [form, setForm] = useState({
-    name: '',
-    lastname: '',
-    birthdate: '',
+    userName: '',
+    lastName: '',
     email: '',
-    password: ''
+    password: '',
+    confirm: '',
+    birthdate: '',
+    wantsNotification: true
   });
 
   const handleChange = (event) => {
@@ -41,36 +33,57 @@ const User = () => {
     setForm({
       ...form,
       birthdate: dateString
-
     });
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const carouselRef = useRef();
+
+
+
+  const handleNextSlide = () => {
+    const currentDate = new Date();
+    const birthdate = new Date(form.birthdate);
+    const age = currentDate.getFullYear() - birthdate.getFullYear();
+
+    if (
+      form.userName &&
+      form.lastName &&
+      form.email &&
+      form.password &&
+      form.password === form.confirm &&
+      age >= 18
+    ) {
+      carouselRef.current.next();
+    };
+  }
+
+
+  const onFinish = (values) => {
+    console.log('Success:', values);
+  };
+  const onFinishFailed = (errorInfo) => {
+    console.log('Failed:', errorInfo);
   };
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
   return (
-    <div>
-      <Button type="primary" onClick={showModal}>
-        Open Modal
-      </Button>
-      <Modal
-        className={style.formBox}
-        open={isModalOpen}
-        onCancel={handleCancel}
-        footer={null}
-      >
-        <Form onSubmit={handleSubmit}>
-          <h3>Registro</h3>
+    <Carousel effect="fade" dots={false} ref={carouselRef}>
+      <div>
+        <Form
+          name="user"
+          labelCol={{
+            span: 8,
+          }}
+          wrapperCol={{
+            span: 24,
+          }}
+          style={{
+            maxWidth: "100%",
+          }}
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+        >
           <Form.Item
-            name="name"
+            name="userName"
             rules={[
               {
                 required: true,
@@ -80,8 +93,8 @@ const User = () => {
           >
             <div className={style.nameField}>
               <Input
-                name="name"
-                value={form.name}
+                name="userName"
+                value={form.userName}
                 type="text"
                 onChange={handleChange}
                 autoComplete="true"
@@ -91,7 +104,7 @@ const User = () => {
           </Form.Item>
 
           <Form.Item
-            name="lastname"
+            name="lastName"
             rules={[
               {
                 required: true,
@@ -101,8 +114,8 @@ const User = () => {
           >
             <div className={style.lastnameField}>
               <Input
-                name="lastname"
-                value={form.lastname}
+                name="lastName"
+                value={form.lastName}
                 type="text"
                 onChange={handleChange}
                 autoComplete="true"
@@ -111,15 +124,31 @@ const User = () => {
             </div>
           </Form.Item>
 
-          <Form.Item name="date-picker" {...config}>
-            <div className={style.ageField}>
-              <DatePicker
-                className={style.datePicker}
-                onChange={(date, dateString) => handleDateChange(date, dateString)}
-                placeholder='Fecha de nacimiento'
-              />
-              <p>Para registrarte, debes tener al menos 18 años. Tu fecha de nacimiento no se compartirá con otras personas que utilicen nuestra app.</p>
-            </div>
+          <div className={style.ageField}>
+            <p>Para registrarte, debes tener al menos 18 años. Tu fecha de nacimiento no se compartirá con otras personas que utilicen nuestra app.</p>
+          </div>
+          <Form.Item name="date-picker"
+            rules={[{
+              required: true,
+              message: "La fecha de nacimiento es obligatoria."
+            },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                const currentDate = new Date();
+                const age = currentDate.getFullYear() - new Date(value).getFullYear();
+                if (age < 18) {
+                  return Promise.reject(new Error('Debes ser mayor de 18 años para registrarte.'));
+                }
+                return Promise.resolve();
+              },
+            }),
+            ]}
+          >
+            <DatePicker
+              className={style.datePicker}
+              onChange={(date, dateString) => handleDateChange(date, dateString)}
+              placeholder='Fecha de nacimiento'
+            />
           </Form.Item>
 
           <Form.Item
@@ -152,6 +181,23 @@ const User = () => {
               {
                 required: true,
                 message: 'Por favor ingrese su contraseña',
+              },
+              {
+                min: 6,
+                max: 15,
+                message: 'La contraseña debe tener entre 6 y 15 caracteres',
+              },
+              {
+                pattern: /^(?=.*[0-9]).*$/,
+                message: 'La contraseña debe contener al menos un número',
+              },
+              {
+                pattern: /^(?=.*[A-Z]).*$/,
+                message: 'La contraseña debe contener al menos una letra mayúscula',
+              },
+              {
+                pattern: /^(?=.*[!@#$%^&*]).*$/,
+                message: 'La contraseña debe contener al menos un carácter especial (por ejemplo: !@#$%^&*)',
               },
             ]}
             hasFeedback
@@ -187,7 +233,9 @@ const User = () => {
           >
             <div className={style.passwordField}>
               <Input.Password
-                name="password"
+                name="confirm"
+                onChange={handleChange}
+                value={form.confirm}
                 placeholder='Confirmar contraseña'
               />
             </div>
@@ -197,6 +245,7 @@ const User = () => {
             <Button
               type="primary"
               htmlType="submit"
+              onClick={handleNextSlide}
               style={buttonStyle}
               block
             >
@@ -204,8 +253,11 @@ const User = () => {
             </Button>
           </div>
         </Form>
-      </Modal>
-    </div >
+      </div >
+      <div>
+        <Photo />
+      </div>
+    </Carousel>
   )
 };
 

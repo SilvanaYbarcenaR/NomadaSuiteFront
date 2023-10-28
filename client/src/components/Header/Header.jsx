@@ -1,11 +1,12 @@
 import '../Header/Header.css'
 import React, { useState } from 'react';
 import NSlogo2 from "../../assets/image/logo.png"
-import { DatePicker, Space, InputNumber, AutoComplete, Dropdown } from 'antd';
+import { DatePicker, Space, InputNumber, AutoComplete, Dropdown, Modal } from 'antd';
+import User from '../Modals/RegisterUser/User';
+import Login from '../Modals/Login/Login';
 
 
 function Header() {
-
   const { RangePicker } = DatePicker;
 
   const mockVal = (str, repeat = 1) => ({
@@ -28,13 +29,21 @@ function Header() {
     }
   };
 
+  const [isUserModalVisible, setIsUserModalVisible] = useState(false);
+  const [isLoginModalVisible, setIsLoginModalVisible] = useState(false);
+  const closeUserModal = () => {
+    setIsUserModalVisible(false);
+  };
+  const closeLoginModal = () => {
+    setIsLoginModalVisible(false);
+  };
   const items = [
     {
-      label: <a className='font-bold'>Registro</a>,
+      label: <a className='font-bold' onClick={() => setIsUserModalVisible(true)}>Registro</a>,
       key: '0',
     },
     {
-      label: "Iniciar sesión",
+      label: <a onClick={setIsLoginModalVisible}>Iniciar sesión</a>,
       key: '1',
     },
     {
@@ -130,6 +139,25 @@ function Header() {
           </Dropdown>
 
           {/* end login */}
+
+          <Modal
+            className="modalRegister"
+            title="Registro"
+            open={isUserModalVisible}
+            onCancel={closeUserModal}
+            footer={null}
+          >
+            <User />
+          </Modal>
+          <Modal
+            className="modalRegister"
+            title="Bienvenido a NómadaSuite"
+            open={isLoginModalVisible}
+            onCancel={closeLoginModal}
+            footer={null}
+          >
+            <Login />
+          </Modal>
 
         </header>
       </nav>
