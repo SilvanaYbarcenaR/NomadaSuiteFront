@@ -1,28 +1,32 @@
 /* eslint-disable no-case-declarations */
-import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, ORDER_BY_RATING } from "./actions/actions-types";
+import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING } from "./actions/actions-types";
 
 let initialState = {
   accommodations: [],
   allAccommodations: [],
   accommodationById: {},
   accommodationsFiltered: [],
+  itemsPerPage: 12,
   services: []
 };
 
 const rootReducer = (state = initialState, { type, payload }) => {
+  const ITEMS_PER_PAGE = state.itemsPerPage;
   switch (type) {
     case GET_ACCOMMODATIONS:
       return {
         ...state,
-        accommodations: [...payload],
+        accommodations: [...payload].splice(0, ITEMS_PER_PAGE),
         allAccommodations: payload,
         accommodationsFiltered: payload
-      };
+      }
+
     case GET_ACCOMMODATION_BY_ID:
       return {
         ...state,
         accommodationById: payload
       }
+      
     case ORDER_BY_RATING:
       let filteredByOrder = [];
       if (payload === "asc") {
@@ -48,7 +52,13 @@ const rootReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         accommodationsFiltered: filteredByOrder,
-        accommodations: [...filteredByOrder]
+        accommodations: [...filteredByOrder].splice(0, ITEMS_PER_PAGE)
+      }
+
+    case GET_NEXT_ACCOMMODATIONS:
+      return {
+        ...state,
+        accommodations: [...state.accommodationsFiltered].splice(payload*ITEMS_PER_PAGE, ITEMS_PER_PAGE),
       }
     case GET_SERVICES:
       return {

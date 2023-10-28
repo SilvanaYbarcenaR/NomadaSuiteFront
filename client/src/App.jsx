@@ -13,9 +13,9 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/detail/:id" element={<AccommodationDetail />} />
       </Routes>
-      <Footer></Footer>
+      <Footer />
     </div>
   )
-};
+}
 
 export default App;
