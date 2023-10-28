@@ -58,14 +58,28 @@ const Photo = () => {
   };
 
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
-
+  const [form] = Form.useForm();
   const handleWelcomeClick = () => {
     setShowWelcomeModal(true);
   };
 
+  const handleLaterClick = () => {
+    form
+      .validateFields()
+      .then(() => {
+        onFinish(form.getFieldsValue());
+        setShowWelcomeModal(true);
+      })
+      .catch((errorInfo) => {
+        console.log('Validation failed:', errorInfo);
+      });
+  };
+
   return (
     <div>
-      <Form className={style.formBox}
+      <Form
+        form={form}
+        className={style.formBox}
         name="photo"
         labelCol={{
           span: 4,
@@ -118,7 +132,7 @@ const Photo = () => {
           </Button>
         </Form.Item>
         <Link>
-          <p>Lo haré más tarde</p>
+          <p onClick={handleLaterClick}>Lo haré más tarde</p>
         </Link>
       </Form>
       <Modal
