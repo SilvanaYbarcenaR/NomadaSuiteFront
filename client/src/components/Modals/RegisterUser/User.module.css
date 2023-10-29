@@ -1,0 +1,36 @@
+.nameField Input {
+  border-radius: 4px;
+  height: 3rem;
+}
+
+.lastnameField Input {
+  border-radius: 4px;
+  height: 3rem;
+}
+
+.datePicker {
+  height: 3rem;
+  width: 100%;
+}
+
+.ageField p {
+  font-size: .8rem;
+}
+
+.emailField Input {
+  border-radius: 4px;
+  height: 3rem;
+}
+
+.passwordField Input {
+  height: 2.4rem;
+}
+
+.submitBtn Button {
+  border-radius: 4px;
+  height: 3rem;
+}
+
+.user-slide-short {
+  max-height: 50vh;
+}
