@@ -185,26 +185,35 @@ return (
             <span style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginLeft: '26px', fontWeight: 'bold', fontSize: '25px' }}>
             ¿Qué ofrece este lugar?
             </span>
-            <span style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginLeft: '46px', marginTop: '46px', fontSize: '35px'  }}>
-            <CarOutlined style={{  marginLeft: '16px',marginRight: '26px', }}/><p style={{fontSize: '16px'}}>holasd</p>
-            <CoffeeOutlined style={{  marginLeft: '356px',marginRight: '26px', }}/><p style={{fontSize: '16px'}}>holasd</p>
-            </span>
-            <span style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginLeft: '46px', marginTop: '46px', fontSize: '35px'  }}>
-            <LaptopOutlined style={{  marginLeft: '16px',marginRight: '26px', }}/><p style={{fontSize: '16px'}}>holasd</p>
-            <WifiOutlined style={{  marginLeft: '356px',marginRight: '26px', }}/><p style={{fontSize: '16px'}}>holasd</p>
-            </span>
-            <span style={{ display: 'flex', alignItems: 'center' }}>
-            <CarOutlined style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginLeft: '46px', marginTop: '46px', fontSize: '35px' }}/>
-            <CoffeeOutlined style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginLeft: '356px', marginTop: '26px', fontSize: '35px' }}/>
-            </span>
-            <span style={{ display: 'flex', alignItems: 'center' }}>
-            <CarOutlined style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginLeft: '46px', marginTop: '46px', fontSize: '35px' }}/>
-            <CoffeeOutlined style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginLeft: '356px', marginTop: '26px', fontSize: '35px' }}/>
-            </span>
+            <div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', marginTop: '46px', fontSize: '35px' }}>
+  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <CoffeeOutlined style={{ fontSize: '35px', marginBottom: '8px', height: '50px' }} />
+    <p style={{ fontSize: '16px', margin: '0' }}>Cocina</p>
+  </div>
+  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <CarOutlined style={{ fontSize: '35px', marginBottom: '8px', height: '50px' }} />
+    <p style={{ fontSize: '16px', margin: '0' }}>Cochera</p>
+  </div>
+</div>
+
+<div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', marginTop: '46px', fontSize: '35px' }}>
+  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <LaptopOutlined style={{ fontSize: '35px', marginBottom: '8px', height: '50px' }} />
+    <p style={{ fontSize: '16px', margin: '0' }}>Escritorio</p>
+  </div>
+  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <WifiOutlined style={{ fontSize: '35px', marginBottom: '8px', height: '50px' }} />
+    <p style={{ fontSize: '16px', margin: '0' }}>Wifi</p>
+  </div>
+</div>
+
+
+
+
 
             <Divider />
 
-            <Maps />
+            <iframe width="100%" height="500" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=Rio%20de%20las%20carpas+(San%20Luis,%20Argentina)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"><a href="https://www.maps.ie/population/">Calculate population in area</a></iframe>
 
 
     </div>
@@ -242,7 +251,7 @@ return (
               $38 USD
             </span>
           }
-            extra={<a href="#"></a>}
+            extra={<a href="#">Precio por 30 dias</a>}
             style={{
               width: 417
             }}
@@ -268,6 +277,17 @@ return (
               >
               Reservar
             </Button>
+
+            <Divider />
+
+            <span style={{ fontSize: '20px', justifyContent: 'space-between',display: 'flex' }}>
+              <p>
+                Total a pagar:
+              </p>
+              <p>
+                $ USD
+              </p>
+            </span>
 
           </Card>
 
