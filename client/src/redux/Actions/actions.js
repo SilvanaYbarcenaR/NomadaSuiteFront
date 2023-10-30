@@ -1,6 +1,6 @@
 /* eslint-disable no-unreachable */
 import axios from "axios";
-import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING } from "./actions-types";
+import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING, GET_LOCATION_BY_NAME } from "./actions-types";
 
 const getAccommodations = () => {
   const endpoint = "http://localhost:3001/api/accommodation/";
@@ -73,10 +73,26 @@ const getServices = () => {
   }
 };
 
+const getLocationByName = (name) => {
+  const endpoint = `http://localhost:3001/location?name=${name}`
+  try {
+    return async (dispatch) => {
+      const { data } = await axios.get(endpoint);
+      return dispatch({
+        type: GET_LOCATION_BY_NAME,
+        payload: data
+      })
+    }
+  } catch (error) {
+    console.log(error.response.data.error);
+  }
+}
+
 export {
   getAccommodations,
   getAccommodationById,
   getServices,
   getNextAccommodations,
+  getLocationByName,
   orderByRating
 }
