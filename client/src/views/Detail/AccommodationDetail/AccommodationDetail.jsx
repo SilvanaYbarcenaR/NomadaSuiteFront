@@ -1,19 +1,25 @@
-import React, {Component} from 'react';
-import { useLocation } from 'react-router-dom';
+import React, {Component, useEffect} from 'react';
+import { useLocation, useParams } from 'react-router-dom';
+import { clearDetail, getAccommodationById } from '../../../redux/actions/actions';
 import Maps from "./GoogleMap";
 import { UserOutlined, CarOutlined, RightOutlined, CoffeeOutlined, LaptopOutlined, WifiOutlined, HeartFilled } from '@ant-design/icons';
 import { Col, DatePicker, Button, Anchor, Divider, InputNumber, Avatar, Card, Row, Carousel } from 'antd';
+import { useSelector, useDispatch } from 'react-redux';
 
 
 
 const AccommodationDetail = () => {
 
-const Location = useLocation();
-const queryParams = new URLSearchParams(Location.search);
-const price = queryParams.get('price');
-const name = queryParams.get('name');
-const rating = queryParams.get('rating');
-const location = queryParams.get('location');
+  const id = useParams().id;
+  const dispatch = useDispatch();
+  let AccommodationById = useSelector((state) => state.accommodationById);
+
+  useEffect(() => {
+    dispatch(getAccommodationById(id));
+    return () => {
+      dispatch(clearDetail());
+    }
+  }, [])
 
 
   const { RangePicker } = DatePicker;
@@ -67,6 +73,7 @@ return (
     // primera fila
 
   <>
+  {console.log(AccommodationById)}
     <Divider />
         <Row
             gutter={{
@@ -77,8 +84,8 @@ return (
             }}
             >
             <Col className="gutter-row" span={12}>
-                <div style={style}>{name}</div>
-                <div style={style2}>{location}</div>
+                <div style={style}>{AccommodationById.name}</div>
+                <div style={style2}>{AccommodationById.location}</div>
             </Col>
             <Col className="gutter-row" span={12}>
 
@@ -119,7 +126,7 @@ return (
                 
                 <Row gutter={16} style={{ marginBottom: '15px' }}>
                     <Col span={12}>
-                        <div style={contentStyle2}>1 imagen</div>
+                        <div style={contentStyle2}>{AccommodationById.photo}</div>
                     </Col>
                     <Col span={12}>
                         <div style={contentStyle2}>2 imagen</div>
@@ -177,7 +184,8 @@ return (
             
             <span style={{ display: 'flex', alignItems: 'center', marginLeft: '30px', fontWeight: 'bold', fontSize: '25px' }}>
               <HeartFilled style={{ marginRight: '20px', fontSize: '25px' }} />
-              {rating !== null && rating !== undefined ? rating : "Aun no hay valoraciones"}
+              {AccommodationById.rating}
+              
             </span>
            
 
@@ -222,7 +230,7 @@ return (
 
             <Divider />
 
-            <iframe width="100%" height="800" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=Rio%20de%20las%20carpas+(San%20Luis,%20Argentina)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"><a href="https://www.maps.ie/population/">Calculate population in area</a></iframe>
+            <iframe width="100%" height="400" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=Rio%20de%20las%20carpas+(San%20Luis,%20Argentina)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"><a href="https://www.maps.ie/population/">Calculate population in area</a></iframe>
 
     </div>
 
@@ -256,7 +264,7 @@ return (
           <Card
           title={
             <span style={{ fontSize: '26px' }}>
-              ${price} USD
+              ${AccommodationById.price} USD
             </span>
           }
             extra={<a href="#">Precio por 30 dias</a>}
@@ -293,7 +301,7 @@ return (
                 Total a pagar:
               </p>
               <p>
-              ${price} USD
+              ${AccommodationById.price} USD
               </p>
             </span>
 

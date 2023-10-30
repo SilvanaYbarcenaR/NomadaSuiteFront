@@ -1,6 +1,6 @@
 /* eslint-disable no-unreachable */
 import axios from "axios";
-import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING } from "./actions-types";
+import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING, CLEAR_DETAIL } from "./actions-types";
 
 const getAccommodations = () => {
   const endpoint = "http://localhost:3001/api/accommodation/";
@@ -73,10 +73,20 @@ const getServices = () => {
   }
 };
 
+const clearDetail = () => {
+  return async (dispatch) => {
+    dispatch({
+      type: CLEAR_DETAIL,
+    });
+  }
+} 
+
+
 export {
   getAccommodations,
   getAccommodationById,
   getServices,
   getNextAccommodations,
-  orderByRating
+  orderByRating,
+  clearDetail
 }
