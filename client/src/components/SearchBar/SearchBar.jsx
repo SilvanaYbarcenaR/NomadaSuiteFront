@@ -47,7 +47,7 @@ const SearchBar = () => {
   const onChange = (data) => {
     if (/^[a-zA-Z, ]*$/.test(data)) {
       const input = data.split(',').map(item => item.trim());
-
+      
       if (input.length === 2) {
         const city = input[0];
         const country = input[1];

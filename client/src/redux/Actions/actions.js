@@ -75,7 +75,7 @@ const getServices = () => {
 
 const getFilteredAccommodation = (values) => {
   const {city, country, startDate, endDate, rooms} = values
-  const cityName = `city${city}`
+  const cityName = `city=${city}`
   const countryName = `country=${country}`
   const startDateNum = `startDate=${startDate}`
   const endDateNum = `endDate=${endDate}`
