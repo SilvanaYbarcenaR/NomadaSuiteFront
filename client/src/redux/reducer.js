@@ -67,7 +67,6 @@ const rootReducer = (state = initialState, { type, payload }) => {
         services: payload
       }
     case GET_FILTERED_ACCOMMODATION:
-      console.log(payload);
       return{
         ...state,
         accommodations: payload
