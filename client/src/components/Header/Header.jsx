@@ -1,5 +1,6 @@
 import '../Header/Header.css'
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';  
 import NSlogo2 from "../../assets/image/logo.png"
 import { DatePicker, Space, InputNumber, AutoComplete, Dropdown, Modal } from 'antd';
 import User from '../Modals/RegisterUser/User';
@@ -64,9 +65,9 @@ function Header() {
       <nav className=" bg-white w-full navBar relative justify-between items-center mx-auto px-1">
         {/* Logo */}
         <header className='p-4 flex justify-between'>
-          <a href='' className='flex items-center gap-1'>
-            <img src={NSlogo2} width={220} height={70} alt="Nomada Suite Logo" />
-          </a>
+        <Link to="/home" className='flex items-center gap-1'>
+          <img src={NSlogo2} width={220} height={70} alt="Nomada Suite Logo" />
+        </Link>
 
           {/* end logo */}
 

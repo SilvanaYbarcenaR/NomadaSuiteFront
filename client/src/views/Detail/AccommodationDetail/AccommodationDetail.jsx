@@ -1,12 +1,20 @@
 import React, {Component} from 'react';
+import { useLocation } from 'react-router-dom';
 import Maps from "./GoogleMap";
 import { UserOutlined, CarOutlined, RightOutlined, CoffeeOutlined, LaptopOutlined, WifiOutlined, HeartFilled } from '@ant-design/icons';
-const url = 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg';
-import { Col, DatePicker, Button, Anchor, Divider, InputNumber, Avatar, Card, Row, Badge, Carousel } from 'antd';
+import { Col, DatePicker, Button, Anchor, Divider, InputNumber, Avatar, Card, Row, Carousel } from 'antd';
 
 
 
 const AccommodationDetail = () => {
+
+const Location = useLocation();
+const queryParams = new URLSearchParams(Location.search);
+const price = queryParams.get('price');
+const name = queryParams.get('name');
+const rating = queryParams.get('rating');
+const location = queryParams.get('location');
+
 
   const { RangePicker } = DatePicker;
 
@@ -69,8 +77,8 @@ return (
             }}
             >
             <Col className="gutter-row" span={12}>
-                <div style={style}>Casa en San Luis.</div>
-                <div style={style2}>San Luis, Argentina</div>
+                <div style={style}>{name}</div>
+                <div style={style2}>{location}</div>
             </Col>
             <Col className="gutter-row" span={12}>
 
@@ -163,11 +171,15 @@ return (
             <Divider />
             {/* atributos */}
             
-            <span style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginLeft: '26px', fontWeight: 'bold', fontSize: '25px' }}>
-            Sin valoraciones (por ahora)
+            <span style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginBottom: '26px', marginLeft: '26px', fontWeight: 'bold', fontSize: '25px' }}>
+            Valoracion del alojamiento 
             </span>
-            <HeartFilled style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginLeft: '46px', marginTop: '26px', fontSize: '25px' }}/>
             
+            <span style={{ display: 'flex', alignItems: 'center', marginLeft: '30px', fontWeight: 'bold', fontSize: '25px' }}>
+              <HeartFilled style={{ marginRight: '20px', fontSize: '25px' }} />
+              {rating !== null && rating !== undefined ? rating : "Aun no hay valoraciones"}
+            </span>
+           
 
             <Divider />
 
@@ -186,35 +198,31 @@ return (
             ¿Qué ofrece este lugar?
             </span>
             <div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', marginTop: '46px', fontSize: '35px' }}>
-  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-    <CoffeeOutlined style={{ fontSize: '35px', marginBottom: '8px', height: '50px' }} />
-    <p style={{ fontSize: '16px', margin: '0' }}>Cocina</p>
-  </div>
-  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-    <CarOutlined style={{ fontSize: '35px', marginBottom: '8px', height: '50px' }} />
-    <p style={{ fontSize: '16px', margin: '0' }}>Cochera</p>
-  </div>
-</div>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <CoffeeOutlined style={{ fontSize: '35px', marginBottom: '8px', height: '50px' }} />
+                <p style={{ fontSize: '16px', margin: '0' }}>Cocina</p>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <CarOutlined style={{ fontSize: '35px', marginBottom: '8px', height: '50px' }} />
+                <p style={{ fontSize: '16px', margin: '0' }}>Cochera</p>
+              </div>
+            </div>
 
-<div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', marginTop: '46px', fontSize: '35px' }}>
-  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-    <LaptopOutlined style={{ fontSize: '35px', marginBottom: '8px', height: '50px' }} />
-    <p style={{ fontSize: '16px', margin: '0' }}>Escritorio</p>
-  </div>
-  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-    <WifiOutlined style={{ fontSize: '35px', marginBottom: '8px', height: '50px' }} />
-    <p style={{ fontSize: '16px', margin: '0' }}>Wifi</p>
-  </div>
-</div>
-
-
-
+            <div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', marginTop: '46px', fontSize: '35px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <LaptopOutlined style={{ fontSize: '35px', marginBottom: '8px', height: '50px' }} />
+                <p style={{ fontSize: '16px', margin: '0' }}>Escritorio</p>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <WifiOutlined style={{ fontSize: '35px', marginBottom: '8px', height: '50px' }} />
+                <p style={{ fontSize: '16px', margin: '0' }}>Wifi</p>
+              </div>
+            </div>
 
 
             <Divider />
 
-            <iframe width="100%" height="500" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=Rio%20de%20las%20carpas+(San%20Luis,%20Argentina)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"><a href="https://www.maps.ie/population/">Calculate population in area</a></iframe>
-
+            <iframe width="100%" height="800" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=Rio%20de%20las%20carpas+(San%20Luis,%20Argentina)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"><a href="https://www.maps.ie/population/">Calculate population in area</a></iframe>
 
     </div>
 
@@ -248,7 +256,7 @@ return (
           <Card
           title={
             <span style={{ fontSize: '26px' }}>
-              $38 USD
+              ${price} USD
             </span>
           }
             extra={<a href="#">Precio por 30 dias</a>}
@@ -285,7 +293,7 @@ return (
                 Total a pagar:
               </p>
               <p>
-                $ USD
+              ${price} USD
               </p>
             </span>
 

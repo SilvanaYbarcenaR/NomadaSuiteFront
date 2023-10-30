@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import CardBox from '../CardBox/CardBox';
+import AccommodationDetail from '../../views/Detail/AccommodationDetail/AccommodationDetail';
 import CardsStyles from '../CardsContainer/CardsContainer.module.css';
 import { getAccommodations, getNextAccommodations } from '../../redux/actions/actions';
 import { useSelector, useDispatch } from 'react-redux';
