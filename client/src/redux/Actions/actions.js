@@ -1,6 +1,6 @@
 /* eslint-disable no-unreachable */
 import axios from "axios";
-import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING, CLEAR_DETAIL } from "./actions-types";
+import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING, GET_FILTERED_ACCOMMODATION, CLEAR_DETAIL } from "./actions-types";
 
 const getAccommodations = () => {
   const endpoint = "http://localhost:3001/api/accommodation/";
@@ -73,6 +73,27 @@ const getServices = () => {
   }
 };
 
+const getFilteredAccommodation = (values) => {
+  const {city, country, startDate, endDate, rooms} = values
+  const cityName = `city=${city}`
+  const countryName = `country=${country}`
+  const startDateNum = `startDate=${startDate}`
+  const endDateNum = `endDate=${endDate}`
+  const roomsNum = `rooms=${rooms}`
+  const endpoint = `http://localhost:3001/api/filtered/combinated?${cityName}&${countryName}&${roomsNum}`
+  try {
+    return async (dispatch) => {
+      const { data } = await axios.get(endpoint);
+      return dispatch({
+        type: GET_FILTERED_ACCOMMODATION,
+        payload: data
+      })
+    }
+  } catch (error) {
+    console.log(error.response.data.error);
+  }
+}
+
 const clearDetail = () => {
   return async (dispatch) => {
     dispatch({
@@ -87,6 +108,7 @@ export {
   getAccommodationById,
   getServices,
   getNextAccommodations,
+  getFilteredAccommodation,
   orderByRating,
   clearDetail
 }

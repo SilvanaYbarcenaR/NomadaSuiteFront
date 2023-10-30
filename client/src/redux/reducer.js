@@ -1,5 +1,5 @@
 /* eslint-disable no-case-declarations */
-import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING, CLEAR_DETAIL } from "./actions/actions-types";
+import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_FILTERED_ACCOMMODATION, GET_NEXT_ACCOMMODATIONS, GET_SERVICES, ORDER_BY_RATING, CLEAR_DETAIL } from "./actions/actions-types";
 
 let initialState = {
   accommodations: [],
@@ -64,6 +64,11 @@ const rootReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         services: payload
+      }
+    case GET_FILTERED_ACCOMMODATION:
+      return{
+        ...state,
+        accommodations: payload
       }
     case CLEAR_DETAIL:
       return {
