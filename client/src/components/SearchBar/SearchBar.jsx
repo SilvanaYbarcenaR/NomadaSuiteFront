@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { AutoComplete, DatePicker, InputNumber, Space } from "antd";
 import { useDispatch } from "react-redux";
-import { getLocationByName } from "../../redux/Actions/actions";
+import { getFilteredAccommodation } from "../../redux/Actions/actions";
 
 const { RangePicker } = DatePicker;
 const mockVal = (str, repeat = 1) => ({
@@ -10,18 +10,17 @@ const mockVal = (str, repeat = 1) => ({
 
 const SearchBar = () => {
   const dispatch = useDispatch()
-
-  const [value, setValue] = useState({
-    location: '',
+  const [options, setOptions] = useState([]);
+  const [values, setValues] = useState({
+    country: '',
     startDate: '',
     endDate: '',
     rooms: ''
   });
-  const [options, setOptions] = useState([]);
 
   const onRangeChange = (dates, dateStrings) => {
-    setValue({
-      ...value,
+    setValues({
+      ...values,
       startDate: dateStrings[0],
       endDate: dateStrings[1]
     });
@@ -34,30 +33,33 @@ const SearchBar = () => {
   };
 
   const searchHandler = () => {
-    dispatch(getLocationByName(value))
+      dispatch(getFilteredAccommodation(values));
   };
 
   const onChangeRooms = (value) => {
-    setValue({
-      ...value,
+    setValues({
+      ...values,
       rooms: value
     });
   };
 
   const onChange = (data) => {
     if (/^[a-zA-Z]*$/.test(data)) {
-      setValue(data);
-    }
+      setValues({
+        ...values,
+        country: data
+      });
+    };
   };
   return (
     <div>
-      
+
       {/* Search and Filter */}
 
       <div className='flex gap-2 border border-gray-300 rounded-full py-4 px-4 shadow-md shadow-gray-400'>
         <AutoComplete
           size="large"
-          value={value.location}
+          value={values.location}
           options={options}
           style={{
             width: 200,
@@ -69,7 +71,7 @@ const SearchBar = () => {
         />
         <RangePicker size="small" placeholder={['Check-in', 'Check-out']} onChange={onRangeChange} />
         <Space wrap>
-          <InputNumber value={value.rooms} placeholder={"Habitaciones"} size="large" min={1} max={10} onChange={onChangeRooms} type='number'
+          <InputNumber value={values.rooms} placeholder={"Habitaciones"} size="large" min={1} max={10} onChange={onChangeRooms} type='number'
             style={{
               width: 114,
             }}

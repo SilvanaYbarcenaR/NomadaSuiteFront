@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import CardBox from '../CardBox/CardBox';
 import CardsStyles from '../CardsContainer/CardsContainer.module.css';
-import { getAccommodations, getNextAccommodations } from '../../redux/actions/actions';
+import { getAccommodations, getNextAccommodations } from '../../redux/Actions/actions';
 import { useSelector, useDispatch } from 'react-redux';
 import { Row, Divider, Skeleton, Flex } from 'antd';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -30,6 +30,7 @@ const CardsContainer = () => {
   }, []);
 
   useEffect(() => {
+    alert("Todo OK")
     setData([...data, ...accommodations]);
   }, [accommodations]);
 

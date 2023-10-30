@@ -1,6 +1,6 @@
 /* eslint-disable no-unreachable */
 import axios from "axios";
-import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING, GET_LOCATION_BY_NAME } from "./actions-types";
+import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING, GET_FILTERED_ACCOMMODATION } from "./actions-types";
 
 const getAccommodations = () => {
   const endpoint = "http://localhost:3001/api/accommodation/";
@@ -73,13 +73,18 @@ const getServices = () => {
   }
 };
 
-const getLocationByName = (name) => {
-  const endpoint = `http://localhost:3001/location?name=${name}`
+const getFilteredAccommodation = (values) => {
+  const {country, startDate, endDate, rooms} = values
+  const countryName = `country=${country}`
+  const startDateNum = `startDate=${startDate}`
+  const endDateNum = `endDate=${endDate}`
+  const roomsNum = `rooms=${rooms}`
+  const endpoint = `http://localhost:3001/api/filtered/combinated?${countryName}&${roomsNum}`
   try {
     return async (dispatch) => {
       const { data } = await axios.get(endpoint);
       return dispatch({
-        type: GET_LOCATION_BY_NAME,
+        type: GET_FILTERED_ACCOMMODATION,
         payload: data
       })
     }
@@ -93,6 +98,6 @@ export {
   getAccommodationById,
   getServices,
   getNextAccommodations,
-  getLocationByName,
+  getFilteredAccommodation,
   orderByRating
 }
