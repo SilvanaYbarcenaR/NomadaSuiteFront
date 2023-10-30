@@ -38,8 +38,6 @@ const User = () => {
 
   const carouselRef = useRef();
 
-
-
   const handleNextSlide = () => {
     const currentDate = new Date();
     const birthdate = new Date(form.birthdate);
