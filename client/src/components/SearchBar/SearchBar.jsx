@@ -12,6 +12,7 @@ const SearchBar = () => {
   const dispatch = useDispatch()
   const [options, setOptions] = useState([]);
   const [values, setValues] = useState({
+    city: '',
     country: '',
     startDate: '',
     endDate: '',
@@ -33,7 +34,7 @@ const SearchBar = () => {
   };
 
   const searchHandler = () => {
-      dispatch(getFilteredAccommodation(values));
+    dispatch(getFilteredAccommodation(values));
   };
 
   const onChangeRooms = (value) => {
@@ -44,13 +45,28 @@ const SearchBar = () => {
   };
 
   const onChange = (data) => {
-    if (/^[a-zA-Z]*$/.test(data)) {
-      setValues({
-        ...values,
-        country: data
-      });
-    };
+    if (/^[a-zA-Z, ]*$/.test(data)) {
+      const input = data.split(',').map(item => item.trim());
+
+      if (input.length === 2) {
+        const city = input[0];
+        const country = input[1];
+
+        setValues({
+          ...values,
+          city: city,
+          country: country
+        });
+      } else if (input.length === 1) {
+        setValues({
+          ...values,
+          city: input[0],
+          country: ''
+        });
+      }
+    }
   };
+
   return (
     <div>
 
