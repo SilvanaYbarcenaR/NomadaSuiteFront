@@ -1,5 +1,5 @@
 /* eslint-disable no-case-declarations */
-import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING } from "./actions/actions-types";
+import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING, FILTER_BY_PRICE } from "./actions/actions-types";
 
 let initialState = {
   accommodations: [],
@@ -25,6 +25,18 @@ const rootReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         accommodationById: payload
+      }
+    
+    case GET_SERVICES:
+      return {
+        ...state,
+        services: payload
+      }
+    
+    case GET_NEXT_ACCOMMODATIONS:
+      return {
+        ...state,
+        accommodations: [...state.accommodationsFiltered].splice(payload*ITEMS_PER_PAGE, ITEMS_PER_PAGE),
       }
       
     case ORDER_BY_RATING:
@@ -55,17 +67,28 @@ const rootReducer = (state = initialState, { type, payload }) => {
         accommodations: [...filteredByOrder].splice(0, ITEMS_PER_PAGE)
       }
 
-    case GET_NEXT_ACCOMMODATIONS:
-      return {
-        ...state,
-        accommodations: [...state.accommodationsFiltered].splice(payload*ITEMS_PER_PAGE, ITEMS_PER_PAGE),
-      }
-    case GET_SERVICES:
-      return {
-        ...state,
-        services: payload
+    case FILTER_BY_PRICE:
+      const maxPrice = payload.maxPrice;
+      const minPrice = payload.minPrice;
+      let filteredByPrice = [];
+
+      if (maxPrice || minPrice) {
+        filteredByPrice = [...state.accommodationsFiltered].filter((accommodation) => { 
+          return accommodation.price >= minPrice && (maxPrice ? accommodation.price <= maxPrice : true)
+        });
+      } 
+      else {
+        return {
+          ...state,
+          accommodations: [...state.allAccommodations]
+        }
       }
       
+      return {
+        ...state,
+        accommodationsFiltered: filteredByPrice,
+        accommodations: [...filteredByPrice].splice(0, ITEMS_PER_PAGE)
+      }
     default:
       return {
         ...state,

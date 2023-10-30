@@ -1,6 +1,6 @@
 /* eslint-disable no-unreachable */
 import axios from "axios";
-import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING } from "./actions-types";
+import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING, FILTER_BY_PRICE } from "./actions-types";
 
 const getAccommodations = () => {
   const endpoint = "http://localhost:3001/api/accommodation/";
@@ -32,32 +32,6 @@ const getAccommodationById = (id) => {
   }
 };
 
-const orderByRating = (order) => {
-  return async (dispatch) => {
-    try {
-      dispatch({
-        type: ORDER_BY_RATING,
-        payload: order,
-      });
-    } catch (error) {
-      console.log(error.response.data.error);
-    }
-  }
-};
-
-const getNextAccommodations = (page) => {
-  return async (dispatch) => {
-    try {
-      dispatch({
-        type: GET_NEXT_ACCOMMODATIONS,
-        payload: page,
-      });
-    } catch (error) {
-      console.log(error.response.data.error);
-    }
-  }
-}
-
 const getServices = () => {
   const endpoint = `http://localhost:3001/api/services`;
   try {
@@ -73,10 +47,50 @@ const getServices = () => {
   }
 };
 
+const getNextAccommodations = (page) => {
+  return async (dispatch) => {
+    try {
+      dispatch({
+        type: GET_NEXT_ACCOMMODATIONS,
+        payload: page,
+      });
+    } catch (error) {
+      console.log(error.response.data.error);
+    }
+  }
+};
+
+const orderByRating = (order) => {
+  return async (dispatch) => {
+    try {
+      dispatch({
+        type: ORDER_BY_RATING,
+        payload: order,
+      });
+    } catch (error) {
+      console.log(error.response.data.error);
+    }
+  }
+};
+
+const filterByPrice = (minPrice, maxPrice) => {
+  return async (dispatch) => {
+    try {
+      dispatch({
+        type: FILTER_BY_PRICE,
+        payload: {minPrice: minPrice, maxPrice: maxPrice}
+      });
+    } catch (error) {
+      console.log(error.response.data.error);
+    }
+  }
+}
+
 export {
   getAccommodations,
   getAccommodationById,
   getServices,
   getNextAccommodations,
-  orderByRating
+  orderByRating,
+  filterByPrice
 }
