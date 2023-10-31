@@ -102,7 +102,6 @@ const clearDetail = () => {
   }
 } 
 
-
 export {
   getAccommodations,
   getAccommodationById,

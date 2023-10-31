@@ -26,7 +26,7 @@ const rootReducer = (state = initialState, { type, payload }) => {
         ...state,
         accommodationById: payload
       }
-      
+
     case ORDER_BY_RATING:
       let filteredByOrder = [];
       if (payload === "asc") {
@@ -58,24 +58,27 @@ const rootReducer = (state = initialState, { type, payload }) => {
     case GET_NEXT_ACCOMMODATIONS:
       return {
         ...state,
-        accommodations: [...state.accommodationsFiltered].splice(payload*ITEMS_PER_PAGE, ITEMS_PER_PAGE),
+        accommodations: [...state.accommodationsFiltered].splice(payload * ITEMS_PER_PAGE, ITEMS_PER_PAGE),
       }
+      
     case GET_SERVICES:
       return {
         ...state,
         services: payload
       }
+      
     case GET_FILTERED_ACCOMMODATION:
       return{
         ...state,
         accommodations: payload
       }
+      
     case CLEAR_DETAIL:
       return {
         ...state,
         accommodationById: {},
       }
-      
+
     default:
       return {
         ...state,
