@@ -1,6 +1,5 @@
 /* eslint-disable no-case-declarations */
-
-import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_FILTERED_ACCOMMODATION, GET_NEXT_ACCOMMODATIONS, GET_SERVICES, ORDER_BY_RATING } from "./Actions/actions-types";
+import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_FILTERED_ACCOMMODATION, GET_NEXT_ACCOMMODATIONS, GET_SERVICES, ORDER_BY_RATING, CLEAR_DETAIL } from "./actions/actions-types";
 
 let initialState = {
   accommodations: [],
@@ -61,16 +60,25 @@ const rootReducer = (state = initialState, { type, payload }) => {
         ...state,
         accommodations: [...state.accommodationsFiltered].splice(payload * ITEMS_PER_PAGE, ITEMS_PER_PAGE),
       }
+      
     case GET_SERVICES:
       return {
         ...state,
         services: payload
       }
+      
     case GET_FILTERED_ACCOMMODATION:
       return{
         ...state,
         accommodations: payload
       }
+      
+    case CLEAR_DETAIL:
+      return {
+        ...state,
+        accommodationById: {},
+      }
+
     default:
       return {
         ...state,

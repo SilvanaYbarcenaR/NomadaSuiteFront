@@ -30,6 +30,7 @@ const CardsContainer = () => {
   }, []);
 
   useEffect(() => {
+    // alert("Todo OK")
     setData([...data, ...accommodations]);
   }, [accommodations]);
 

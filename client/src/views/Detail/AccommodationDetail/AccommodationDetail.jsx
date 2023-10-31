@@ -1,12 +1,26 @@
-import React, {Component} from 'react';
+import React, {Component, useEffect} from 'react';
+import { useLocation, useParams } from 'react-router-dom';
+import { clearDetail, getAccommodationById } from '../../../redux/actions/actions';
 import Maps from "./GoogleMap";
 import { UserOutlined, CarOutlined, RightOutlined, CoffeeOutlined, LaptopOutlined, WifiOutlined, HeartFilled } from '@ant-design/icons';
-const url = 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg';
-import { Col, DatePicker, Button, Anchor, Divider, InputNumber, Avatar, Card, Row, Badge, Carousel } from 'antd';
+import { Col, DatePicker, Button, Anchor, Divider, InputNumber, Avatar, Card, Row, Carousel } from 'antd';
+import { useSelector, useDispatch } from 'react-redux';
 
 
 
 const AccommodationDetail = () => {
+
+  const id = useParams().id;
+  const dispatch = useDispatch();
+  let AccommodationById = useSelector((state) => state.accommodationById);
+
+  useEffect(() => {
+    dispatch(getAccommodationById(id));
+    return () => {
+      dispatch(clearDetail());
+    }
+  }, [])
+
 
   const { RangePicker } = DatePicker;
 
@@ -59,6 +73,7 @@ return (
     // primera fila
 
   <>
+  {console.log(AccommodationById)}
     <Divider />
         <Row
             gutter={{
@@ -69,8 +84,8 @@ return (
             }}
             >
             <Col className="gutter-row" span={12}>
-                <div style={style}>Casa en San Luis.</div>
-                <div style={style2}>San Luis, Argentina</div>
+                <div style={style}>{AccommodationById.name}</div>
+                <div style={style2}>{AccommodationById.idLocation?.city}</div>
             </Col>
             <Col className="gutter-row" span={12}>
 
@@ -93,10 +108,10 @@ return (
             <Col className="gutter-row" span={12}>
                 <Carousel afterChange={onChange}>
                     <div>
-                        <h3 style={contentStyle}>1</h3>
+                        <h3 style={contentStyle}><img src={AccommodationById?.photos} alt="Imagen 1" /></h3>
                     </div>
                     <div>
-                        <h3 style={contentStyle}>2</h3>
+                    <h3 style={contentStyle}><img src={AccommodationById?.photos} alt="Imagen 1" /></h3>
                     </div>
                     <div>
                         <h3 style={contentStyle}>3</h3>
@@ -111,7 +126,9 @@ return (
                 
                 <Row gutter={16} style={{ marginBottom: '15px' }}>
                     <Col span={12}>
-                        <div style={contentStyle2}>1 imagen</div>
+                    <div style={contentStyle2}>
+                      <img src={AccommodationById?.photos} alt="Imagen 1" />
+                    </div>
                     </Col>
                     <Col span={12}>
                         <div style={contentStyle2}>2 imagen</div>
@@ -163,16 +180,21 @@ return (
             <Divider />
             {/* atributos */}
             
-            <span style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginLeft: '26px', fontWeight: 'bold', fontSize: '25px' }}>
-            Sin valoraciones (por ahora)
+            <span style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginBottom: '26px', marginLeft: '26px', fontWeight: 'bold', fontSize: '25px' }}>
+            Valoracion del alojamiento 
             </span>
-            <HeartFilled style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginLeft: '46px', marginTop: '26px', fontSize: '25px' }}/>
             
+            <span style={{ display: 'flex', alignItems: 'center', marginLeft: '30px', fontWeight: 'bold', fontSize: '25px' }}>
+              <HeartFilled style={{ marginRight: '20px', fontSize: '25px' }} />
+              {AccommodationById.rating}
+              
+            </span>
+           
 
             <Divider />
 
             <span style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginLeft: '26px' }}>
-            Este lugar especial está cerca de todo: va a ser muy fácil planear tu visita. Ideal para pasar unos días en San Luis. Queda ubicada en las afueras del centro de la ciudad, ubicación muy cómoda, del Policlínico, la jefatura central de policía, a unos km de casa de gobierno "Terrazas del Portezuelo", buena ubicación para poder salir hacia las sierras (potrero de los Funes, el trapiche, etc) a solo 5 cuadras del parque de las naciones donde existe un parque recreativo para poder hacer ejercicio.
+            {AccommodationById.description}
             </span >
             <span style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginLeft: '26px',marginTop: '26px'  }}>
               <Button type="link" style={{fontWeight: 'bold',fontSize: '17px'}}>Saber Más...</Button>
@@ -186,35 +208,31 @@ return (
             ¿Qué ofrece este lugar?
             </span>
             <div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', marginTop: '46px', fontSize: '35px' }}>
-  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-    <CoffeeOutlined style={{ fontSize: '35px', marginBottom: '8px', height: '50px' }} />
-    <p style={{ fontSize: '16px', margin: '0' }}>Cocina</p>
-  </div>
-  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-    <CarOutlined style={{ fontSize: '35px', marginBottom: '8px', height: '50px' }} />
-    <p style={{ fontSize: '16px', margin: '0' }}>Cochera</p>
-  </div>
-</div>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <CoffeeOutlined style={{ fontSize: '35px', marginBottom: '8px', height: '50px' }} />
+                <p style={{ fontSize: '16px', margin: '0' }}>Cocina</p>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <CarOutlined style={{ fontSize: '35px', marginBottom: '8px', height: '50px' }} />
+                <p style={{ fontSize: '16px', margin: '0' }}>Cochera</p>
+              </div>
+            </div>
 
-<div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', marginTop: '46px', fontSize: '35px' }}>
-  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-    <LaptopOutlined style={{ fontSize: '35px', marginBottom: '8px', height: '50px' }} />
-    <p style={{ fontSize: '16px', margin: '0' }}>Escritorio</p>
-  </div>
-  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-    <WifiOutlined style={{ fontSize: '35px', marginBottom: '8px', height: '50px' }} />
-    <p style={{ fontSize: '16px', margin: '0' }}>Wifi</p>
-  </div>
-</div>
-
-
-
+            <div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', marginTop: '46px', fontSize: '35px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <LaptopOutlined style={{ fontSize: '35px', marginBottom: '8px', height: '50px' }} />
+                <p style={{ fontSize: '16px', margin: '0' }}>Escritorio</p>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <WifiOutlined style={{ fontSize: '35px', marginBottom: '8px', height: '50px' }} />
+                <p style={{ fontSize: '16px', margin: '0' }}>Wifi</p>
+              </div>
+            </div>
 
 
             <Divider />
 
-            <iframe width="100%" height="500" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=Rio%20de%20las%20carpas+(San%20Luis,%20Argentina)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"><a href="https://www.maps.ie/population/">Calculate population in area</a></iframe>
-
+            <iframe width="100%" height="400" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%25&amp;height=400&amp;hl=en&amp;q=Ciudad%20Aut%C3%B3noma%20de%20Buenos%20Aires,%20Lavalle%201459%20+(Ciudad%20Aut%C3%B3noma%20de%20Buenos%20Aires)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"><a href="https://www.maps.ie/population/">Find Population on Map</a></iframe>
 
     </div>
 
@@ -248,7 +266,7 @@ return (
           <Card
           title={
             <span style={{ fontSize: '26px' }}>
-              $38 USD
+              ${AccommodationById.price} USD
             </span>
           }
             extra={<a href="#">Precio por 30 dias</a>}
@@ -285,7 +303,7 @@ return (
                 Total a pagar:
               </p>
               <p>
-                $ USD
+              ${AccommodationById.price} USD
               </p>
             </span>
 

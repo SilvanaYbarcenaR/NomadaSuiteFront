@@ -1,6 +1,6 @@
 /* eslint-disable no-unreachable */
 import axios from "axios";
-import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING, GET_FILTERED_ACCOMMODATION } from "./actions-types";
+import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING, GET_FILTERED_ACCOMMODATION, CLEAR_DETAIL } from "./actions-types";
 
 const getAccommodations = () => {
   const endpoint = "http://localhost:3001/api/accommodation/";
@@ -94,11 +94,20 @@ const getFilteredAccommodation = (values) => {
   }
 }
 
+const clearDetail = () => {
+  return async (dispatch) => {
+    dispatch({
+      type: CLEAR_DETAIL,
+    });
+  }
+} 
+
 export {
   getAccommodations,
   getAccommodationById,
   getServices,
   getNextAccommodations,
   getFilteredAccommodation,
-  orderByRating
+  orderByRating,
+  clearDetail
 }
