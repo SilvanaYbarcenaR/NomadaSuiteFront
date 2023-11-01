@@ -65,8 +65,9 @@ const User = () => {
           birthdate: form.birthdate,
         })
       }
-      setServerResponse({ success: 'Usuario registrado con éxito' });
-      setCurrentSlide(1);
+      if (setServerResponse({ success: 'Usuario registrado con éxito' })) {
+        setCurrentSlide(1);
+      }
     } catch (error) {
       console.error(error);
       setServerResponse({ error: 'No se pudo registrar el usuario' });

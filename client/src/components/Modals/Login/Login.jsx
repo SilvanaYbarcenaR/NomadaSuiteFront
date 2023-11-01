@@ -25,15 +25,17 @@ const Login = () => {
   });
   const [errors, setErrors] = useState(null);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = axios.post('http://localhost:3001/api/user/login', {
+      const response = await axios.post('http://localhost:3001/api/user/login', {
         email: userData.email,
         password: userData.password
       });
       const { accessToken, refreshToken } = response.data;
-      handleWelcomeClick()
+      if (accessToken && refreshToken) {
+        handleWelcomeClick()
+      }
     } catch (error) {
       setErrors("Credenciales inválidas. Por favor, verifica tu correo y contraseña.");
     }
@@ -117,6 +119,7 @@ const Login = () => {
             />
           </div>
         </Form.Item>
+        {errors && <p className={style.errorText}>{errors}</p>}
 
         {/* Password end*/}
         {/* Remember */}
@@ -133,7 +136,6 @@ const Login = () => {
 
         {/* Remember end*/}
 
-        {errors && <p className={style.errorText}>{errors}</p>}
         <span className={style.span}>or</span>
         <hr />
 

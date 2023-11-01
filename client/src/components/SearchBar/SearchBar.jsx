@@ -4,13 +4,21 @@ import { useDispatch } from "react-redux";
 import { getFilteredAccommodation } from "../../redux/Actions/actions";
 
 const { RangePicker } = DatePicker;
-const mockVal = (str, repeat = 1) => ({
-  value: str.repeat(repeat),
-});
+
+const options = [
+  {
+    value: 'Burns Bay Road',
+  },
+  {
+    value: 'Downing Street',
+  },
+  {
+    value: 'Wall Street',
+  },
+];
 
 const SearchBar = () => {
   const dispatch = useDispatch()
-  const [options, setOptions] = useState([]);
   const [values, setValues] = useState({
     city: '',
     country: '',
@@ -27,12 +35,6 @@ const SearchBar = () => {
     });
   };
 
-  const getPanelValue = (searchText) =>
-    !searchText ? [] : [mockVal(searchText), mockVal(searchText, 2), mockVal(searchText, 3)];
-  const onSelect = (data) => {
-    console.log('onSelect', data);
-  };
-
   const searchHandler = () => {
     dispatch(getFilteredAccommodation(values));
   };
@@ -47,7 +49,7 @@ const SearchBar = () => {
   const onChange = (data) => {
     if (/^[a-zA-Z, ]*$/.test(data)) {
       const input = data.split(',').map(item => item.trim());
-      
+
       if (input.length === 2) {
         const city = input[0];
         const country = input[1];
@@ -80,10 +82,12 @@ const SearchBar = () => {
           style={{
             width: 200,
           }}
-          onSelect={onSelect}
-          onSearch={(text) => setOptions(getPanelValue(text))}
           onChange={onChange}
           placeholder="Ubicación"
+
+          filterOption={(inputValue, option) =>
+            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+          }
         />
         <RangePicker size="small" placeholder={['Check-in', 'Check-out']} onChange={onRangeChange} />
         <Space wrap>
