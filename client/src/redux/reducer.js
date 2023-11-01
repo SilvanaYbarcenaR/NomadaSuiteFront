@@ -68,9 +68,11 @@ const rootReducer = (state = initialState, { type, payload }) => {
       }
       
     case GET_FILTERED_ACCOMMODATION:
+      console.log(payload);
       return{
         ...state,
-        accommodations: payload
+        accommodationsFiltered: payload,
+        accommodations: payload,
       }
       
     case CLEAR_DETAIL:

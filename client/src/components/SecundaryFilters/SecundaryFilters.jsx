@@ -18,7 +18,7 @@ const SecundaryFilters = () => {
     <div className={SecundaryFiltersStyles.secundaryFilters}>
       <Form>
         <Flex justify={"space-between"}>
-          <Form.Item label={<><BsFilter/>&nbsp;Rango de precio</>}>
+          <Form.Item label={<><BsFilter />&nbsp;Rango de precio</>}>
             <Space>
               <InputNumber
                 defaultValue={100}
@@ -34,14 +34,14 @@ const SecundaryFilters = () => {
               />
             </Space>
           </Form.Item>
-          <Form.Item label={<><RiOrderPlayFill/>&nbsp;Rating</>}>
+          <Form.Item label={<><RiOrderPlayFill />&nbsp;Rating</>}>
             <Select
               style={{
                 width: '300px',
               }}
               placeholder="Orden"
               onChange={handleChange}
-              options={[{value: "asc", label: "Ascendente"}, {value: "desc", label: "Descendente"}]}
+              options={[{ value: "asc", label: "Ascendente" }, { value: "desc", label: "Descendente" }]}
             />
           </Form.Item>
         </Flex>

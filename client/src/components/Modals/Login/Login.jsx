@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import style from "./Login.module.css";
 import User from "../RegisterUser/User";
 import Welcome from "../Welcome/Welcome";
+import axios from "axios";
 
 const buttonStyle = {
   background: "#231CA7",
@@ -22,22 +23,31 @@ const Login = () => {
     email: '',
     password: ''
   });
+  const [errors, setErrors] = useState(null);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:3001/api/user/login', {
+        email: userData.email,
+        password: userData.password
+      });
+      const { accessToken, refreshToken } = response.data;
+      if (accessToken && refreshToken) {
+        handleWelcomeClick()
+      }
+    } catch (error) {
+      setErrors("Credenciales inválidas. Por favor, verifica tu correo y contraseña.");
+    }
+  };
 
   const handleChange = (event) => {
     const property = event.target.name;
     const value = event.target.value;
-
     setUserData({
       ...userData,
       [property]: value
     });
-  };
-
-  const onFinish = (values) => {
-    console.log('Success:', values);
-  };
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
   };
 
   const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -63,8 +73,6 @@ const Login = () => {
         initialValues={{
           remember: true,
         }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
       >
         <Form.Item
           name="email"
@@ -75,6 +83,9 @@ const Login = () => {
             },
           ]}
         >
+
+          {/* Email */}
+
           <div className={style.emailField}>
             <Input
               name="email"
@@ -86,6 +97,9 @@ const Login = () => {
             />
           </div>
         </Form.Item>
+
+        {/* Email end*/}
+        {/* Password */}
 
         <Form.Item
           name="password"
@@ -105,6 +119,10 @@ const Login = () => {
             />
           </div>
         </Form.Item>
+        {errors && <p className={style.errorText}>{errors}</p>}
+
+        {/* Password end*/}
+        {/* Remember */}
 
         <Form.Item
           name="remember"
@@ -116,8 +134,12 @@ const Login = () => {
           <Checkbox>Recuérdame</Checkbox>
         </Form.Item>
 
+        {/* Remember end*/}
+
         <span className={style.span}>or</span>
         <hr />
+
+        {/* Login Google */}
 
         <Form.Item
           wrapperCol={{
@@ -135,16 +157,22 @@ const Login = () => {
             </Button>
           </div>
 
+          {/* Login Google end*/}
+          {/* button submit */}
+
           <div className={style.submitBtn}>
             <Button
               block
               htmlType="submit"
-              onClick={handleWelcomeClick}
+              onClick={handleSubmit}
               style={buttonStyle}
               type="primary"
             >
               Ingresar
             </Button>
+
+            {/* button submit */}
+
           </div>
         </Form.Item>
         <div className={style.textRegister}>
@@ -161,7 +189,7 @@ const Login = () => {
         <User />
       </Modal>
       <Modal
-      className={style.welcome}
+        className={style.welcome}
         title="Inicio de sesión exitoso."
         open={showWelcomeModal}
         onOk={() => setShowWelcomeModal(false)}
