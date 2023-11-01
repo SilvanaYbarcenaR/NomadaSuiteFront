@@ -30,7 +30,6 @@ const CardsContainer = () => {
   }, []);
 
   useEffect(() => {
-    console.log(accommodations);
     setData([...data, ...accommodations]);
   }, [accommodations]);
 
