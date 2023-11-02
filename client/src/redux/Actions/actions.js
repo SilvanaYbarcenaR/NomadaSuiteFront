@@ -74,13 +74,16 @@ const getServices = () => {
 };
 
 const getFilteredAccommodation = (values) => {
-  const {city, country, startDate, endDate, rooms} = values
-  const cityName = `city=${city}`
-  const countryName = `country=${country}`
-  const startDateNum = `startDate=${startDate}`
-  const endDateNum = `endDate=${endDate}`
-  const roomsNum = `rooms=${rooms}`
-  const endpoint = `http://localhost:3001/api/filtered/combinated?${cityName}&${countryName}&${roomsNum}`
+  console.log(values);
+  const {city, country, startDate, endDate, rooms, min, max} = values
+  const cityName = city && `city=${city}`
+  const countryName = country && `&country=${country}`
+  const startDateNum = startDate && `&startDate=${startDate}`
+  const endDateNum = endDate && `&endDate=${endDate}`
+  const roomsNum = rooms && `&rooms=${rooms}`
+  const minPrice = `&min=${min}`
+  const maxPrice = max>0 && `&max=${max}`
+  const endpoint = `http://localhost:3001/api/filtered/combinated?${cityName}${countryName}${roomsNum}${minPrice}${maxPrice}`
   try {
     return async (dispatch) => {
       const { data } = await axios.get(endpoint);

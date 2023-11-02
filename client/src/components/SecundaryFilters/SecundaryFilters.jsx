@@ -1,44 +1,63 @@
 import { InputNumber, Space, Form, Select, Flex } from 'antd';
 import SecundaryFiltersStyles from './SecundaryFilters.module.css';
-import { RiOrderPlayFill } from 'react-icons/ri';
-import { BsFilter } from 'react-icons/bs';
 import { useDispatch } from 'react-redux';
-import { orderByRating } from '../../redux/actions/actions';
+import { orderByRating } from '../../redux/Actions/actions';
+import { useEffect, useState } from 'react';
 
-const SecundaryFilters = () => {
+const SecundaryFilters = ({ handleSecValues, show }) => {
   const dispatch = useDispatch();
+  const [values, setValues] = useState({
+    min: 0,
+    max: null
+  });
 
-  const onChange = (value) => {
-    console.log('changed', value);
+  const onChangeMin = (value) => {
+    setValues({
+      ...values,
+      min: value
+    });
+    handleSecValues({
+      ...values,
+      min: value
+    })
+  };
+  const onChangeMax = (value) => {
+    setValues({
+      ...values,
+      max: value
+    });
+    handleSecValues({
+      ...values,
+      max: value
+    })
   };
   const handleChange = (value) => {
     dispatch(orderByRating(value));
   };
+
   return (
-    <div className={SecundaryFiltersStyles.secundaryFilters}>
+    <div className={`${SecundaryFiltersStyles.secundaryFilters} ${show ? SecundaryFiltersStyles.show : ""}`}>
       <Form>
-        <Flex justify={"space-between"}>
-          <Form.Item label={<><BsFilter />&nbsp;Rango de precio</>}>
+        {console.log(show)}
+        <Flex justify={"center"}>
+          <Form.Item label={"Rango de precio"} style={{margin: '0' }}>
             <Space>
               <InputNumber
-                defaultValue={100}
                 formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
-                onChange={onChange}
+                onChange={onChangeMin}
+                min={0}
               />
               <InputNumber
-                defaultValue={500}
                 formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
-                onChange={onChange}
+                onChange={onChangeMax}
+                min={0}
               />
             </Space>
           </Form.Item>
-          <Form.Item label={<><RiOrderPlayFill />&nbsp;Rating</>}>
+          <Form.Item label={"Rating"} style={{margin: '0 0 0 25px' }}>
             <Select
-              style={{
-                width: '300px',
-              }}
               placeholder="Orden"
               onChange={handleChange}
               options={[{ value: "asc", label: "Ascendente" }, { value: "desc", label: "Descendente" }]}
