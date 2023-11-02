@@ -1,8 +1,12 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { AutoComplete, DatePicker, InputNumber, Space } from "antd";
 import { useDispatch } from "react-redux";
 import { getFilteredAccommodation } from "../../redux/Actions/actions";
 import SecundaryFilters from "../SecundaryFilters/SecundaryFilters";
+
+dayjs.extend(customParseFormat);
 
 const { RangePicker } = DatePicker;
 
@@ -17,6 +21,10 @@ const options = [
     value: 'Wall Street',
   },
 ];
+
+const disabledDate = (current) => {
+  return current && current < dayjs().endOf('day');
+};
 
 const SearchBar = () => {
   const dispatch = useDispatch();
@@ -107,7 +115,7 @@ const SearchBar = () => {
               option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
             }
           />
-          <RangePicker placeholder={['Check-in', 'Check-out']} onChange={onRangeChange} />
+          <RangePicker placeholder={['Check-in', 'Check-out']} onChange={onRangeChange} disabledDate={disabledDate} />
           <InputNumber value={values.rooms} placeholder={"Habitaciones"} min={1} max={10} onChange={onChangeRooms} type='number'
             style={{
               width: 114,
