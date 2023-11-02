@@ -24,7 +24,7 @@ const CardBox = ({ id, name, photos, rating, price, location }) => {
                 <Flex gap="middle" justify={'space-between'} align="flex-start">
                   <h2 className={CardStyles.cardTitle}>{name}</h2>
                   <Flex gap="3px" align="center">
-                    <AiFillStar/> {rating ? rating : 5 }
+                  {rating && <><AiFillStar/> {rating}</>}
                   </Flex>
                 </Flex>
                 <p className={CardStyles.location}>{location}</p>

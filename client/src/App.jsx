@@ -6,9 +6,10 @@ import Footer from './components/Footer/Footer.jsx';
 import './App.css'
 
 function App() {
+  
   return (
     <div>
-      <Header />
+      <Header/>
       <Routes>
         <Route path="/home" element={<Home />} />
         <Route path="/detail/:id" element={<AccommodationDetail />} />

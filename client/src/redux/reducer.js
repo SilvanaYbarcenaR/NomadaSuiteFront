@@ -1,5 +1,5 @@
 /* eslint-disable no-case-declarations */
-import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_FILTERED_ACCOMMODATION, GET_NEXT_ACCOMMODATIONS, GET_SERVICES, ORDER_BY_RATING, CLEAR_DETAIL } from "./actions/actions-types";
+import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_FILTERED_ACCOMMODATION, GET_NEXT_ACCOMMODATIONS, GET_SERVICES, ORDER_BY_RATING, CLEAR_DETAIL } from "./Actions/actions-types";
 
 let initialState = {
   accommodations: [],
@@ -48,7 +48,7 @@ const rootReducer = (state = initialState, { type, payload }) => {
           accommodations: [...state.accommodations]
         }
       }
-
+      
       return {
         ...state,
         accommodationsFiltered: filteredByOrder,
@@ -68,7 +68,6 @@ const rootReducer = (state = initialState, { type, payload }) => {
       }
       
     case GET_FILTERED_ACCOMMODATION:
-      console.log(payload);
       return{
         ...state,
         accommodationsFiltered: payload,

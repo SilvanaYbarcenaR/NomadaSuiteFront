@@ -5,8 +5,8 @@ import banner from '../../assets/image/banner.png';
 const Home = () => {
   return (
     <div>
-      <img style={{width:"100%", marginTop: "-15rem"}} src={banner}/>
-      <SecundaryFilters/>
+      <img style={{width:"100%"}} src={banner}/>
+      <SecundaryFilters />
       <Cards></Cards>
     </div>
   )
