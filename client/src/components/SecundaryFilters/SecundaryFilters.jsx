@@ -58,6 +58,7 @@ const SecundaryFilters = ({ handleSecValues, show }) => {
           </Form.Item>
           <Form.Item label={"Rating"} style={{margin: '0 0 0 25px' }}>
             <Select
+              style={{ width: "120px" }}
               placeholder="Orden"
               onChange={handleChange}
               options={[{ value: "asc", label: "Ascendente" }, { value: "desc", label: "Descendente" }]}

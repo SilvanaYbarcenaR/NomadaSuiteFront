@@ -1,7 +1,6 @@
-import React, {Component, useEffect} from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { clearDetail, getAccommodationById } from '../../../redux/Actions/actions';
-import Maps from "./GoogleMap";
 import { UserOutlined, CarOutlined, RightOutlined, CoffeeOutlined, LaptopOutlined, WifiOutlined, HeartFilled } from '@ant-design/icons';
 import { Col, DatePicker, Button, Anchor, Divider, InputNumber, Avatar, Card, Row, Carousel } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
