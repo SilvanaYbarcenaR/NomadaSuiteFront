@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import style from "./Login.module.css";
 import User from "../RegisterUser/User";
 import Welcome from "../Welcome/Welcome";
+import axios from "axios";
+import { useEffect } from "react";
 
 const buttonStyle = {
   background: "#231CA7",
@@ -15,6 +17,7 @@ const buttonStyle = {
 const googleBtnStyle = {
   border: "1px solid black",
   height: "3rem",
+  paddingTop: "0.8rem"
 };
 
 const Login = () => {
@@ -22,22 +25,31 @@ const Login = () => {
     email: '',
     password: ''
   });
+  const [errors, setErrors] = useState(null);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:3001/api/user/login', {
+        email: userData.email,
+        password: userData.password
+      });
+      const { accessToken, refreshToken } = response.data;
+      if (accessToken && refreshToken) {
+        handleWelcomeClick()
+      }
+    } catch (error) {
+      setErrors("Credenciales inválidas. Por favor, verifica tu correo y contraseña.");
+    }
+  };
 
   const handleChange = (event) => {
     const property = event.target.name;
     const value = event.target.value;
-
     setUserData({
       ...userData,
       [property]: value
     });
-  };
-
-  const onFinish = (values) => {
-    console.log('Success:', values);
-  };
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
   };
 
   const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -46,6 +58,28 @@ const Login = () => {
   const handleWelcomeClick = () => {
     setShowWelcomeModal(true);
   };
+
+  const handleRememberChange = (event) => {
+    const { name, checked } = event.target;
+    if (checked) {
+      localStorage.setItem("rememberMe", "true");
+      localStorage.setItem("email", userData.email);
+      localStorage.setItem("password", userData.password);
+    } else {
+      localStorage.removeItem("rememberMe");
+      localStorage.removeItem("email");
+      localStorage.removeItem("password");
+    }
+  };
+
+  useEffect(() => {
+    const rememberMe = localStorage.getItem("rememberMe");
+    if (rememberMe === "true") {
+      const email = localStorage.getItem("email") || "";
+      const password = localStorage.getItem("password") || "";
+      setUserData({ email, password });
+    }
+  }, []);
 
   return (
     <div className={style.loginBox}>
@@ -63,8 +97,6 @@ const Login = () => {
         initialValues={{
           remember: true,
         }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
       >
         <Form.Item
           name="email"
@@ -75,6 +107,9 @@ const Login = () => {
             },
           ]}
         >
+
+          {/* Email */}
+
           <div className={style.emailField}>
             <Input
               name="email"
@@ -82,10 +117,13 @@ const Login = () => {
               type="email"
               onChange={handleChange}
               autoComplete="true"
-              placeholder="Email"
+              placeholder="Correo"
             />
           </div>
         </Form.Item>
+
+        {/* Email end*/}
+        {/* Password */}
 
         <Form.Item
           name="password"
@@ -101,10 +139,14 @@ const Login = () => {
               name="password"
               value={userData.password}
               onChange={handleChange}
-              placeholder="Password"
+              placeholder="Contraseña"
             />
           </div>
         </Form.Item>
+        {errors && <p className={style.errorText}>{errors}</p>}
+
+        {/* Password end*/}
+        {/* Remember */}
 
         <Form.Item
           name="remember"
@@ -113,11 +155,15 @@ const Login = () => {
             span: 16,
           }}
         >
-          <Checkbox>Recuérdame</Checkbox>
+          <Checkbox onChange={handleRememberChange}>Recuérdame</Checkbox>
         </Form.Item>
+
+        {/* Remember end*/}
 
         <span className={style.span}>or</span>
         <hr />
+
+        {/* Login Google */}
 
         <Form.Item
           wrapperCol={{
@@ -126,6 +172,7 @@ const Login = () => {
         >
           <div className={style.googleBtn}>
             <Button
+              href="http://localhost:3001/auth/google"
               style={googleBtnStyle}
               type="submit"
               block
@@ -135,17 +182,23 @@ const Login = () => {
             </Button>
           </div>
 
+          {/* Login Google end*/}
+          {/* button submit */}
+
           <div className={style.submitBtn}>
             <Button
               block
               htmlType="submit"
-              onClick={handleWelcomeClick}
+              onClick={handleSubmit}
               style={buttonStyle}
               type="primary"
             >
               Ingresar
             </Button>
           </div>
+
+          {/* button submit */}
+
         </Form.Item>
         <div className={style.textRegister}>
           <p>¿No tienes una cuenta? <Link onClick={() => setShowRegisterModal(true)}>Regístrate</Link></p>
@@ -161,7 +214,7 @@ const Login = () => {
         <User />
       </Modal>
       <Modal
-      className={style.welcome}
+        className={style.welcome}
         title="Inicio de sesión exitoso."
         open={showWelcomeModal}
         onOk={() => setShowWelcomeModal(false)}

@@ -1,7 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { Button, Carousel, DatePicker, Form, Input } from 'antd';
-import style from "./User.module.css";
+import { FcGoogle } from "react-icons/fc";
 import Photo from '../Photo/Photo';
+import axios from 'axios';
+import style from "./User.module.css";
 
 const buttonStyle = {
   background: "#231CA7",
@@ -9,24 +11,38 @@ const buttonStyle = {
   height: "3rem",
 };
 
+const googleBtnStyle = {
+  border: "1px solid black",
+  height: "3rem",
+  paddingTop: "0.8rem"
+};
+
 const User = () => {
   const [form, setForm] = useState({
-    userName: '',
+    firstName: '',
     lastName: '',
     email: '',
     password: '',
-    confirm: '',
     birthdate: '',
-    wantsNotification: true
   });
 
   const handleChange = (event) => {
     const property = event.target.name;
     const value = event.target.value;
-    setForm({
-      ...form,
-      [property]: value
-    });
+    if (property === 'firstName') {
+      const names = value.split(' ');
+      const updatedFirstName = names[0];
+      setForm({
+        ...form,
+        [property]: value,
+        userName: updatedFirstName,
+      });
+    } else {
+      setForm({
+        ...form,
+        [property]: value
+      });
+    }
   };
 
   const handleDateChange = (date, dateString) => {
@@ -37,34 +53,44 @@ const User = () => {
   };
 
   const carouselRef = useRef();
+  const [serverResponse, setServerResponse] = useState(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
-  const handleNextSlide = () => {
-    const currentDate = new Date();
-    const birthdate = new Date(form.birthdate);
-    const age = currentDate.getFullYear() - birthdate.getFullYear();
-
-    if (
-      form.userName &&
-      form.lastName &&
-      form.email &&
-      form.password &&
-      form.password === form.confirm &&
-      age >= 18
-    ) {
-      carouselRef.current.next();
-    };
-  }
-
-
-  const onFinish = (values) => {
-    console.log('Success:', values);
+  const handleNextSlide = async () => {
+    try {
+      const currentDate = new Date();
+      const birthdate = new Date(form.birthdate);
+      const age = currentDate.getFullYear() - birthdate.getFullYear();
+      if (form.firstName && form.lastName && form.email && form.password && form.password === form.confirm && age >= 18) {
+        const response = await axios.post('http://localhost:3001/api/user/register', {
+          userName: form.userName,
+          firstName: form.firstName,
+          lastName: form.lastName,
+          email: form.email,
+          password: form.password,
+          birthdate: form.birthdate,
+        })
+      }
+      if (setServerResponse({ success: 'Usuario registrado con éxito' })) {
+        setCurrentSlide(1);
+      }
+    } catch (error) {
+      console.error(error);
+      setServerResponse({ error: 'No se pudo registrar el usuario' });
+    }
   };
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
+  const renderServerResponse = () => {
+    if (serverResponse) {
+      return (
+        <div className={serverResponse.error ? 'error' : 'success'}>
+          {serverResponse.error || serverResponse.success}
+        </div>
+      );
+    }
   };
 
   return (
-    <Carousel effect="fade" dots={false} ref={carouselRef}>
+    <Carousel effect="fade" dots={true} ref={carouselRef}>
       <div>
         <Form
           name="user"
@@ -77,11 +103,12 @@ const User = () => {
           style={{
             maxWidth: "100%",
           }}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
         >
+
+          {/* FirstName */}
+
           <Form.Item
-            name="userName"
+            name="firstName"
             rules={[
               {
                 required: true,
@@ -91,8 +118,8 @@ const User = () => {
           >
             <div className={style.nameField}>
               <Input
-                name="userName"
-                value={form.userName}
+                name="firstName"
+                value={form.firstName}
                 type="text"
                 onChange={handleChange}
                 autoComplete="true"
@@ -100,6 +127,9 @@ const User = () => {
               />
             </div>
           </Form.Item>
+
+          {/* FirstName end*/}
+          {/* LastName */}
 
           <Form.Item
             name="lastName"
@@ -122,9 +152,14 @@ const User = () => {
             </div>
           </Form.Item>
 
+          {/* LastName end*/}
+
           <div className={style.ageField}>
             <p>Para registrarte, debes tener al menos 18 años. Tu fecha de nacimiento no se compartirá con otras personas que utilicen nuestra app.</p>
           </div>
+
+          {/* Birthdate */}
+
           <Form.Item name="date-picker"
             rules={[{
               required: true,
@@ -149,6 +184,9 @@ const User = () => {
             />
           </Form.Item>
 
+          {/* Birthdate end*/}
+          {/* Email */}
+
           <Form.Item
             name="email"
             rules={[
@@ -172,6 +210,9 @@ const User = () => {
               />
             </div>
           </Form.Item>
+
+          {/* Email end*/}
+          {/* Password */}
 
           <Form.Item
             name="password"
@@ -210,6 +251,9 @@ const User = () => {
             </div>
           </Form.Item>
 
+          {/* Password end*/}
+          {/* Confirm password */}
+
           <Form.Item
             name="confirm"
             dependencies={['password']}
@@ -239,17 +283,44 @@ const User = () => {
             </div>
           </Form.Item>
 
-          <div className={style.submitBtn}>
-            <Button
-              type="primary"
-              htmlType="submit"
-              onClick={handleNextSlide}
-              style={buttonStyle}
-              block
-            >
-              Ingresar
-            </Button>
-          </div>
+          {/* Confirm password end*/}
+          {/* Button submit */}
+
+          <Form.Item
+            wrapperCol={{
+              span: 24,
+            }}
+          >
+            <div className={style.submitBtn}>
+              <Button
+                block
+                htmlType="submit"
+                onClick={handleNextSlide}
+                style={buttonStyle}
+                type="primary"
+              >
+                Registrarse
+              </Button>
+            </div>
+
+            {/* Google */}
+
+            <div className={style.googleBtn}>
+              <Button
+                href="http://localhost:3001/auth/google"
+                style={googleBtnStyle}
+                type="submit"
+                block
+              >
+                Regístrate con Google
+                <FcGoogle className={style.icon} />
+              </Button>
+            </div>
+          </Form.Item>
+
+          {/* Google end*/}
+
+          {renderServerResponse()}
         </Form>
       </div >
       <div>
