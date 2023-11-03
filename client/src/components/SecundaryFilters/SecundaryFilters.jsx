@@ -53,6 +53,7 @@ const SecundaryFilters = ({ handleSecValues, show }) => {
                 parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
                 onChange={onChangeMax}
                 min={0}
+                step="0.01"
               />
             </Space>
           </Form.Item>
