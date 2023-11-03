@@ -1,6 +1,7 @@
 const Accommodation = () => {
     return (
         <div>
+        
         </div>
     )
 };
