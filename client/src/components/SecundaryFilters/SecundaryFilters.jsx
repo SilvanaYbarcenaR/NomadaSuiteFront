@@ -39,13 +39,14 @@ const SecundaryFilters = ({ handleSecValues, show }) => {
     <div className={`${SecundaryFiltersStyles.secundaryFilters} ${show ? SecundaryFiltersStyles.show : ""}`}>
       <Form>
         <Flex justify={"center"}>
-          <Form.Item label={"Rango de precio"} style={{margin: '0' }}>
+          <Form.Item label={"Rango de precio"} style={{ margin: '0' }}>
             <Space>
               <InputNumber
                 formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
-                onChange={onChangeMin}
                 min={0}
+                onChange={onChangeMin}
+                parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
+                step="0.01"
               />
               <InputNumber
                 formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
@@ -55,7 +56,7 @@ const SecundaryFilters = ({ handleSecValues, show }) => {
               />
             </Space>
           </Form.Item>
-          <Form.Item label={"Rating"} style={{margin: '0 0 0 25px' }}>
+          <Form.Item label={"Rating"} style={{ margin: '0 0 0 25px' }}>
             <Select
               style={{ width: "120px" }}
               placeholder="Orden"

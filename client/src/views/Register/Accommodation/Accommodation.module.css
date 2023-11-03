@@ -1,0 +1,29 @@
+.Accommodation {
+    display: flex;
+    justify-content: center;
+}
+
+.accommodationBox {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    padding-top: 1.5rem;
+    width: 600px;
+}
+
+.Accommodation h1 {
+    font-weight: 700;
+    padding-bottom: 1.5rem;
+}
+
+.services {
+    display: flex;
+}
+
+.bedroom {
+    width: 100%;
+}
+
+.bathroom {
+    width: 100%;
+}

@@ -6,6 +6,7 @@ import style from "./Login.module.css";
 import User from "../RegisterUser/User";
 import Welcome from "../Welcome/Welcome";
 import axios from "axios";
+import { useEffect } from "react";
 
 const buttonStyle = {
   background: "#231CA7",
@@ -16,6 +17,7 @@ const buttonStyle = {
 const googleBtnStyle = {
   border: "1px solid black",
   height: "3rem",
+  paddingTop: "0.8rem"
 };
 
 const Login = () => {
@@ -57,6 +59,28 @@ const Login = () => {
     setShowWelcomeModal(true);
   };
 
+  const handleRememberChange = (event) => {
+    const { name, checked } = event.target;
+    if (checked) {
+      localStorage.setItem("rememberMe", "true");
+      localStorage.setItem("email", userData.email);
+      localStorage.setItem("password", userData.password);
+    } else {
+      localStorage.removeItem("rememberMe");
+      localStorage.removeItem("email");
+      localStorage.removeItem("password");
+    }
+  };
+
+  useEffect(() => {
+    const rememberMe = localStorage.getItem("rememberMe");
+    if (rememberMe === "true") {
+      const email = localStorage.getItem("email") || "";
+      const password = localStorage.getItem("password") || "";
+      setUserData({ email, password });
+    }
+  }, []);
+
   return (
     <div className={style.loginBox}>
       <Form
@@ -93,7 +117,7 @@ const Login = () => {
               type="email"
               onChange={handleChange}
               autoComplete="true"
-              placeholder="Email"
+              placeholder="Correo"
             />
           </div>
         </Form.Item>
@@ -115,7 +139,7 @@ const Login = () => {
               name="password"
               value={userData.password}
               onChange={handleChange}
-              placeholder="Password"
+              placeholder="Contraseña"
             />
           </div>
         </Form.Item>
@@ -131,7 +155,7 @@ const Login = () => {
             span: 16,
           }}
         >
-          <Checkbox>Recuérdame</Checkbox>
+          <Checkbox onChange={handleRememberChange}>Recuérdame</Checkbox>
         </Form.Item>
 
         {/* Remember end*/}
@@ -148,6 +172,7 @@ const Login = () => {
         >
           <div className={style.googleBtn}>
             <Button
+              href="http://localhost:3001/auth/google"
               style={googleBtnStyle}
               type="submit"
               block
@@ -170,10 +195,10 @@ const Login = () => {
             >
               Ingresar
             </Button>
-
-            {/* button submit */}
-
           </div>
+
+          {/* button submit */}
+
         </Form.Item>
         <div className={style.textRegister}>
           <p>¿No tienes una cuenta? <Link onClick={() => setShowRegisterModal(true)}>Regístrate</Link></p>

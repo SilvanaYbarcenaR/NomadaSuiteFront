@@ -34,3 +34,16 @@
 .user-slide-short {
   max-height: 50vh;
 }
+
+.icon {
+  position: absolute;
+  top: 17px;
+}
+
+.googleBtn {
+  padding-top: 1.5rem;
+}
+
+.googleBtn Button {
+  border-radius: 4px;
+}
