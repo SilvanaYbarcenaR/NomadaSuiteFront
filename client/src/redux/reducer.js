@@ -1,5 +1,5 @@
 /* eslint-disable no-case-declarations */
-import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_FILTERED_ACCOMMODATION, GET_NEXT_ACCOMMODATIONS, GET_SERVICES, ORDER_BY_RATING, CLEAR_DETAIL, GET_LOCATIONS } from "./Actions/actions-types";
+import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_FILTERED_ACCOMMODATION, GET_NEXT_ACCOMMODATIONS, GET_SERVICES, ORDER_BY_RATING, CLEAR_DETAIL, GET_COUNTRIES, GET_CITIES, GET_LOCATIONS } from "./Actions/actions-types";
 
 let initialState = {
   accommodations: [],
@@ -8,6 +8,8 @@ let initialState = {
   accommodationsFiltered: [],
   itemsPerPage: 12,
   services: [],
+  countries: [],
+  cities: [],
   locations: []
 };
 
@@ -49,7 +51,7 @@ const rootReducer = (state = initialState, { type, payload }) => {
           accommodations: [...state.accommodations]
         }
       }
-      
+
       return {
         ...state,
         accommodationsFiltered: filteredByOrder,
@@ -61,13 +63,13 @@ const rootReducer = (state = initialState, { type, payload }) => {
         ...state,
         accommodations: [...state.accommodationsFiltered].splice(payload * ITEMS_PER_PAGE, ITEMS_PER_PAGE),
       }
-      
+
     case GET_SERVICES:
       return {
         ...state,
         services: payload
       }
-      
+
     case GET_FILTERED_ACCOMMODATION:
       return {
         ...state,
@@ -84,11 +86,21 @@ const rootReducer = (state = initialState, { type, payload }) => {
         ...state,
         locations: newLocations
       }
-      
+
     case CLEAR_DETAIL:
       return {
         ...state,
         accommodationById: {},
+      }
+    case GET_COUNTRIES:
+      return {
+        ...state,
+        countries: payload
+      }
+    case GET_CITIES:
+      return {
+        ...state,
+        cities: payload
       }
 
     default:

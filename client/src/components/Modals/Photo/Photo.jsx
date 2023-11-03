@@ -95,7 +95,7 @@ const Photo = () => {
       >
         <hr />
         <h1>Añade una foto</h1>
-        <p>Elige una imagen que muestre tu rostro. Los anfitriones no podrán ver tu foto de perfil hasta que se confirme tu reserva.</p>
+        <p>Elige una imagen que muestre tu rostro.</p>
         <Form.Item valuePropName="fileList" getValueFromEvent={normFile}>
           <Upload
             accept='image/png, image/jpeg'

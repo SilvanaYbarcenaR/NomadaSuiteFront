@@ -1,11 +1,11 @@
 import '../Header/Header.css'
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';  
 import NSlogo2 from "../../assets/image/logo.png"
 import { Space, Dropdown, Modal } from 'antd';
 import User from '../Modals/RegisterUser/User';
 import Login from '../Modals/Login/Login';
 import SearchBar from '../SearchBar/SearchBar';
+import { Link, NavLink } from 'react-router-dom/dist';
 
 
 function Header() {
@@ -30,7 +30,7 @@ function Header() {
       type: 'divider',
     },
     {
-      label: 'Publica tu espacio',
+      label: <NavLink to="/register-accommodation">Publica tu espacio</NavLink>,
       key: '3',
     },
     {

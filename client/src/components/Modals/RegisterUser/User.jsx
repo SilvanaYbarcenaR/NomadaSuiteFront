@@ -1,8 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { Button, Carousel, DatePicker, Form, Input } from 'antd';
-import style from "./User.module.css";
+import { FcGoogle } from "react-icons/fc";
 import Photo from '../Photo/Photo';
 import axios from 'axios';
+import style from "./User.module.css";
 
 const buttonStyle = {
   background: "#231CA7",
@@ -10,9 +11,14 @@ const buttonStyle = {
   height: "3rem",
 };
 
+const googleBtnStyle = {
+  border: "1px solid black",
+  height: "3rem",
+  paddingTop: "0.8rem"
+};
+
 const User = () => {
   const [form, setForm] = useState({
-    userName: '',
     firstName: '',
     lastName: '',
     email: '',
@@ -84,7 +90,7 @@ const User = () => {
   };
 
   return (
-    <Carousel effect="fade" dots={false} ref={carouselRef}>
+    <Carousel effect="fade" dots={true} ref={carouselRef}>
       <div>
         <Form
           name="user"
@@ -280,20 +286,40 @@ const User = () => {
           {/* Confirm password end*/}
           {/* Button submit */}
 
-          <div className={style.submitBtn}>
-            <Button
-              type="primary"
-              htmlType="submit"
-              onClick={handleNextSlide}
-              style={buttonStyle}
-              block
-            >
-              Ingresar
-            </Button>
+          <Form.Item
+            wrapperCol={{
+              span: 24,
+            }}
+          >
+            <div className={style.submitBtn}>
+              <Button
+                block
+                htmlType="submit"
+                onClick={handleNextSlide}
+                style={buttonStyle}
+                type="primary"
+              >
+                Registrarse
+              </Button>
+            </div>
 
-            {/* Button submit */}
+            {/* Google */}
 
-          </div>
+            <div className={style.googleBtn}>
+              <Button
+                href="http://localhost:3001/auth/google"
+                style={googleBtnStyle}
+                type="submit"
+                block
+              >
+                Regístrate con Google
+                <FcGoogle className={style.icon} />
+              </Button>
+            </div>
+          </Form.Item>
+
+          {/* Google end*/}
+
           {renderServerResponse()}
         </Form>
       </div >
