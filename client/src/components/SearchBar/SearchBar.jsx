@@ -1,26 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { AutoComplete, DatePicker, InputNumber, Space } from "antd";
-import { useDispatch } from "react-redux";
-import { getFilteredAccommodation } from "../../redux/Actions/actions";
+import { useDispatch, useSelector } from "react-redux";
+import { getFilteredAccommodation, getLocations } from "../../redux/Actions/actions";
 import SecundaryFilters from "../SecundaryFilters/SecundaryFilters";
 
 dayjs.extend(customParseFormat);
 
 const { RangePicker } = DatePicker;
-
-const options = [
-  {
-    value: 'Burns Bay Road',
-  },
-  {
-    value: 'Downing Street',
-  },
-  {
-    value: 'Wall Street',
-  },
-];
 
 const disabledDate = (current) => {
   return current && current < dayjs().endOf('day');
@@ -28,6 +16,7 @@ const disabledDate = (current) => {
 
 const SearchBar = () => {
   const dispatch = useDispatch();
+  const locations = useSelector((state) => state.locations);
   const [showSecundaryFilters, setShowSecundaryFilters] = useState(false);
   const [secValues, setSecValues] = useState({
     min: '',
@@ -98,13 +87,17 @@ const SearchBar = () => {
     }
   };
 
+  useEffect(() => {
+    dispatch(getLocations());
+  }, [])
+
   return (
     <div>
       <div className='flex border border-gray-200 rounded-full py-2 px-4 shadow-md' onClick={(handleSecundaryFilters)}>
         <Space size={12}>
           <AutoComplete
             value={values.location}
-            options={options}
+            options={locations}
             style={{
               width: 200,
             }}

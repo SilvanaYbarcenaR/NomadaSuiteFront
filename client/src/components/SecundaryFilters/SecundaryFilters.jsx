@@ -38,7 +38,6 @@ const SecundaryFilters = ({ handleSecValues, show }) => {
   return (
     <div className={`${SecundaryFiltersStyles.secundaryFilters} ${show ? SecundaryFiltersStyles.show : ""}`}>
       <Form>
-        {console.log(show)}
         <Flex justify={"center"}>
           <Form.Item label={"Rango de precio"} style={{margin: '0' }}>
             <Space>
