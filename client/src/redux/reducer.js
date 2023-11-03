@@ -1,5 +1,9 @@
 /* eslint-disable no-case-declarations */
+<<<<<<< HEAD
 import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_FILTERED_ACCOMMODATION, GET_NEXT_ACCOMMODATIONS, GET_SERVICES, ORDER_BY_RATING, CLEAR_DETAIL, GET_COUNTRIES, GET_CITIES } from "./Actions/actions-types";
+=======
+import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_FILTERED_ACCOMMODATION, GET_NEXT_ACCOMMODATIONS, GET_SERVICES, ORDER_BY_RATING, CLEAR_DETAIL, GET_LOCATIONS } from "./Actions/actions-types";
+>>>>>>> dev
 
 let initialState = {
   accommodations: [],
@@ -8,8 +12,12 @@ let initialState = {
   accommodationsFiltered: [],
   itemsPerPage: 12,
   services: [],
+<<<<<<< HEAD
   countries: [],
   cities: []
+=======
+  locations: []
+>>>>>>> dev
 };
 
 const rootReducer = (state = initialState, { type, payload }) => {
@@ -76,6 +84,19 @@ const rootReducer = (state = initialState, { type, payload }) => {
         accommodations: payload,
       }
 
+<<<<<<< HEAD
+=======
+    case GET_LOCATIONS:
+      const newLocations = [];
+      payload.forEach((location) => {
+        newLocations.push({value: location});
+      })
+      return {
+        ...state,
+        locations: newLocations
+      }
+      
+>>>>>>> dev
     case CLEAR_DETAIL:
       return {
         ...state,
