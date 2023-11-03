@@ -172,7 +172,7 @@ const Login = () => {
         >
           <div className={style.googleBtn}>
             <Button
-              href="/auth/google"
+              href="http://localhost:3001/auth/google"
               style={googleBtnStyle}
               type="submit"
               block

@@ -1,10 +1,6 @@
 /* eslint-disable no-unreachable */
 import axios from "axios";
-<<<<<<< HEAD
-import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING, GET_FILTERED_ACCOMMODATION, CLEAR_DETAIL, GET_COUNTRIES, GET_CITIES } from "./actions-types";
-=======
-import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING, GET_FILTERED_ACCOMMODATION, CLEAR_DETAIL, GET_LOCATIONS } from "./actions-types";
->>>>>>> dev
+import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING, GET_FILTERED_ACCOMMODATION, CLEAR_DETAIL, GET_COUNTRIES, GET_CITIES, GET_LOCATIONS } from "./actions-types";
 
 const getAccommodations = () => {
   const endpoint = "http://localhost:3001/api/accommodation/";
@@ -86,11 +82,7 @@ const getFilteredAccommodation = (values) => {
   const endDateNum = endDate && `&endDate=${endDate}`
   const roomsNum = rooms && `&rooms=${rooms}`
   const minPrice = `&min=${min}`
-<<<<<<< HEAD
-  const maxPrice = max > 0 && `&max=${max}`
-=======
-  const maxPrice = max>0 ? `&max=${max}` : ""
->>>>>>> dev
+  const maxPrice = max > 0 ? `&max=${max}` : ""
   const endpoint = `http://localhost:3001/api/filtered/combinated?${cityName}${countryName}${roomsNum}${minPrice}${maxPrice}`
   try {
     return async (dispatch) => {
@@ -105,7 +97,7 @@ const getFilteredAccommodation = (values) => {
   }
 }
 
-const getLocations = ()  => {
+const getLocations = () => {
   const endpoint = "http://localhost:3001/api/location";
   try {
     return async (dispatch) => {
@@ -174,11 +166,8 @@ export {
   getServices,
   getNextAccommodations,
   getFilteredAccommodation,
-<<<<<<< HEAD
   getCountries,
-=======
   getLocations,
->>>>>>> dev
   orderByRating,
   getCities,
   clearDetail
