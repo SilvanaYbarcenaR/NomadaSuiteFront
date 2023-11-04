@@ -75,7 +75,6 @@ const User = () => {
         setCurrentSlide(1);
       }
     } catch (error) {
-      console.error(error);
       setServerResponse({ error: 'No se pudo registrar el usuario' });
     }
   };

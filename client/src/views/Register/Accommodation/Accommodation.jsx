@@ -31,8 +31,6 @@ const getBase64 = (file) =>
     reader.onerror = (error) => reject(error);
   });
 
-//GoogleMaps
-
 const containerStyle = {
   width: '100%',
   height: '300px'
@@ -50,14 +48,28 @@ const Accommodation = () => {
   const dispatch = useDispatch();
 
   const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState('');
-  const [previewTitle, setPreviewTitle] = useState('');
-  const [fileList, setFileList] = useState([])
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+  const [fileList, setFileList] = useState([]);
   const handleCancel = () => setPreviewOpen(false);
+
+  const [formData, setFormData] = useState({
+    name: "",
+    bedroom: [],
+    bathroom: [],
+    services: [],
+    country: "",
+    city: "",
+    address: "",
+    zipCode: "",
+    description: "",
+    price: 0,
+  });
+  console.log(formData.services);
 
   useEffect(() => {
     dispatch(getServices());
-    dispatch(getCountries())
+    dispatch(getCountries());
   }, []);
 
   const handleChangePhoto = ({ fileList: newFileList }) => setFileList(newFileList);
@@ -67,48 +79,69 @@ const Accommodation = () => {
     }
     setPreviewImage(file.url || file.preview);
     setPreviewOpen(true);
-    setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
+    setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf("/") + 1));
   };
 
   const [serverResponse, setServerResponse] = useState(null);
 
-  const handleFormSubmit = async (event) => {
-    event.preventDefault();
-
-    const formData = new FormData(event.target);
-
-    try {
-      const response = await axios.post('http://localhost:3001/api/accommodation/create', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+  const handleFormChange = (field, value) => {
+    if (field === "bedroom" || field === "bathroom") {
+      setFormData({
+        ...formData,
+        services: [...formData.services, value]
       });
-      if (response.status === 200) {
-        setServerResponse({ success: 'Registro exitoso' });
+    } else {
+      if (field === "services") {
+        setFormData({
+          ...formData,
+          services: [...formData.services, value]
+        });
       } else {
-        setServerResponse({ error: 'No se pudo realizar el registro' });
+        setFormData({
+          ...formData,
+          [field]: value
+        });
       }
-    } catch (error) {
-      setServerResponse({ error: 'Hubo un error en la solicitud' });
     }
   };
 
-  const [form, setForm] = useState({});
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    // Crear un objeto FormData con los datos de formData
+    const formDataToSend = new FormData();
+    formDataToSend.append("name", formData.name);
+    formDataToSend.append("bedroom", formData.bedroom);
+    formDataToSend.append("bathroom", formData.bathroom);
+    formDataToSend.append("services", JSON.stringify(formData.services));
+    formDataToSend.append("country", formData.country);
+    formDataToSend.append("city", formData.city);
+    formDataToSend.append("address", formData.address);
+    formDataToSend.append("zipCode", formData.zipCode);
+    formDataToSend.append("description", formData.description);
+    formDataToSend.append("price", formData.price);
+    // Agregar la imagen a formDataToSend (fileList[0] debería ser un archivo)
+    if (fileList.length > 0) {
+      formDataToSend.append("image", fileList[0].originFileObj);
+    }
 
-  const handleChange = (event) => {
-    const property = event.target.name;
-    const value = event.target.value
-    setForm({
-      ...form,
-      [property]: value
-    });
+    try {
+      // Realizar la solicitud POST al servidor con formDataToSend
+      const response = await axios.post("URL_DE_TU_API", formDataToSend, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      setServerResponse({ success: "Usuario registrado con éxito" });
+    } catch (error) {
+      setServerResponse({ error: "No se pudo registrar el usuario" });
+    }
   };
 
   const handleCity = (value) => {
-    dispatch(getCities(value))
+    dispatch(getCities(value));
   };
 
-  //GoogleMaps
+  // GoogleMaps
   const [selectedCoordinates, setSelectedCoordinates] = useState({
     lat: 0,
     lng: 0,
@@ -120,7 +153,6 @@ const Accommodation = () => {
       lng: event.latLng.lng(),
     });
   };
-
   return (
     <div className={style.Accommodation}>
       <div className={style.accommodationBox}>
@@ -153,7 +185,8 @@ const Accommodation = () => {
               <Input
                 type="text"
                 autoComplete="true"
-                onChange={handleChange}
+                value={formData.name}
+                onChange={(e) => handleFormChange("name", e.target.value)}
               />
             </Form.Item>
           </div>
@@ -170,9 +203,9 @@ const Accommodation = () => {
                 name="bedroom"
               >
                 <Select
-                  mode="multiple"
                   placeholder="Selecciona la cantidad de habitaciones"
-                  onChange={handleChange}
+                  value={formData.bedroom}
+                  onChange={(value) => handleFormChange("bedroom", value)}
                 >
                   {services.filter((service) => service.name === 'Habitación')
                     .map((service) => (
@@ -193,9 +226,9 @@ const Accommodation = () => {
                 name="bathroom"
               >
                 <Select
-                  mode="multiple"
                   placeholder="Selecciona la cantidad de baños"
-                  onChange={handleChange}
+                  value={formData.bathroom}
+                  onChange={(value) => handleFormChange("bathroom", value)}
                 >
                   {services
                     .filter((service) => service.name === 'Baño')
@@ -224,7 +257,8 @@ const Accommodation = () => {
                     value: service._id,
                     key: service._id,
                   }))}
-                name="otherServices"
+                value={formData.services}
+                onChange={(value) => handleFormChange("services", value)}
               />
             </Form.Item>
           </div>
@@ -241,11 +275,11 @@ const Accommodation = () => {
             <Upload
               action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
               listType="picture-card"
-              accept='image/png, image/jpeg'
+              accept="image/png, image/jpeg"
               fileList={fileList}
               onPreview={handlePreview}
               onChange={handleChangePhoto}
-              type='file'
+              type="file"
             >
               <div>
                 <PlusOutlined />
@@ -278,7 +312,8 @@ const Accommodation = () => {
           >
             <Select
               placeholder="Selecciona el país"
-              onChange={(value) => handleCity(value)}
+              onChange={(value) => handleCity(value) && handleFormChange("country", value)}
+              value={formData.country}
             >
               {countries.map((country) => (
                 <Select.Option
@@ -300,6 +335,8 @@ const Accommodation = () => {
           >
             <Select
               placeholder="Selecciona la ciudad"
+              value={formData.city}
+              onChange={(value) => handleFormChange("city", value)}
             >
               {cities.map((country) => (
                 <Select.Option
@@ -327,7 +364,8 @@ const Accommodation = () => {
           >
             <Input
               type="text"
-              onChange={handleChange}
+              value={formData.address}
+              onChange={(e) => handleFormChange("address", e.target.value)}
             />
           </Form.Item>
 
@@ -346,7 +384,8 @@ const Accommodation = () => {
           >
             <Input
               type="number"
-              onChange={handleChange}
+              value={formData.zipCode}
+              onChange={(value) => handleFormChange("zipCode", value)}
             />
           </Form.Item>
 
@@ -372,7 +411,11 @@ const Accommodation = () => {
             label="Despripción"
             name="description"
           >
-            <TextArea rows={4} />
+            <TextArea
+              rows={4}
+              value={formData.description}
+              onChange={(e) => handleFormChange("description", e.target.value)}
+            />
           </Form.Item>
 
           {/* Description end */}
@@ -387,6 +430,8 @@ const Accommodation = () => {
               min={0}
               parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
               step="0.01"
+              value={formData.price}
+              onChange={(value) => handleFormChange("price", value)}
             />
           </Form.Item>
 
