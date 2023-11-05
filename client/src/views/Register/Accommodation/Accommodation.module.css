@@ -4,11 +4,13 @@
 }
 
 .accommodationBox {
-    align-items: center;
-    display: flex;
-    justify-content: center;
     padding-top: 1.5rem;
-    width: 600px;
+    width: 500px;
+}
+
+.services {
+    display: flex;
+    width: 100%;
 }
 
 .Accommodation h1 {
@@ -16,14 +18,13 @@
     padding-bottom: 1.5rem;
 }
 
-.services {
-    display: flex;
+.map {
+    position: relative;
+    left: -4.5rem;
+    margin-bottom: 1.5rem;
+    width: 130%;
 }
 
-.bedroom {
-    width: 100%;
-}
-
-.bathroom {
-    width: 100%;
+.Accommodation hr {
+    padding-bottom: 1.5rem;
 }

@@ -2,7 +2,7 @@ import { InputNumber, Space, Form, Select, Flex } from 'antd';
 import SecundaryFiltersStyles from './SecundaryFilters.module.css';
 import { useDispatch } from 'react-redux';
 import { orderByRating } from '../../redux/Actions/actions';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const SecundaryFilters = ({ handleSecValues, show }) => {
   const dispatch = useDispatch();

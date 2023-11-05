@@ -17,6 +17,7 @@ function Header() {
   const closeLoginModal = () => {
     setIsLoginModalVisible(false);
   };
+
   const items = [
     {
       label: <a className='font-bold' onClick={() => setIsUserModalVisible(true)}>Registro</a>,
@@ -106,7 +107,7 @@ function Header() {
             onCancel={closeLoginModal}
             footer={null}
           >
-            <Login />
+            <Login closeModal={closeLoginModal}/>
           </Modal>
 
         </header>

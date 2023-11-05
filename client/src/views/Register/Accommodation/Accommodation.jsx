@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCities, getCountries, getServices } from "../../../redux/Actions/actions";
-import { Button, Checkbox, Form, Input, InputNumber, Modal, Select, Upload } from "antd";
+import { Button, Checkbox, Form, Input, InputNumber, Modal, Select, Upload, Row, Col } from "antd";
 import { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import axios from "axios";
@@ -12,7 +12,7 @@ const buttonStyle = {
   background: "#231CA7",
   color: "white",
   height: "3rem",
-  width: "100%"
+  width: "140%"
 };
 
 const { TextArea } = Input;
@@ -55,8 +55,6 @@ const Accommodation = () => {
 
   const [formData, setFormData] = useState({
     name: "",
-    bedroom: [],
-    bathroom: [],
     services: [],
     country: "",
     city: "",
@@ -64,6 +62,7 @@ const Accommodation = () => {
     zipCode: "",
     description: "",
     price: 0,
+    coordinates: ""
   });
   console.log(formData.services);
 
@@ -92,15 +91,22 @@ const Accommodation = () => {
       });
     } else {
       if (field === "services") {
+        const services = [...formData.services, ...value]
+        const servicesFiltered = [...formData.services, ...value].filter((service, index) => {
+          return services.indexOf(service) === index;
+        });
         setFormData({
           ...formData,
-          services: [...formData.services, value]
+          services: servicesFiltered
         });
       } else {
         setFormData({
           ...formData,
           [field]: value
         });
+      }
+      if (field === "country") {
+        dispatch(getCities(value));
       }
     }
   };
@@ -137,22 +143,16 @@ const Accommodation = () => {
     }
   };
 
-  const handleCity = (value) => {
-    dispatch(getCities(value));
-  };
-
   // GoogleMaps
-  const [selectedCoordinates, setSelectedCoordinates] = useState({
-    lat: 0,
-    lng: 0,
-  });
 
   const handleMapClick = (event) => {
-    setSelectedCoordinates({
+    setFormData({
+      ...formData,
       lat: event.latLng.lat(),
       lng: event.latLng.lng(),
     });
   };
+
   return (
     <div className={style.Accommodation}>
       <div className={style.accommodationBox}>
@@ -186,7 +186,7 @@ const Accommodation = () => {
                 type="text"
                 autoComplete="true"
                 value={formData.name}
-                onChange={(e) => handleFormChange("name", e.target.value)}
+                onChange={(event) => handleFormChange("name", event.target.value)}
               />
             </Form.Item>
           </div>
@@ -194,15 +194,18 @@ const Accommodation = () => {
           {/* Accommodation Name end */}
           {/* Services */}
 
+          <hr />
           <h1>Servicios</h1>
 
-          <div className={style.services}>
-            <div className={style.bedroom}>
+          <Row>
+            <Col span={12}>
               <Form.Item
-                label="Habitaciones"
+                label="Habitaciones: "
                 name="bedroom"
+                labelCol={{ span: 10 }}
               >
                 <Select
+                  style={{ width: '100%' }}
                   placeholder="Selecciona la cantidad de habitaciones"
                   value={formData.bedroom}
                   onChange={(value) => handleFormChange("bedroom", value)}
@@ -218,14 +221,16 @@ const Accommodation = () => {
                     ))}
                 </Select>
               </Form.Item>
-            </div>
+            </Col>
 
-            <div className={style.bathroom}>
+            <Col span={12}>
               <Form.Item
-                label="Baños"
+                label="Baños: "
                 name="bathroom"
+                labelCol={{ span: 10 }}
               >
                 <Select
+                  style={{ width: '100%' }}
                   placeholder="Selecciona la cantidad de baños"
                   value={formData.bathroom}
                   onChange={(value) => handleFormChange("bathroom", value)}
@@ -242,26 +247,29 @@ const Accommodation = () => {
                     ))}
                 </Select>
               </Form.Item>
-            </div>
-          </div>
+            </Col>
+          </Row>
 
-          <div>
-            <Form.Item
-              name="services"
+          <Form.Item name="services">
+            <Checkbox.Group
+              style={{
+                width: '180%',
+              }}
+              value={formData.services}
+              onChange={(value) => handleFormChange("services", value)}
             >
-              <Checkbox.Group
-                options={services
+              <Row>
+                {services
                   .filter((service) => service.name !== 'Habitación' && service.name !== 'Baño')
-                  .map((service) => ({
-                    label: `${service.name}`,
-                    value: service._id,
-                    key: service._id,
-                  }))}
-                value={formData.services}
-                onChange={(value) => handleFormChange("services", value)}
-              />
-            </Form.Item>
-          </div>
+                  .map((service) => (
+                    <Col span={8} key={service._id}>
+                      <Checkbox value={service._id}>{service.name}</Checkbox>
+                    </Col>
+                  ))}
+              </Row>
+            </Checkbox.Group>
+          </Form.Item>
+          <hr />
 
           {/* Services end */}
           {/* Photos */}
@@ -293,6 +301,7 @@ const Accommodation = () => {
               </div>
             </Upload>
           </Form.Item>
+          <hr />
           <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
             <img
               alt="example"
@@ -312,7 +321,7 @@ const Accommodation = () => {
           >
             <Select
               placeholder="Selecciona el país"
-              onChange={(value) => handleCity(value) && handleFormChange("country", value)}
+              onChange={(value) => handleFormChange("country", value)}
               value={formData.country}
             >
               {countries.map((country) => (
@@ -365,7 +374,7 @@ const Accommodation = () => {
             <Input
               type="text"
               value={formData.address}
-              onChange={(e) => handleFormChange("address", e.target.value)}
+              onChange={(event) => handleFormChange("address", event.target.value)}
             />
           </Form.Item>
 
@@ -373,7 +382,7 @@ const Accommodation = () => {
           {/* Zip Code */}
 
           <Form.Item
-            label="Código Postal"
+            label="C.Postal"
             name="zipCode"
             rules={[
               {
@@ -383,26 +392,29 @@ const Accommodation = () => {
             ]}
           >
             <Input
-              type="number"
               value={formData.zipCode}
-              onChange={(value) => handleFormChange("zipCode", value)}
+              onChange={(event) => handleFormChange("zipCode", event.target.value)}
             />
           </Form.Item>
+          <hr />
 
           {/* Zip Code end */}
           {/* GoogleMaps */}
 
-          <LoadScript googleMapsApiKey="AIzaSyArs06xMpsgYYgUJFVEkngG6e0TZkF0Sus">
-            <GoogleMap
-              mapContainerStyle={containerStyle}
-              center={center}
-              id="map"
-              zoom={5}
-              onClick={handleMapClick}
-            >
-              <Marker position={selectedCoordinates} />
-            </GoogleMap>
-          </LoadScript>
+          <div className={style.map}>
+            <LoadScript googleMapsApiKey="AIzaSyArs06xMpsgYYgUJFVEkngG6e0TZkF0Sus">
+              <GoogleMap
+                mapContainerStyle={containerStyle}
+                center={center}
+                id="map"
+                zoom={5}
+                onClick={handleMapClick}
+              >
+                <Marker position={formData} />
+              </GoogleMap>
+            </LoadScript>
+          </div>
+          <hr />
 
           {/* GoogleMaps end */}
           {/* Description */}
@@ -442,9 +454,8 @@ const Accommodation = () => {
               type="primary"
               htmlType="submit"
               style={buttonStyle}
-              block
             >
-              Button
+              Registrar
             </Button>
           </Form.Item>
         </Form>

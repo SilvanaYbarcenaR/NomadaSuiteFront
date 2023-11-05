@@ -20,7 +20,7 @@ const googleBtnStyle = {
   paddingTop: "0.8rem"
 };
 
-const Login = () => {
+const Login = ({closeModal}) => {
   const [userData, setUserData] = useState({
     email: '',
     password: ''
@@ -38,6 +38,7 @@ const Login = () => {
       if (accessToken && refreshToken) {
         handleWelcomeClick()
       }
+      closeModal();
     } catch (error) {
       setErrors("Credenciales inválidas. Por favor, verifica tu correo y contraseña.");
     }
