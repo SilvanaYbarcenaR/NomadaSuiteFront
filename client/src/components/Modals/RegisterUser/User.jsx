@@ -20,7 +20,7 @@ const googleBtnStyle = {
   paddingTop: "0.8rem"
 };
 
-const User = () => {
+const User = ({ closeUserModal }) => {
 
   const dispatch = useDispatch();
   const [showPhotoUser, setShowPhotoUser] = useState(false);
@@ -93,7 +93,10 @@ const User = () => {
 
   const loginGoogleAccount = useGoogleLogin({
     onSuccess: (googleUser) => {
-      dispatch(loginGoogle(googleUser));
+      dispatch(loginGoogle(googleUser))
+        .then(() => {
+          closeUserModal()
+        })
     },
     onError: (error) => console.log('Login Failed:', error)
   });

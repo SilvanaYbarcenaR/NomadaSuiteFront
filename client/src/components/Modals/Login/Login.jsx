@@ -77,7 +77,10 @@ const Login = ({ closeModal }) => {
 
   const loginGoogleAccount = useGoogleLogin({
     onSuccess: (googleUser) => {
-      dispatch(loginGoogle(googleUser));
+      dispatch(loginGoogle(googleUser))
+      .then(()=>{
+        closeModal();
+      })
     },
     onError: (error) => console.log('Login Failed:', error)
   });
@@ -86,8 +89,7 @@ const Login = ({ closeModal }) => {
     const rememberMe = localStorage.getItem("rememberMe");
     if (rememberMe === "true") {
       const email = localStorage.getItem("email") || "";
-      const password = localStorage.getItem("password") || "";
-      setUserData({ email, password });
+      setUserData({ email });
     }
   }, []);
 

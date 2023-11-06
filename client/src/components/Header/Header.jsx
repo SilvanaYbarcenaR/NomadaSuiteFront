@@ -122,7 +122,7 @@ function Header() {
             onCancel={closeUserModal}
             footer={null}
           >
-            <User />
+            <User closeUserModal={closeUserModal} />
           </Modal>
           <Modal
             className="modalRegister"
