@@ -34,7 +34,7 @@ const AccommodationDetail = () => {
   }, [])
 
   const handle = () => {
-    const URL = 'https://nomada-suite.onrender.com/'
+    const URL = 'https://nomada-suite.onrender.com/api'
     // const URL = 'http://localhost:3001/api'
     axios.post(`${URL}/stripe/charge`, {
       "line_items": [
