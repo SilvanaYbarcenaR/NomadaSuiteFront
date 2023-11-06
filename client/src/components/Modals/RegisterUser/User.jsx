@@ -4,6 +4,9 @@ import { FcGoogle } from "react-icons/fc";
 import Photo from '../Photo/Photo';
 import axios from 'axios';
 import style from "./User.module.css";
+import { useDispatch } from 'react-redux';
+import { useGoogleLogin } from '@react-oauth/google';
+import { loginGoogle } from '../../../redux/Actions/actions';
 
 const buttonStyle = {
   background: "#231CA7",
@@ -18,6 +21,7 @@ const googleBtnStyle = {
 };
 
 const User = () => {
+  const dispatch = useDispatch();
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
@@ -88,6 +92,13 @@ const User = () => {
       );
     }
   };
+
+  const loginGoogleAccount = useGoogleLogin({
+    onSuccess: (googleUser) => {
+      dispatch(loginGoogle(googleUser));
+    },
+    onError: (error) => console.log('Login Failed:', error)
+  });
 
   return (
     <Carousel effect="fade" dots={true} ref={carouselRef}>
@@ -307,7 +318,7 @@ const User = () => {
 
             <div className={style.googleBtn}>
               <Button
-                href="http://localhost:3001/auth/google"
+                onClick={loginGoogleAccount}
                 style={googleBtnStyle}
                 type="submit"
                 block
