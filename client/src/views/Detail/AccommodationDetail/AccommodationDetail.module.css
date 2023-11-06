@@ -1,0 +1,76 @@
+.Button {
+  background-color: orange;
+  color: black;
+  transition: background-color 0.3s, color 0.3s;
+}
+.Button:hover {
+  background-color: blue;
+  color: white;
+}
+.carouselContainer .carouselSlide {
+  height: 65vh!important;
+  margin: 0;
+}
+.carouselContainer img {
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+.detailContent {
+  padding: 5%;
+}
+.detailTitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
+.valoration .valorationNumber {
+  font-size: 1.2rem;
+  margin-left: 0.7rem;
+}
+.valoration .detailTitle {
+  margin-bottom: 1rem;
+}
+.checkout :global(.ant-anchor) {
+  padding: 2rem 0;
+  border-left: 0!important;
+}
+.checkout :global(.ant-anchor) {
+  padding: 2rem 0;
+}
+.checkout :global(.ant-anchor::before) {
+  display: none;
+}
+
+:global(.ant-carousel .slick-prev), :global(.ant-carousel .slick-next) {
+  color: #ffffff;
+  height: 3rem;
+  opacity: 0;
+  transition: 0.4s ease all;
+  visibility: hidden;
+  width: 3rem;
+  z-index: 999;
+}
+:global(.ant-carousel:hover .slick-prev), :global(.ant-carousel:hover .slick-next) {
+  visibility: visible;
+  opacity: 0.5;
+}
+:global(.ant-carousel .slick-prev::before), :global(.ant-carousel .slick-next::before) {
+  background: #ffffff;
+  border-radius: 50%;
+  color: #222222;
+  display: block;
+  font-size: 2.5rem;
+  height: 100%;
+  line-height: 3rem;
+  width: 100%;
+}
+:global(.ant-carousel .slick-prev:hover), :global(.ant-carousel .slick-next:hover) {
+  opacity: 0.8;
+}
+:global(.ant-carousel .slick-prev) {
+  left: 1rem;
+}
+:global(.ant-carousel .slick-next) {
+  right: 1rem;
+}

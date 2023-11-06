@@ -1,0 +1,30 @@
+.Accommodation {
+    display: flex;
+    justify-content: center;
+}
+
+.accommodationBox {
+    padding-top: 1.5rem;
+    width: 500px;
+}
+
+.services {
+    display: flex;
+    width: 100%;
+}
+
+.Accommodation h1 {
+    font-weight: 700;
+    padding-bottom: 1.5rem;
+}
+
+.map {
+    position: relative;
+    left: -4.5rem;
+    margin-bottom: 1.5rem;
+    width: 130%;
+}
+
+.Accommodation hr {
+    padding-bottom: 1.5rem;
+}
