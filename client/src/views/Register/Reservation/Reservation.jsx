@@ -7,6 +7,7 @@ import { Col, DatePicker, Button, Anchor, Divider, InputNumber, Card, Row } from
 import { useSelector, useDispatch } from 'react-redux';
 import { BsBoxArrowLeft } from "react-icons/bs"
 import style from './Reservation.module.css';
+import axios from 'axios';
 
 dayjs.extend(customParseFormat);
 const buttonStyle = {
@@ -31,6 +32,37 @@ const AccommodationDetail = () => {
       dispatch(clearDetail());
     }
   }, [])
+
+  const handle = () => {
+    axios.post("http://localhost:3001/api/stripe/charge", {
+      "line_items": [
+        {
+          "price_data": {
+            "product_data": {
+              "name": "Laptop"
+            },
+            "currency": "usd",
+            "unit_amount": 2000
+          },
+          "quantity": 1
+        },
+        {
+          "price_data": {
+            "product_data": {
+              "name": "TV"
+            },
+            "currency": "usd",
+            "unit_amount": 1000
+          },
+          "quantity": 2
+        }
+      ],
+      "duration": {
+        "start_date": "2023-12-01",
+        "end_date": "2023-12-05"
+      }
+    });
+  };
 
   return (
     <div className={style.reservationBox}>
@@ -78,6 +110,7 @@ const AccommodationDetail = () => {
               <Divider />
               <p className={style.pSubmit}>Al seleccionar el botón que aparece a continuación, acepto las siguientes políticas: Reglas del anfitrión de la casa, Reglas fundamentales para los huéspedes. Acepto pagar el monto total indicado si el anfitrión acepta mi solicitud de reservación.</p>
               <Button
+                onClick={handle}
                 style={buttonStyle}
                 type="primary"
                 htmlType="submit"
@@ -99,7 +132,7 @@ const AccommodationDetail = () => {
                     title: (
                       <Card
                         title={
-                          <img src={AccommodationById.photos}/>
+                          <img src={AccommodationById.photos} />
                         }
                         extra={<a href="#">Precio por 30 días</a>}
                         style={{
