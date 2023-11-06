@@ -64,8 +64,10 @@ const User = ({ closeUserModal }) => {
     const birthdate = new Date(formUser.birthdate);
     const age = currentDate.getFullYear() - birthdate.getFullYear();
     if (formUser.firstName && formUser.lastName && formUser.email && formUser.password && formUser.password === formUser.confirm && age >= 18) {
+      const URL = 'https://nomada-suite.onrender.com/api'
+      // const URL = 'http://localhost:3001/api'
       try {
-        await axios.post('http://localhost:3001/api/user/register', {
+        await axios.post(`${URL}/user/register`, {
           userName: formUser.userName,
           firstName: formUser.firstName,
           lastName: formUser.lastName,
