@@ -118,7 +118,7 @@ const AccommodationDetail = () => {
 
       <Row>
         <Col className="gutter-row" span={24}>
-          <Carousel className={detailStyles.carouselContainer} arrows>
+          <Carousel className={detailStyles.carouselContainerDetail} arrows>
             {
               AccommodationById?.photos?.map((photo, index) => {
                 return (

@@ -41,28 +41,20 @@ const AccommodationDetail = () => {
         {
           "price_data": {
             "product_data": {
-              "name": "Laptop"
+              "name": "Alojamiento en Apartamento Acogedor en el Centro de Buenos Aires, Argentina"
             },
             "currency": "usd",
-            "unit_amount": 2000
+            "unit_amount": 10000
           },
           "quantity": 1
-        },
-        {
-          "price_data": {
-            "product_data": {
-              "name": "TV"
-            },
-            "currency": "usd",
-            "unit_amount": 1000
-          },
-          "quantity": 2
         }
       ],
       "duration": {
-        "start_date": "2023-12-01",
-        "end_date": "2023-12-05"
+        "start_date": "2023-11-07",
+        "end_date": "2023-12-07"
       }
+    }).then((response) => {
+      window.location.href = response.data.url;
     });
   };
 
@@ -86,11 +78,11 @@ const AccommodationDetail = () => {
               <h4 className={style.detailTitle}>Tu viaje</h4>
               <div className={style.fechas}>
                 <h5>Fechas</h5>
-                <p>6 - 13 de nov</p>
+                <p>07 Nov - 07 Oct</p>
               </div>
               <div className={style.habitaciones}>
                 <h5>Habitaciones</h5>
-                <p>1 Habitación</p>
+                <p>3 Habitaciones</p>
               </div>
 
               <Divider />
@@ -117,7 +109,7 @@ const AccommodationDetail = () => {
                 type="primary"
                 htmlType="submit"
               >
-                Reservar
+                Realizar el pago
               </Button>
 
             </div>
@@ -133,13 +125,10 @@ const AccommodationDetail = () => {
                     href: '#part-1',
                     title: (
                       <Card
-                        title={
+                       /*  title={
                           <img src={AccommodationById.photos} />
-                        }
-                        extra={<a href="#">Precio por 30 días</a>}
-                        style={{
-                          width: 417
-                        }}
+                        } */
+                        /* extra={<a href="#">Precio por 30 días</a>} */
                       >
                         <Divider />
                         <span style={{ fontSize: '20px', justifyContent: 'space-between', display: 'flex' }}>
@@ -157,6 +146,7 @@ const AccommodationDetail = () => {
                         <Button
                           type="reserv"
                           block
+                          onClick={handle}
                           style={{
                             backgroundColor: 'orange',
                             color: 'black',
@@ -165,7 +155,7 @@ const AccommodationDetail = () => {
                             transition: 'background-color 0.3s, color 0.3s',
                           }}
                         >
-                          Reservar
+                          Realizar el pago
                         </Button>
 
                         <Divider />
