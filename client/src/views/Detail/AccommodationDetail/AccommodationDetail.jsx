@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { clearDetail, getAccommodationById } from '../../../redux/Actions/actions';
@@ -97,8 +97,6 @@ const AccommodationDetail = () => {
       "end_date": date.end_date
     }
   }
-
-  console.log(newObj);
 
   return (
     // primera fila
@@ -351,19 +349,21 @@ const AccommodationDetail = () => {
                       }}
                     />
                     <p></p>
-                    <Button
-                      type="reserv"
-                      block
-                      style={{
-                        backgroundColor: 'orange',
-                        color: 'black',
-                        marginTop: '40px',
-                        fontWeight: 'bold',
-                        transition: 'background-color 0.3s, color 0.3s', // Agregar transición suave
-                      }}
-                    >
-                      Reservar
-                    </Button>
+                    <Link to="/reservation">
+                      <Button
+                        type="reserv"
+                        block
+                        style={{
+                          backgroundColor: 'orange',
+                          color: 'black',
+                          marginTop: '40px',
+                          fontWeight: 'bold',
+                          transition: 'background-color 0.3s, color 0.3s', // Agregar transición suave
+                        }}
+                      >
+                        Reservar
+                      </Button>
+                    </Link>
 
                     <Divider />
 
