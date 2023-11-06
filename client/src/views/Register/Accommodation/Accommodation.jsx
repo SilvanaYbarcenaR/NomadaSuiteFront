@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCities, getCountries, getServices } from "../../../redux/Actions/actions";
-import { Button, Checkbox, Form, Input, InputNumber, Modal, Select, Upload, Row, Col } from "antd";
+import { Button, Checkbox, Flex, Form, Input, InputNumber, Modal, Select, Upload, Row, Col } from "antd";
 import { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import axios from "axios";
@@ -144,10 +144,18 @@ const Accommodation = () => {
   };
 
   // GoogleMaps
+  const [selectedCoordinates, setSelectedCoordinates] = useState({
+    lat: 0,
+    lng: 0,
+  });
 
   const handleMapClick = (event) => {
+    const coordinates = `${event.latLng.lat()}, ${event.latLng.lng()}`
     setFormData({
       ...formData,
+      coordinates: coordinates
+    })
+    setSelectedCoordinates({
       lat: event.latLng.lat(),
       lng: event.latLng.lng(),
     });
@@ -410,7 +418,7 @@ const Accommodation = () => {
                 zoom={5}
                 onClick={handleMapClick}
               >
-                <Marker position={formData} />
+                <Marker position={selectedCoordinates} />
               </GoogleMap>
             </LoadScript>
           </div>
