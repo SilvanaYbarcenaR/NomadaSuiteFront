@@ -22,7 +22,7 @@ const googleBtnStyle = {
   paddingTop: "0.8rem"
 };
 
-const Login = () => {
+const Login = ({ closeModal }) => {
   const dispatch = useDispatch();
   const [userData, setUserData] = useState({
     email: '',
@@ -37,12 +37,13 @@ const Login = () => {
       email: userData.email,
       password: userData.password
     }))
-    .then(() => {
-      handleWelcomeClick()
-    })
-    .catch(() => {
-      setErrors("Credenciales inválidas. Por favor, verifica tu correo y contraseña.");
-    })
+      .then(() => {
+        handleWelcomeClick();
+        closeModal();
+      })
+      .catch(() => {
+        setErrors("Credenciales inválidas. Por favor, verifica tu correo y contraseña.");
+      })
   };
 
   const handleChange = (event) => {

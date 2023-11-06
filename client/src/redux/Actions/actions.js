@@ -126,7 +126,7 @@ const getCountries = () => {
     try {
       const response = await axios.get('https://www.universal-tutorial.com/api/countries/', {
         headers: {
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJoaC5yb2JpbnNvbjk1QGdtYWlsLmNvbSIsImFwaV90b2tlbiI6IlFrSm5hWUs4OVZfODA3eWV1SkxWQXJJZHVodWxJaThxankwZnBXenNBYno5VjBUTWZPOEpjbllTdzV4OS00Uk1rMzAifSwiZXhwIjoxNjk5MDc2MTU0fQ.7w2piBSwJJwWhSDmxUAmbMnUngjx0XJCB_rBWbiwEjU',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJoaC5yb2JpbnNvbjk1QGdtYWlsLmNvbSIsImFwaV90b2tlbiI6IlFrSm5hWUs4OVZfODA3eWV1SkxWQXJJZHVodWxJaThxankwZnBXenNBYno5VjBUTWZPOEpjbllTdzV4OS00Uk1rMzAifSwiZXhwIjoxNjk5MzI1NTU1fQ.-cGaNFLUXikfTm8qRh6vWCkTKQs8ghknqIXA2GJEM2I',
           'Accept': 'application/json',
         }
       })
@@ -145,7 +145,7 @@ const getCities = (name) => {
     try {
       const response = await axios.get(`https://www.universal-tutorial.com/api/states/${name}`, {
         headers: {
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJoaC5yb2JpbnNvbjk1QGdtYWlsLmNvbSIsImFwaV90b2tlbiI6IlFrSm5hWUs4OVZfODA3eWV1SkxWQXJJZHVodWxJaThxankwZnBXenNBYno5VjBUTWZPOEpjbllTdzV4OS00Uk1rMzAifSwiZXhwIjoxNjk5MDc2MTU0fQ.7w2piBSwJJwWhSDmxUAmbMnUngjx0XJCB_rBWbiwEjU',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJoaC5yb2JpbnNvbjk1QGdtYWlsLmNvbSIsImFwaV90b2tlbiI6IlFrSm5hWUs4OVZfODA3eWV1SkxWQXJJZHVodWxJaThxankwZnBXenNBYno5VjBUTWZPOEpjbllTdzV4OS00Uk1rMzAifSwiZXhwIjoxNjk5MzI1NTU1fQ.-cGaNFLUXikfTm8qRh6vWCkTKQs8ghknqIXA2GJEM2I',
           'Accept': 'application/json',
         }
       })
@@ -190,7 +190,6 @@ const loginGoogle = (userData) => {
             Accept: 'application/json'
         }
       })
-
       const { email, family_name, given_name, id, picture } = await profileUser.data;
       const newUser = {
         firstName: given_name,
@@ -213,7 +212,7 @@ const registerUser = (userData, accessToken) => {
       const response = await axios.post(endpoint, userData);
       dispatch({
         type: REGISTER_USER,
-        payload: {...response.data, accessToken}
+        payload: {...response.data.user, accessToken}
       })
     } catch (error) {
       if(error.response.data.userFound) {

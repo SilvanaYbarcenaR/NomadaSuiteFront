@@ -25,7 +25,6 @@ function Header() {
   const logOutUser = () => {
     dispatch(logOut());
   }
-
   const items = [
     {
       label: Object.keys(userLoggedInfo).length === 0 && <a className='font-bold' onClick={() => setIsUserModalVisible(true)}>Registro</a>,
@@ -59,19 +58,20 @@ function Header() {
 
   useEffect(() => {
     const userId = localStorage.getItem("userId");
-    if(Object.keys(userLoggedInfo).length === 0 && userId) {
+    if (Object.keys(userLoggedInfo).length === 0 && userId) {
       dispatch(getUserData(userId));
     }
   }, [userLoggedInfo])
 
   return (
     <div>
+      {console.log(userLoggedInfo)}
       <nav className="bg-white w-full navBar relative justify-between items-center mx-auto px-1">
         {/* Logo */}
         <header className='p-4 flex justify-between'>
-        <Link to="/" className='flexgap-1'>
-          <img src={NSlogo2} width={185} height={70} alt="Nomada Suite Logo" />
-        </Link>
+          <Link to="/" className='flexgap-1'>
+            <img src={NSlogo2} width={185} height={70} alt="Nomada Suite Logo" />
+          </Link>
 
           {/* end logo */}
 
@@ -111,7 +111,7 @@ function Header() {
                 </Space>
               </a>
             </Dropdown>
-            </div>
+          </div>
 
           {/* end login */}
 
@@ -131,7 +131,7 @@ function Header() {
             onCancel={closeLoginModal}
             footer={null}
           >
-            <Login />
+            <Login closeModal={closeLoginModal} />
           </Modal>
 
         </header>
