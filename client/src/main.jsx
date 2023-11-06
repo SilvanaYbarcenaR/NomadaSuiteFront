@@ -7,7 +7,8 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import './index.css'
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://localhost:3001/api';
+// axios.defaults.baseURL = 'http://localhost:3001/api';
+axios.defaults.baseURL = 'https://nomada-suite.onrender.com/api'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
