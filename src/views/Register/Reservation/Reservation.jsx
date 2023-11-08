@@ -18,12 +18,12 @@ const buttonStyle = {
   marginTop: "1rem"
 };
 
-const AccommodationDetail = () => {
+const Reservation = () => {
 
   const id = useParams().id;
   const dispatch = useDispatch();
   let AccommodationById = useSelector((state) => state.accommodationById);
-  console.log(AccommodationById);
+  let reservationData = useSelector((state) => state.reservationData);
   const [total, setTotal] = useState(AccommodationById?.price);
 
   useEffect(() => {
@@ -36,27 +36,19 @@ const AccommodationDetail = () => {
   const handle = () => {
     const URL = 'https://nomada-suite.onrender.com/api'
     // const URL = 'http://localhost:3001/api'
-    axios.post(`${URL}/stripe/charge`, {
-      "line_items": [
-        {
-          "price_data": {
-            "product_data": {
-              "name": "Alojamiento en Apartamento Acogedor en el Centro de Buenos Aires, Argentina"
-            },
-            "currency": "usd",
-            "unit_amount": 10000
-          },
-          "quantity": 1
-        }
-      ],
-      "duration": {
-        "start_date": "2023-11-07",
-        "end_date": "2023-12-07"
-      }
-    }).then((response) => {
-      window.location.href = response.data.url;
-    });
+    axios.post(`${URL}/stripe/charge`, reservationData)
+      .then((response) => {
+        window.location.href = response.data.url;
+      });
   };
+
+  const start_date = reservationData?.duration?.start_date;
+  const end_date = reservationData?.duration?.end_date;
+  const formattedStartDate = dayjs(start_date).format('DD-MM-YYYY');
+  const formattedEndDate = dayjs(end_date).format('DD-MM-YYYY');
+  const name = reservationData?.line_items[0]?.price_data?.product_data?.name;
+  const quantity = reservationData?.line_items[0]?.quantity;
+  const unit_amount = reservationData?.line_items[0]?.price_data?.unit_amount;
 
   return (
     <div className={style.reservationBox}>
@@ -78,11 +70,11 @@ const AccommodationDetail = () => {
               <h4 className={style.detailTitle}>Tu viaje</h4>
               <div className={style.fechas}>
                 <h5>Fechas</h5>
-                <p>07 Nov - 07 Oct</p>
+                <p>{`${formattedStartDate} al ${formattedEndDate}`}</p>
               </div>
               <div className={style.habitaciones}>
                 <h5>Habitaciones</h5>
-                <p>3 Habitaciones</p>
+                <p>{quantity} habitaciones</p>
               </div>
 
               <Divider />
@@ -125,11 +117,12 @@ const AccommodationDetail = () => {
                     href: '#part-1',
                     title: (
                       <Card
-                       /*  title={
-                          <img src={AccommodationById.photos} />
-                        } */
-                        /* extra={<a href="#">Precio por 30 días</a>} */
+                      /*  title={
+                        <img src={AccommodationById.photos} />
+                       } */
+                      /* extra={<a href="#">Precio por 30 días</a>} */
                       >
+                        <p className={style.accommodation}>{name}</p>
                         <Divider />
                         <span style={{ fontSize: '20px', justifyContent: 'space-between', display: 'flex' }}>
                           <p>
@@ -140,7 +133,7 @@ const AccommodationDetail = () => {
                           <p>
                             <b>Tarifa por servicio</b>
                           </p>
-                          <p>{total} USD</p>
+                          <p>{unit_amount} USD</p>
                         </span>
                         <p></p>
                         <Button
@@ -164,7 +157,7 @@ const AccommodationDetail = () => {
                           <p>
                             <b>Total a pagar:</b>
                           </p>
-                          <p>{total} USD</p>
+                          <p>{unit_amount} USD</p>
                         </span>
 
                       </Card>
@@ -180,4 +173,4 @@ const AccommodationDetail = () => {
   )
 };
 
-export default AccommodationDetail;
+export default Reservation;
