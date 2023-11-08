@@ -1,5 +1,5 @@
 /* eslint-disable no-case-declarations */
-import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_FILTERED_ACCOMMODATION, GET_NEXT_ACCOMMODATIONS, GET_SERVICES, ORDER_BY_RATING, CLEAR_DETAIL, GET_COUNTRIES, GET_CITIES, GET_LOCATIONS, LOGIN_USER, LOGIN_GOOGLE, REGISTER_USER, GET_USER_DATA, LOG_OUT } from "./Actions/actions-types";
+import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_FILTERED_ACCOMMODATION, GET_NEXT_ACCOMMODATIONS, GET_SERVICES, ORDER_BY_RATING, CLEAR_DETAIL, GET_COUNTRIES, GET_CITIES, GET_LOCATIONS, LOGIN_USER, LOGIN_GOOGLE, REGISTER_USER, GET_USER_DATA, LOG_OUT, SET_RESERVATION_DATA } from "./Actions/actions-types";
 
 let initialState = {
   accommodations: [],
@@ -13,7 +13,8 @@ let initialState = {
   locations: [],
   idUserLogged: "",
   userLogged: {},
-  userGoogle: {}
+  userGoogle: {},
+  reservationData: null
 };
 
 const rootReducer = (state = initialState, { type, payload }) => {
@@ -84,7 +85,7 @@ const rootReducer = (state = initialState, { type, payload }) => {
     case GET_LOCATIONS:
       const newLocations = [];
       payload.forEach((location) => {
-        newLocations.push({value: location});
+        newLocations.push({ value: location });
       })
       return {
         ...state,
@@ -109,8 +110,8 @@ const rootReducer = (state = initialState, { type, payload }) => {
       }
 
     case LOGIN_USER:
-      localStorage.setItem("accessToken", payload.accessToken )
-      localStorage.setItem("userId", payload.user._id )
+      localStorage.setItem("accessToken", payload.accessToken)
+      localStorage.setItem("userId", payload.user._id)
       return {
         ...state,
         userLogged: payload.user
@@ -121,22 +122,22 @@ const rootReducer = (state = initialState, { type, payload }) => {
         ...state,
         userGoogle: payload
       }
-    
+
     case REGISTER_USER:
-      localStorage.setItem("accessToken", payload.accessToken )
-      localStorage.setItem("userId", payload._id )
+      localStorage.setItem("accessToken", payload.accessToken)
+      localStorage.setItem("userId", payload._id)
       return {
         ...state,
         userLogged: payload,
       }
 
-    case GET_USER_DATA: 
+    case GET_USER_DATA:
       return {
         ...state,
         userLogged: payload,
       }
 
-    case LOG_OUT: 
+    case LOG_OUT:
       localStorage.clear();
       return {
         ...state,
@@ -144,7 +145,12 @@ const rootReducer = (state = initialState, { type, payload }) => {
         userLogged: {},
         userGoogle: {}
       }
-    
+    case SET_RESERVATION_DATA:
+      return {
+        ...state,
+        reservationData: payload
+      }
+
     default:
       return {
         ...state,
