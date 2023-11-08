@@ -64,7 +64,6 @@ const Accommodation = () => {
     price: 0,
     coordinates: ""
   });
-  console.log(formData.services);
 
   useEffect(() => {
     dispatch(getServices());
@@ -112,7 +111,6 @@ const Accommodation = () => {
   };
 
   const handleFormSubmit = async (values) => {
-    console.log(values);
     // Crear un objeto FormData con los datos de formData
     var form = document.querySelector('form');
     let formDataToSend = new FormData(form);
@@ -156,7 +154,6 @@ const Accommodation = () => {
 
   const handleMapClick = (event) => {
     const coordinates = `${event.latLng.lat()}, ${event.latLng.lng()}`
-    console.log(coordinates);
     setFormData({
       ...formData,
       coordinates: coordinates
