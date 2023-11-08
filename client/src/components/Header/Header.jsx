@@ -40,13 +40,8 @@ function Header() {
   ];
 
   return (
-<<<<<<< HEAD
     <>
       <nav className=" bg-white w-full navBar relative justify-between items-center mx-auto px-1">
-=======
-    <div>
-      <nav className="bg-white w-full navBar relative justify-between items-center mx-auto px-1">
->>>>>>> 2ce32bb4658372b39b9bfefb0bee6c09b0b19bc5
         {/* Logo */}
         <header className='p-4 flex justify-between'>
         <Link to="/home" className='flexgap-1'>

@@ -6,6 +6,7 @@ import Home from './views/Home/Home';
 import AccountPage from './views/UserPanel/AccountPage';
 import Footer from './components/Footer/Footer.jsx';
 import './App.css'
+import Checkout from './components/Checkout/Checkout';
 
 function App() {
 
@@ -16,6 +17,8 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/detail/:id" element={<AccommodationDetail />} />
         <Route path="/register-accommodation" element={<Accommodation />} />
+        <Route path="/account" element={<AccountPage />} />
+        <Route path="/checkout" element={<Checkout />} />
       </Routes>
       <Footer />
     </div>

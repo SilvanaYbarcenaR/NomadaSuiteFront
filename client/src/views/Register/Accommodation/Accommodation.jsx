@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCities, getCountries, getServices } from "../../../redux/Actions/actions";
-import { Button, Checkbox, Form, Input, InputNumber, Modal, Select, Upload } from "antd";
+import { Button, Checkbox, Form, Input, InputNumber, Modal, Select, Upload, Divider } from "antd";
 import { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import axios from "axios";
@@ -161,7 +161,8 @@ const Accommodation = () => {
           {/* Accommodation Name end */}
           {/* Services */}
 
-          <h1>Servicios</h1>
+          {/* <h1>Servicios</h1> */}
+          <Divider plain><h1>Servicios</h1></Divider>
 
           <div className={style.services}>
             <div className={style.bedroom}>
