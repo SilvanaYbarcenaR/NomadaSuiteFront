@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Input, Button, Checkbox, Form, Modal } from 'antd';
 import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import style from "./Login.module.css";
 import User from "../RegisterUser/User";
 import Welcome from "../Welcome/Welcome";
-import axios from "axios";
+import { useGoogleLogin } from '@react-oauth/google';
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { loginGoogle, loginUser } from "../../../redux/Actions/actions";
 
 const buttonStyle = {
   background: "#231CA7",
@@ -20,27 +22,28 @@ const googleBtnStyle = {
   paddingTop: "0.8rem"
 };
 
-const Login = () => {
+const Login = ({ closeModal }) => {
+  const dispatch = useDispatch();
   const [userData, setUserData] = useState({
     email: '',
     password: ''
   });
+
   const [errors, setErrors] = useState(null);
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:3001/api/user/login', {
-        email: userData.email,
-        password: userData.password
-      });
-      const { accessToken, refreshToken } = response.data;
-      if (accessToken && refreshToken) {
-        handleWelcomeClick()
-      }
-    } catch (error) {
-      setErrors("Credenciales inválidas. Por favor, verifica tu correo y contraseña.");
-    }
+    dispatch(loginUser({
+      email: userData.email,
+      password: userData.password
+    }))
+      .then(() => {
+        handleWelcomeClick();
+        closeModal();
+      })
+      .catch(() => {
+        setErrors("Credenciales inválidas. Por favor, verifica tu correo y contraseña.");
+      })
   };
 
   const handleChange = (event) => {
@@ -72,12 +75,21 @@ const Login = () => {
     }
   };
 
+  const loginGoogleAccount = useGoogleLogin({
+    onSuccess: (googleUser) => {
+      dispatch(loginGoogle(googleUser))
+      .then(()=>{
+        closeModal();
+      })
+    },
+    onError: (error) => console.log('Login Failed:', error)
+  });
+
   useEffect(() => {
     const rememberMe = localStorage.getItem("rememberMe");
     if (rememberMe === "true") {
       const email = localStorage.getItem("email") || "";
-      const password = localStorage.getItem("password") || "";
-      setUserData({ email, password });
+      setUserData({ email });
     }
   }, []);
 
@@ -172,7 +184,7 @@ const Login = () => {
         >
           <div className={style.googleBtn}>
             <Button
-              href="http://localhost:3001/auth/google"
+              onClick={loginGoogleAccount}
               style={googleBtnStyle}
               type="submit"
               block

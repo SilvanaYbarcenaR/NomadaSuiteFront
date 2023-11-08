@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux'
 import style from "../UserPanel/AccountPage.module.css"
 import { UploadOutlined } from '@ant-design/icons';
 import { Button, message, Upload, Form, Input, Card, Flex, DatePicker, Tabs } from 'antd';
 import Photo from "../UserPanel/Photo/PhotoAcc"
 import SimpleReservation from "../UserPanel/Reservations"
+
 
 
 const props = {
@@ -31,9 +33,30 @@ const cardStyle = {
 
 const AccountPage = () => {
 
+  const [activeTab, setActiveTab] = useState('1'); // Inicializa la pestaña activa en '1'
+
+  // const userLoggedInfo = useSelector((state) => state.userLogged);
+
   const [formDisabled, setFormDisabled] = useState(true);
   const toggleForm = () => {
     setFormDisabled(!formDisabled);
+  };
+
+  
+  const userLoggedInfoFromRedux = useSelector((state) => state.userLogged);
+
+  const [userLoggedInfo, setUserLoggedInfo] = useState({
+    firstName: userLoggedInfoFromRedux.firstName,
+  });
+  
+
+  const handleFirstNameChange = (e) => {
+    // Actualiza el valor de userLoggedInfo.firstName cuando el usuario cambia el valor en el campo de entrada
+    const newValue = e.target.value;
+    setUserLoggedInfo({
+      ...userLoggedInfo,
+      firstName: newValue,
+    });
   };
 
     return (
@@ -41,14 +64,17 @@ const AccountPage = () => {
             <div style={{ marginTop: '50px' }}>
                 <Tabs
                     defaultActiveKey="1"
+                    activeKey={activeTab} // Establece la pestaña activa basada en la variable de estado
+                    onChange={(key) => setActiveTab(key)} // Actualiza la variable de estado cuando se cambia de pestaña
                     type="card"
                     centered
                     size="large"
                     tabBarGutter={86}
                     items={[
                         {
-                          label: <b>Mi Perfil</b>,
+                          label: <div className={`${activeTab === '1' ? style.activeLabel : style.inactiveLabel}`}><b>Mi Perfil</b></div>,
                           key: '1',
+                          
                           children: 
                                 <Flex style={{ alignItems: 'center', justifyContent: 'center',display: 'flex' }}>
                                     <Card
@@ -71,22 +97,12 @@ const AccountPage = () => {
                                           <>
                                             <Form layout="horizontal">
                                               <Form.Item label="">
-                                                <Input className={style.userinfo} defaultValue="Nombres" disabled={formDisabled} placeholder="" />
-                                              </Form.Item>
-                                            </Form>
-                                          </>
-                                          <>
-                                            <Form layout="horizontal">
-                                              <Form.Item label="">
-                                                <Input className={style.userinfo} defaultValue="Apellidos" disabled={formDisabled} placeholder="" />
-                                              </Form.Item>
-                                            </Form>
-                                          </>
-                                          <>
-                                            <Form layout="horizontal">
-                                              <Form.Item label="">
-                                              <DatePicker
-                                              className={style.userinfo} disabled={formDisabled} placeholder='Fecha de nacimiento'
+                                              <Input
+                                                className={style.userinfo}
+                                                value={userLoggedInfoFromRedux.firstName} // Utiliza el valor del estado
+                                                onChange={handleFirstNameChange} // Maneja el cambio del valor
+                                                disabled={formDisabled}
+                                                placeholder=""
                                               />
                                               </Form.Item>
                                             </Form>
@@ -94,7 +110,23 @@ const AccountPage = () => {
                                           <>
                                             <Form layout="horizontal">
                                               <Form.Item label="">
-                                                <Input className={style.userinfo} defaultValue="Email" value="pepe@suite.com" disabled={true} placeholder="" />
+                                                <Input className={style.userinfo} defaultValue="Apellidos" value={userLoggedInfo.lastName} disabled={formDisabled} placeholder="" />
+                                              </Form.Item>
+                                            </Form>
+                                          </>
+                                          <>
+                                            <Form layout="horizontal">
+                                              <Form.Item label="">
+                                              <DatePicker
+                                              className={style.userinfo} disabled={formDisabled} value={userLoggedInfo.birthdate} placeholder=''
+                                              />
+                                              </Form.Item>
+                                            </Form>
+                                          </>
+                                          <>
+                                            <Form layout="horizontal">
+                                              <Form.Item label="">
+                                                <Input className={style.userinfo} defaultValue="Email" value={userLoggedInfo.email} disabled={true} placeholder="" />
                                               </Form.Item>
                                             </Form>
                                           </>
@@ -107,7 +139,7 @@ const AccountPage = () => {
                                 </Flex>
                         },
                         {
-                          label: <b>Mis Reservaciones</b>,
+                          label: <div className={`${activeTab === '2' ? style.activeLabel : style.inactiveLabel}`}><b>Mis Reservaciones</b></div>,
                           key: '2',
                           children:
                                 <div style={{ alignItems: 'center', justifyContent: 'flex-end' }}>
@@ -115,9 +147,10 @@ const AccountPage = () => {
                                 </div>
                         },
                         {
-                          label: <b>Mis accomodations</b>,
+                          label: <div className={`${activeTab === '3' ? style.activeLabel : style.inactiveLabel}`}><b>Mis Accommodations</b></div>,
                           key: '3',
-                          children: 
+                          children:
+                              
                                 <Flex style={{ alignItems: 'center', justifyContent: 'center',display: 'flex' }}>
                                     <Upload {...props}>
                                         <Button style={{ alignItems: 'center', justifyContent: 'center',display: 'flex' }} icon={<UploadOutlined />}>Click to Upload</Button>

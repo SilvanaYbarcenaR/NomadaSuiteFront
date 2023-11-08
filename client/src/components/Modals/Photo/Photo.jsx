@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Form, Modal, Upload } from 'antd';
 import { Link } from 'react-router-dom';
-import style from './Photo.module.css';
 import Welcome from '../Welcome/Welcome';
+import style from './Photo.module.css';
 
 const buttonStyle = {
   background: "#231CA7",
@@ -25,7 +25,7 @@ const normFile = (e) => {
   return e?.fileList;
 };
 
-const Photo = () => {
+const Photo = ({showPhoto}) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [previewTitle, setPreviewTitle] = useState('');
@@ -76,7 +76,7 @@ const Photo = () => {
   };
 
   return (
-    <div>
+    <div className={`${style.photoContainer} ${showPhoto ? style.show : ""}`}>
       <Form
         form={form}
         className={style.formBox}

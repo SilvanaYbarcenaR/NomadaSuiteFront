@@ -1,5 +1,5 @@
 /* eslint-disable no-case-declarations */
-import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_FILTERED_ACCOMMODATION, GET_NEXT_ACCOMMODATIONS, GET_SERVICES, ORDER_BY_RATING, CLEAR_DETAIL, GET_COUNTRIES, GET_CITIES, GET_LOCATIONS } from "./Actions/actions-types";
+import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_FILTERED_ACCOMMODATION, GET_NEXT_ACCOMMODATIONS, GET_SERVICES, ORDER_BY_RATING, CLEAR_DETAIL, GET_COUNTRIES, GET_CITIES, GET_LOCATIONS, LOGIN_USER, LOGIN_GOOGLE, REGISTER_USER, GET_USER_DATA, LOG_OUT } from "./Actions/actions-types";
 
 let initialState = {
   accommodations: [],
@@ -10,11 +10,15 @@ let initialState = {
   services: [],
   countries: [],
   cities: [],
-  locations: []
+  locations: [],
+  idUserLogged: "",
+  userLogged: {},
+  userGoogle: {}
 };
 
 const rootReducer = (state = initialState, { type, payload }) => {
   const ITEMS_PER_PAGE = state.itemsPerPage;
+
   switch (type) {
     case GET_ACCOMMODATIONS:
       return {
@@ -97,12 +101,50 @@ const rootReducer = (state = initialState, { type, payload }) => {
         ...state,
         countries: payload
       }
+
     case GET_CITIES:
       return {
         ...state,
         cities: payload
       }
 
+    case LOGIN_USER:
+      localStorage.setItem("accessToken", payload.accessToken )
+      localStorage.setItem("userId", payload.user._id )
+      return {
+        ...state,
+        userLogged: payload.user
+      }
+
+    case LOGIN_GOOGLE:
+      return {
+        ...state,
+        userGoogle: payload
+      }
+    
+    case REGISTER_USER:
+      localStorage.setItem("accessToken", payload.accessToken )
+      localStorage.setItem("userId", payload._id )
+      return {
+        ...state,
+        userLogged: payload,
+      }
+
+    case GET_USER_DATA: 
+      return {
+        ...state,
+        userLogged: payload,
+      }
+
+    case LOG_OUT: 
+      localStorage.clear();
+      return {
+        ...state,
+        idUserLogged: "",
+        userLogged: {},
+        userGoogle: {}
+      }
+    
     default:
       return {
         ...state,

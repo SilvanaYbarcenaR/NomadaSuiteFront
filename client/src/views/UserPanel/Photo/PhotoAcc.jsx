@@ -89,7 +89,7 @@ const Photo = () => {
                 className={style.upload}
                 fileList={fileList}
                 listType="picture-circle"
-                name='image'
+                name='imagen'
                 onPreview={handlePreview}
                 onChange={handleChange}
                 type='file'

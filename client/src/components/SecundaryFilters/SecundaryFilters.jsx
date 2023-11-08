@@ -2,7 +2,7 @@ import { InputNumber, Space, Form, Select, Flex } from 'antd';
 import SecundaryFiltersStyles from './SecundaryFilters.module.css';
 import { useDispatch } from 'react-redux';
 import { orderByRating } from '../../redux/Actions/actions';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const SecundaryFilters = ({ handleSecValues, show }) => {
   const dispatch = useDispatch();
@@ -53,6 +53,7 @@ const SecundaryFilters = ({ handleSecValues, show }) => {
                 parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
                 onChange={onChangeMax}
                 min={0}
+                step="0.01"
               />
             </Space>
           </Form.Item>
