@@ -7,11 +7,11 @@
   background-color: blue;
   color: white;
 }
-.carouselContainer .carouselSlide {
+.carouselContainerDetail .carouselSlide {
   height: 65vh!important;
   margin: 0;
 }
-.carouselContainer img {
+.carouselContainerDetail img {
   height: 100%;
   object-fit: cover;
   width: 100%;
@@ -42,7 +42,7 @@
   display: none;
 }
 
-:global(.ant-carousel .slick-prev), :global(.ant-carousel .slick-next) {
+.carouselContainerDetail :global(.slick-prev), .carouselContainerDetail :global(.slick-next) {
   color: #ffffff;
   height: 3rem;
   opacity: 0;
@@ -51,11 +51,11 @@
   width: 3rem;
   z-index: 999;
 }
-:global(.ant-carousel:hover .slick-prev), :global(.ant-carousel:hover .slick-next) {
+.carouselContainerDetail:hover :global(.slick-prev), .carouselContainerDetail:hover :global(.slick-next) {
   visibility: visible;
   opacity: 0.5;
 }
-:global(.ant-carousel .slick-prev::before), :global(.ant-carousel .slick-next::before) {
+.carouselContainerDetail :global(.slick-prev::before), .carouselContainerDetail :global(.slick-next::before) {
   background: #ffffff;
   border-radius: 50%;
   color: #222222;
@@ -65,12 +65,12 @@
   line-height: 3rem;
   width: 100%;
 }
-:global(.ant-carousel .slick-prev:hover), :global(.ant-carousel .slick-next:hover) {
+.carouselContainerDetail :global(.slick-prev:hover), .carouselContainerDetail :global(.slick-next:hover) {
   opacity: 0.8;
 }
-:global(.ant-carousel .slick-prev) {
+.carouselContainerDetail :global(.slick-prev) {
   left: 1rem;
 }
-:global(.ant-carousel .slick-next) {
+.carouselContainerDetail :global(.slick-next) {
   right: 1rem;
 }
