@@ -1,21 +1,21 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { getCities, getCountries, getServices } from "../../../redux/Actions/actions";
-import { Button, Checkbox, Flex, Form, Input, InputNumber, Modal, Select, Upload, Row, Col } from "antd";
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { Button, Checkbox, Col, Form, Input, InputNumber, Modal, Row, Select, Upload } from "antd";
+import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import { PlusOutlined } from "@ant-design/icons";
-import axios from "axios";
-import { GoogleMap, Marker, LoadScript } from "@react-google-maps/api";
 import style from "./Accommodation.module.css"
+import axios from "axios";
+
+const { TextArea } = Input;
 
 const buttonStyle = {
   background: "#231CA7",
   color: "white",
   height: "3rem",
-  width: "140%"
+  width: "160%"
 };
 
-const { TextArea } = Input;
 const normFile = (e) => {
   if (Array.isArray(e)) {
     return e;
@@ -42,17 +42,16 @@ const center = {
 };
 
 const Accommodation = () => {
-  const services = useSelector((state) => state.services);
+
+  const [fileList, setFileList] = useState([]);
+  const [serverResponse, setServerResponse] = useState(null);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [servicesGroup, setServicesGroup] = useState([]);
+  const [previewImage, setPreviewImage] = useState("");
   const countries = useSelector((state) => state.countries);
+  const services = useSelector((state) => state.services);
   const cities = useSelector((state) => state.cities);
   const dispatch = useDispatch();
-
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState("");
-  const [previewTitle, setPreviewTitle] = useState("");
-  const [fileList, setFileList] = useState([]);
-  const handleCancel = () => setPreviewOpen(false);
-
   const [formData, setFormData] = useState({
     name: "",
     services: [],
@@ -64,24 +63,11 @@ const Accommodation = () => {
     price: 0,
     coordinates: ""
   });
-  console.log(formData.services);
 
   useEffect(() => {
     dispatch(getServices());
     dispatch(getCountries());
   }, []);
-
-  const handleChangePhoto = ({ fileList: newFileList }) => setFileList(newFileList);
-  const handlePreview = async (file) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-    setPreviewImage(file.url || file.preview);
-    setPreviewOpen(true);
-    setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf("/") + 1));
-  };
-
-  const [serverResponse, setServerResponse] = useState(null);
 
   const handleFormChange = (field, value) => {
     if (field === "bedroom" || field === "bathroom") {
@@ -91,13 +77,11 @@ const Accommodation = () => {
       });
     } else {
       if (field === "services") {
-        const services = [...formData.services, ...value]
-        const servicesFiltered = [...formData.services, ...value].filter((service, index) => {
-          return services.indexOf(service) === index;
-        });
+        const services = formData.services.filter(service => !servicesGroup.includes(service));
+        setServicesGroup(value);
         setFormData({
           ...formData,
-          services: servicesFiltered
+          services: [...services, ...value]
         });
       } else {
         setFormData({
@@ -111,36 +95,22 @@ const Accommodation = () => {
     }
   };
 
-  const handleFormSubmit = async (event) => {
-    event.preventDefault();
-    // Crear un objeto FormData con los datos de formData
-    const formDataToSend = new FormData();
-    formDataToSend.append("name", formData.name);
-    formDataToSend.append("bedroom", formData.bedroom);
-    formDataToSend.append("bathroom", formData.bathroom);
-    formDataToSend.append("services", JSON.stringify(formData.services));
-    formDataToSend.append("country", formData.country);
-    formDataToSend.append("city", formData.city);
-    formDataToSend.append("address", formData.address);
-    formDataToSend.append("zipCode", formData.zipCode);
-    formDataToSend.append("description", formData.description);
-    formDataToSend.append("price", formData.price);
-    // Agregar la imagen a formDataToSend (fileList[0] debería ser un archivo)
-    if (fileList.length > 0) {
-      formDataToSend.append("image", fileList[0].originFileObj);
-    }
+  // Images
+  const props = {
+    beforeUpload: (file) => {
+      setFileList([...fileList, file]);
+      return false;
+    },
+    fileList,
+  };
 
-    try {
-      // Realizar la solicitud POST al servidor con formDataToSend
-      const response = await axios.post("URL_DE_TU_API", formDataToSend, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      setServerResponse({ success: "Usuario registrado con éxito" });
-    } catch (error) {
-      setServerResponse({ error: "No se pudo registrar el usuario" });
+  const handleCancel = () => setPreviewOpen(false);
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
     }
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
   };
 
   // GoogleMaps
@@ -161,16 +131,50 @@ const Accommodation = () => {
     });
   };
 
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    const formDataToSend = new FormData();
+    fileList.forEach((file) => {
+      formDataToSend.append("images", file);
+    });
+    formDataToSend.append("name", formData.name);
+    formDataToSend.append("services", JSON.stringify(formData.services));
+    formDataToSend.append("country", formData.country);
+    formDataToSend.append("city", formData.city);
+    formDataToSend.append("address", formData.address);
+    formDataToSend.append("zipCode", formData.zipCode);
+    formDataToSend.append("coordinates", formData.coordinates);
+    formDataToSend.append("description", formData.description);
+    formDataToSend.append("price", formData.price);
+    if (formData.name && formData.services && formData.country && formData.city && formData.zipCode && formData.coordinates && formData.price) {
+      // const URL = 'https://nomada-suite.onrender.com/api'
+      const URL = 'http://localhost:3001/api'
+      try {
+        const response = await axios.post(`${URL}/create`, formDataToSend, {
+          // headers: {
+          //   "Content-Type": "multipart/form-data",
+          // },
+        });
+        console.log(response.data);
+        setServerResponse({ success: "Alojamiento registrado con éxito" });
+      } catch (error) {
+        setServerResponse({ error: "No se pudo registrar el Alojamiento" });
+        console.log(error);
+      };
+    };
+  };
+
   return (
     <div className={style.Accommodation}>
       <div className={style.accommodationBox}>
         <Form
-          onSubmit={handleFormSubmit}
+          onSubmit={handleSubmit}
+          name="form"
           labelCol={{
-            span: 4,
+            span: 5,
           }}
           wrapperCol={{
-            span: 14,
+            span: 15,
           }}
           layout="horizontal"
           style={{
@@ -179,6 +183,7 @@ const Accommodation = () => {
         >
 
           {/* Accommodation Name */}
+
           <div>
             <Form.Item
               label="Nombre"
@@ -210,11 +215,17 @@ const Accommodation = () => {
               <Form.Item
                 label="Habitaciones: "
                 name="bedroom"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Por favor ingrese la cantidad de habitaciones de su alojamiento',
+                  },
+                ]}
                 labelCol={{ span: 10 }}
               >
                 <Select
                   style={{ width: '100%' }}
-                  placeholder="Selecciona la cantidad de habitaciones"
+                  placeholder="Cantidad"
                   value={formData.bedroom}
                   onChange={(value) => handleFormChange("bedroom", value)}
                 >
@@ -239,7 +250,7 @@ const Accommodation = () => {
               >
                 <Select
                   style={{ width: '100%' }}
-                  placeholder="Selecciona la cantidad de baños"
+                  placeholder="Cantidad"
                   value={formData.bathroom}
                   onChange={(value) => handleFormChange("bathroom", value)}
                 >
@@ -284,17 +295,21 @@ const Accommodation = () => {
 
           <Form.Item
             label="Fotos"
+            name='images'
             valuePropName="fileList"
             getValueFromEvent={normFile}
-            name='image'
+            rules={[
+              {
+                required: true,
+                message: 'Por favor ingrese una imagen',
+              },
+            ]}
           >
             <Upload
-              action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+              {...props}
+              accept="image/*"
               listType="picture-card"
-              accept="image/png, image/jpeg"
-              fileList={fileList}
               onPreview={handlePreview}
-              onChange={handleChangePhoto}
               type="file"
             >
               <div>
@@ -310,7 +325,11 @@ const Accommodation = () => {
             </Upload>
           </Form.Item>
           <hr />
-          <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
+          <Modal
+            footer={null}
+            onCancel={handleCancel}
+            open={previewOpen}
+          >
             <img
               alt="example"
               style={{
@@ -321,11 +340,17 @@ const Accommodation = () => {
           </Modal>
 
           {/* Photos end */}
-          {/* Location */}
+          {/* Country */}
 
           <Form.Item
             label="País"
             name="country"
+            rules={[
+              {
+                required: true,
+                message: 'Por favor ingrese un país',
+              },
+            ]}
           >
             <Select
               placeholder="Selecciona el país"
@@ -343,12 +368,18 @@ const Accommodation = () => {
             </Select>
           </Form.Item>
 
-          {/* Location end */}
-          {/* Location */}
+          {/* Country end */}
+          {/* City */}
 
           <Form.Item
             label="Ciudad"
             name="city"
+            rules={[
+              {
+                required: true,
+                message: 'Por favor ingrese la ciudad',
+              },
+            ]}
           >
             <Select
               placeholder="Selecciona la ciudad"
@@ -366,7 +397,7 @@ const Accommodation = () => {
             </Select>
           </Form.Item>
 
-          {/* Location end */}
+          {/* City end */}
           {/* Address */}
 
           <Form.Item
@@ -390,7 +421,7 @@ const Accommodation = () => {
           {/* Zip Code */}
 
           <Form.Item
-            label="C.Postal"
+            label="Código Postal"
             name="zipCode"
             rules={[
               {
@@ -401,7 +432,7 @@ const Accommodation = () => {
           >
             <Input
               value={formData.zipCode}
-              onChange={(event) => handleFormChange("zipCode", event.target.value)}
+              onChange={(event) => handleFormChange("zipCode", event.target.value.replace(/\D/g, ''))}
             />
           </Form.Item>
           <hr />
@@ -410,8 +441,12 @@ const Accommodation = () => {
           {/* GoogleMaps */}
 
           <div className={style.map}>
-            <LoadScript googleMapsApiKey="AIzaSyArs06xMpsgYYgUJFVEkngG6e0TZkF0Sus">
+            <LoadScript
+              googleMapsApiKey="AIzaSyArs06xMpsgYYgUJFVEkngG6e0TZkF0Sus"
+              name="coordinates"
+            >
               <GoogleMap
+                name="coordinates"
                 mapContainerStyle={containerStyle}
                 center={center}
                 id="map"
@@ -434,7 +469,8 @@ const Accommodation = () => {
             <TextArea
               rows={4}
               value={formData.description}
-              onChange={(e) => handleFormChange("description", e.target.value)}
+              onChange={(event) => handleFormChange("description", event.target.value)}
+              placeholder="En este espacio, puedes proporcionar no solo una descripción de tu alojamiento, sino también información detallada sobre los servicios que ofreces y/o condiciones."
             />
           </Form.Item>
 
@@ -444,10 +480,16 @@ const Accommodation = () => {
           <Form.Item
             label="Precio"
             name="price"
+            rules={[
+              {
+                required: true,
+                message: 'Por favor ingrese un valor',
+              },
+            ]}
           >
             <InputNumber
               formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-              min={0}
+              min={5}
               parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
               step="0.01"
               value={formData.price}
@@ -459,23 +501,25 @@ const Accommodation = () => {
 
           <Form.Item>
             <Button
-              type="primary"
+              block
               htmlType="submit"
+              onClick={handleSubmit}
               style={buttonStyle}
+              type="primary"
             >
               Registrar
             </Button>
           </Form.Item>
+
+          {serverResponse && (
+            <div className={serverResponse.error ? 'error' : 'success'}>
+              {serverResponse.error || serverResponse.success}
+            </div>
+          )}
+
         </Form>
-
-        {serverResponse && (
-          <div className={serverResponse.error ? 'error' : 'success'}>
-            {serverResponse.error || serverResponse.success}
-          </div>
-        )}
-
-      </div>
-    </div>
+      </div >
+    </div >
   )
 };
 
