@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCities, getCountries, getServices } from "../../../redux/Actions/actions";
-import { Button, Checkbox, Flex, Form, Input, InputNumber, Modal, Select, Upload, Row, Col } from "antd";
+import { Button, Checkbox, Form, Input, InputNumber, Modal, Select, Upload, Row, Col } from "antd";
 import { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import axios from "axios";
@@ -111,28 +111,33 @@ const Accommodation = () => {
     }
   };
 
-  const handleFormSubmit = async (event) => {
-    event.preventDefault();
+  const handleFormSubmit = async (values) => {
+    console.log(values);
     // Crear un objeto FormData con los datos de formData
-    const formDataToSend = new FormData();
-    formDataToSend.append("name", formData.name);
-    formDataToSend.append("bedroom", formData.bedroom);
-    formDataToSend.append("bathroom", formData.bathroom);
-    formDataToSend.append("services", JSON.stringify(formData.services));
-    formDataToSend.append("country", formData.country);
-    formDataToSend.append("city", formData.city);
-    formDataToSend.append("address", formData.address);
-    formDataToSend.append("zipCode", formData.zipCode);
-    formDataToSend.append("description", formData.description);
-    formDataToSend.append("price", formData.price);
-    // Agregar la imagen a formDataToSend (fileList[0] debería ser un archivo)
-    if (fileList.length > 0) {
-      formDataToSend.append("image", fileList[0].originFileObj);
+    var form = document.querySelector('form');
+    let formDataToSend = new FormData(form);
+    formDataToSend.append("name", values.name);
+    if( values.services.length > 0) {
+      values.services.forEach((service) => {
+        formDataToSend.append("services", service);
+      }) 
     }
-
+    formDataToSend.append("country", values.country);
+    formDataToSend.append("city", values.city);
+    formDataToSend.append("address", values.address);
+    formDataToSend.append("zipCode", values.zipCode);
+    formDataToSend.append("description", values.description);
+    formDataToSend.append("price", values.price);
+    formDataToSend.append("coordinates", formData.coordinates);
+    if( values.image.length > 0) {
+      values.image.forEach((image) => {
+        formDataToSend.append("images", image.originFileObj);
+      }) 
+    }
+    
     try {
       // Realizar la solicitud POST al servidor con formDataToSend
-      const response = await axios.post("URL_DE_TU_API", formDataToSend, {
+      const response = await axios.post("http://localhost:3001/api/accommodation/create", formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -151,6 +156,7 @@ const Accommodation = () => {
 
   const handleMapClick = (event) => {
     const coordinates = `${event.latLng.lat()}, ${event.latLng.lng()}`
+    console.log(coordinates);
     setFormData({
       ...formData,
       coordinates: coordinates
@@ -165,7 +171,7 @@ const Accommodation = () => {
     <div className={style.Accommodation}>
       <div className={style.accommodationBox}>
         <Form
-          onSubmit={handleFormSubmit}
+          onFinish={handleFormSubmit}
           labelCol={{
             span: 4,
           }}
@@ -456,16 +462,13 @@ const Accommodation = () => {
           </Form.Item>
 
           {/* Price end */}
-
-          <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              style={buttonStyle}
-            >
-              Registrar
-            </Button>
-          </Form.Item>
+          <Button
+            type="primary"
+            htmlType="submit"
+            style={buttonStyle}
+          >
+            Registrar
+          </Button>
         </Form>
 
         {serverResponse && (
