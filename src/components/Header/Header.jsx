@@ -65,7 +65,6 @@ function Header() {
 
   return (
     <div>
-      {console.log(userLoggedInfo)}
       <nav className="bg-white w-full navBar relative justify-between items-center mx-auto px-1">
         {/* Logo */}
         <header className='p-4 flex justify-between'>

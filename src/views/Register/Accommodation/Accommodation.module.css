@@ -1,11 +1,17 @@
 .Accommodation {
     display: flex;
     justify-content: center;
+    background-color: rgba(60, 60, 60, 0.100);
 }
 
 .accommodationBox {
-    padding-top: 1.5rem;
-    width: 500px;
+    background-color: white;
+    padding-top: 3rem;
+    padding-bottom: 1rem;
+    padding-left: 4rem;
+    padding-right: 4rem;
+    box-shadow: 10px 0px 5px -5px rgba(0, 0, 0, 0.10), -10px 0px 5px -5px rgba(0, 0, 0, 0.10);
+    width: 70%;
 }
 
 .services {
@@ -20,9 +26,8 @@
 
 .map {
     position: relative;
-    left: -4.5rem;
     margin-bottom: 1.5rem;
-    width: 130%;
+    width: 100%;
 }
 
 .Accommodation hr {
