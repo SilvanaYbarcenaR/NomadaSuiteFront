@@ -174,7 +174,7 @@ const Accommodation = () => {
           name="form"
           onFinish={handleFormSubmit}
           labelCol={{
-            span: 5,
+            span: 6,
           }}
           wrapperCol={{
             span: 15,
@@ -214,7 +214,7 @@ const Accommodation = () => {
           <h1>Servicios</h1>
 
           <Row>
-            <Col span={12}>
+            <Col span={13}>
               <Form.Item
                 label="Habitaciones: "
                 name="bedroom"
@@ -245,7 +245,7 @@ const Accommodation = () => {
               </Form.Item>
             </Col>
 
-            <Col span={12}>
+            <Col span={11}>
               <Form.Item
                 label="Baños: "
                 name="bathroom"
@@ -275,7 +275,7 @@ const Accommodation = () => {
           <Form.Item name="services">
             <Checkbox.Group
               style={{
-                width: '180%',
+                width: '175%',
               }}
               value={formData.services}
               onChange={(value) => handleFormChange("services", value)}
@@ -301,6 +301,9 @@ const Accommodation = () => {
             name='image'
             valuePropName="fileList"
             getValueFromEvent={normFile}
+            wrapperCol={{
+              span: 20,
+            }}
             rules={[
               {
                 required: true,
