@@ -24,7 +24,8 @@ const Reservation = () => {
   const dispatch = useDispatch();
   let AccommodationById = useSelector((state) => state.accommodationById);
   let reservationData = useSelector((state) => state.reservationData);
-
+  console.log(AccommodationById);
+  
   useEffect(() => {
     dispatch(getAccommodationById(id));
     return () => {

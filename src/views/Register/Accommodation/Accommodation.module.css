@@ -5,12 +5,13 @@
 }
 
 .accommodationBox {
-    padding-top: 2rem;
-    width: 70%;
-    padding-left: 4rem;
-    padding-right: 4.2rem;
     background-color: white;
-    box-shadow: 5px 0px 5px -5px rgba(0, 0, 0, 0.30), -5px 0px 5px -5px rgba(0, 0, 0, 0.30);
+    padding-top: 3rem;
+    padding-bottom: 1rem;
+    padding-left: 4rem;
+    padding-right: 4rem;
+    box-shadow: 10px 0px 5px -5px rgba(0, 0, 0, 0.10), -10px 0px 5px -5px rgba(0, 0, 0, 0.10);
+    width: 70%;
 }
 
 .services {

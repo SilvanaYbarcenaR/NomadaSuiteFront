@@ -514,7 +514,6 @@ const Accommodation = () => {
                 <Button
                   block
                   htmlType="submit"
-                  // onClick={handleSubmit}
                   style={buttonStyle}
                   type="primary"
                 >
@@ -529,6 +528,7 @@ const Accommodation = () => {
                   </div>
                 )
               }
+              
             </Col>
           </Row>
         </Form >

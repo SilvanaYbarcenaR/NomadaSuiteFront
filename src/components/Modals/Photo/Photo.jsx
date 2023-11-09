@@ -11,13 +11,6 @@ const buttonStyle = {
   height: "3rem",
 };
 
-const getBase64 = (file) =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-  });
 const normFile = (e) => {
   if (Array.isArray(e)) {
     return e;
@@ -25,11 +18,24 @@ const normFile = (e) => {
   return e?.fileList;
 };
 
-const Photo = ({showPhoto}) => {
+const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+
+const Photo = ({ showPhoto }) => {
+
+  const [serverResponse, setServerResponse] = useState(null);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
-  const [previewTitle, setPreviewTitle] = useState('');
   const [fileList, setFileList] = useState([])
+
+
+  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
+
   const handleCancel = () => setPreviewOpen(false);
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -37,24 +43,6 @@ const Photo = ({showPhoto}) => {
     }
     setPreviewImage(file.url || file.preview);
     setPreviewOpen(true);
-    setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
-  };
-  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
-  const uploadButton = (
-    <div>
-      <PlusOutlined />
-      <div
-        style={{
-          marginTop: 8,
-        }}
-      >
-        Upload
-      </div>
-    </div>
-  );
-
-  const onFinish = (values) => {
-    console.log('Success:', values);
   };
 
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
@@ -75,51 +63,102 @@ const Photo = ({showPhoto}) => {
       });
   };
 
+  const uploadButton = (
+    <div>
+      <PlusOutlined />
+      <div
+        style={{
+          marginTop: 8,
+        }}
+      >
+        Upload
+      </div>
+    </div>
+  );
+
+  const handleFormSubmit = async (values) => {
+    var form = document.querySelector('form');
+    let formDataToSend = new FormData(form);
+    if (values.image.length > 0) {
+      values.image.forEach((image) => {
+        formDataToSend.append("images", image.originFileObj);
+      })
+    }
+
+    try {
+      // const URL = 'https://nomada-suite.onrender.com/api'
+      const URL = 'http://localhost:3001/api'
+      const response = await axios.post(`${URL}/accommodation/create`, formDataToSend, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      setServerResponse({ success: 'Foto registrada con éxito' });
+    } catch (error) {
+      setServerResponse({ error: `No se pudo registrar el usuario. ${error.response.data.error}` });
+    }
+  }
+  const renderServerResponse = () => {
+    if (serverResponse) {
+      return (
+        <div className={serverResponse.error ? 'error' : 'success'}>
+          {serverResponse.error || serverResponse.success}
+        </div>
+      );
+    }
+  };
+
   return (
     <div className={`${style.photoContainer} ${showPhoto ? style.show : ""}`}>
       <Form
-        form={form}
-        className={style.formBox}
         name="photo"
-        labelCol={{
-          span: 4,
-        }}
-        wrapperCol={{
-          span: 24,
-        }}
+        onFinish={handleFormSubmit}
+        className={style.formBox}
         layout="horizontal"
         style={{
           maxWidth: 600,
         }}
-        onFinish={onFinish}
       >
         <hr />
         <h1>Añade una foto</h1>
         <p>Elige una imagen que muestre tu rostro.</p>
-        <Form.Item valuePropName="fileList" getValueFromEvent={normFile}>
+
+        {/* Photo */}
+
+        <Form.Item
+          name="image"
+          valuePropName="fileList"
+          getValueFromEvent={normFile}
+        >
           <Upload
-            accept='image/png, image/jpeg'
-            action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+            accept="image/*"
             className={style.upload}
             fileList={fileList}
             listType="picture-circle"
-            name='image'
             onPreview={handlePreview}
             onChange={handleChange}
-            type='file'
+            type="file"
           >
             {fileList.length >= 1 ? null : uploadButton}
           </Upload>
-          <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
-            <img
-              alt="example"
-              style={{
-                width: '100%',
-              }}
-              src={previewImage}
-            />
-          </Modal>
         </Form.Item>
+        <hr />
+        <Modal
+          footer={null}
+          onCancel={handleCancel}
+          open={previewOpen}
+        >
+          <img
+            alt="example"
+            style={{
+              width: '100%',
+            }}
+            src={previewImage}
+          />
+        </Modal>
+
+        {/* Photo end */}
+
         <Form.Item>
           <Button
             type="primary"
@@ -131,6 +170,9 @@ const Photo = ({showPhoto}) => {
             Finalizar
           </Button>
         </Form.Item>
+
+        {renderServerResponse()}
+
         <Link>
           <p onClick={handleLaterClick}>Lo haré más tarde</p>
         </Link>

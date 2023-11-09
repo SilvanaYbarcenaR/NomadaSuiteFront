@@ -23,7 +23,7 @@ const googleBtnStyle = {
 const User = ({ closeUserModal }) => {
 
   const dispatch = useDispatch();
-  const [showPhotoUser, setShowPhotoUser] = useState(true);
+  const [showPhotoUser, setShowPhotoUser] = useState(false);
   const [serverResponse, setServerResponse] = useState(null);
   const [formUser, setFormUser] = useState({
     firstName: '',
@@ -343,6 +343,7 @@ const User = ({ closeUserModal }) => {
         {/* Google end*/}
 
         {renderServerResponse()}
+        
       </Form>
     </div>
   )
