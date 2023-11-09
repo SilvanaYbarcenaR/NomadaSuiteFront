@@ -1,4 +1,4 @@
-import '../Header/Header.css'
+import './Header.css'
 import { useEffect, useState } from 'react';
 import NSlogo2 from "../../assets/image/logo.png"
 import { Space, Dropdown, Modal } from 'antd';

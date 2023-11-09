@@ -131,45 +131,48 @@ const Accommodation = () => {
     });
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault()
-    const formDataToSend = new FormData();
-    fileList.forEach((file) => {
-      formDataToSend.append("images", file);
-    });
-    formDataToSend.append("name", formData.name);
-    formDataToSend.append("services", JSON.stringify(formData.services));
-    formDataToSend.append("country", formData.country);
-    formDataToSend.append("city", formData.city);
-    formDataToSend.append("address", formData.address);
-    formDataToSend.append("zipCode", formData.zipCode);
+  const handleFormSubmit = async (values) => {
+    var form = document.querySelector('form');
+    let formDataToSend = new FormData(form);
+    formDataToSend.append("name", values.name);
+    if (formData.services.length > 0) {
+      formData.services.forEach((service) => {
+        formDataToSend.append("services", service);
+      })
+    }
+    formDataToSend.append("country", values.country);
+    formDataToSend.append("city", values.city);
+    formDataToSend.append("address", values.address);
+    formDataToSend.append("zipCode", values.zipCode);
+    formDataToSend.append("description", values.description);
+    formDataToSend.append("price", values.price);
     formDataToSend.append("coordinates", formData.coordinates);
-    formDataToSend.append("description", formData.description);
-    formDataToSend.append("price", formData.price);
-    if (formData.name && formData.services && formData.country && formData.city && formData.zipCode && formData.coordinates && formData.price) {
+    if (values.image.length > 0) {
+      values.image.forEach((image) => {
+        formDataToSend.append("images", image.originFileObj);
+      })
+    }
+
+    try {
       // const URL = 'https://nomada-suite.onrender.com/api'
       const URL = 'http://localhost:3001/api'
-      try {
-        const response = await axios.post(`${URL}/create`, formDataToSend, {
-          // headers: {
-          //   "Content-Type": "multipart/form-data",
-          // },
-        });
-        console.log(response.data);
-        setServerResponse({ success: "Alojamiento registrado con éxito" });
-      } catch (error) {
-        setServerResponse({ error: "No se pudo registrar el Alojamiento" });
-        console.log(error);
-      };
-    };
-  };
+      const response = await axios.post(`${URL}/accommodation/create`, formDataToSend, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      setServerResponse({ success: "Alojamiento registrado con éxito" });
+    } catch (error) {
+      setServerResponse({ error: "No se pudo registrar el alojamiento" });
+    }
+  }
 
   return (
     <div className={style.Accommodation}>
       <div className={style.accommodationBox}>
         <Form
-          onSubmit={handleSubmit}
           name="form"
+          onFinish={handleFormSubmit}
           labelCol={{
             span: 5,
           }}
@@ -295,7 +298,7 @@ const Accommodation = () => {
 
           <Form.Item
             label="Fotos"
-            name='images'
+            name='image'
             valuePropName="fileList"
             getValueFromEvent={normFile}
             rules={[
@@ -308,6 +311,7 @@ const Accommodation = () => {
             <Upload
               {...props}
               accept="image/*"
+              fileList={fileList}
               listType="picture-card"
               onPreview={handlePreview}
               type="file"
@@ -503,7 +507,7 @@ const Accommodation = () => {
             <Button
               block
               htmlType="submit"
-              onClick={handleSubmit}
+              // onClick={handleSubmit}
               style={buttonStyle}
               type="primary"
             >
@@ -511,13 +515,15 @@ const Accommodation = () => {
             </Button>
           </Form.Item>
 
-          {serverResponse && (
-            <div className={serverResponse.error ? 'error' : 'success'}>
-              {serverResponse.error || serverResponse.success}
-            </div>
-          )}
+          {
+            serverResponse && (
+              <div className={serverResponse.error ? 'error' : 'success'}>
+                {serverResponse.error || serverResponse.success}
+              </div>
+            )
+          }
 
-        </Form>
+        </Form >
       </div >
     </div >
   )

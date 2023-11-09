@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import { clearDetail, getAccommodationById } from '../../../redux/Actions/actions';
+import { clearDetail, getAccommodationById, setReservationData } from '../../../redux/Actions/actions';
 import { UserOutlined, CarOutlined, CoffeeOutlined, LaptopOutlined, WifiOutlined } from '@ant-design/icons';
 import { Col, DatePicker, Button, Anchor, Divider, InputNumber, Avatar, Card, Row, Carousel, Flex, Rate } from 'antd';
 import { LiaToiletSolid } from 'react-icons/lia';
@@ -78,18 +78,22 @@ const AccommodationDetail = () => {
     end_date: ''
   })
 
+  const habitaciones = AccommodationById?.idServices?.find(
+    (service) => service.name === "Habitación"
+  )?.quantity;
+
   const newObj =
   {
     "line_items": [
       {
         "price_data": {
           "product_data": {
-            "name": `Alojamiento en ${AccommodationById.name}`
+            "name": `Alojamiento en: ${AccommodationById.name}`
           },
           "currency": "usd",
           "unit_amount": total
         },
-        "quantity": 1
+        "quantity": habitaciones
       }
     ],
     "duration": {
@@ -97,6 +101,10 @@ const AccommodationDetail = () => {
       "end_date": date.end_date
     }
   }
+
+  const handleReservationClick = () => {
+    dispatch(setReservationData(newObj))
+  };
 
   return (
     // primera fila
@@ -118,7 +126,7 @@ const AccommodationDetail = () => {
 
       <Row>
         <Col className="gutter-row" span={24}>
-          <Carousel className={detailStyles.carouselContainer} arrows>
+          <Carousel className={detailStyles.carouselContainerDetail} arrows>
             {
               AccommodationById?.photos?.map((photo, index) => {
                 return (
@@ -170,13 +178,13 @@ const AccommodationDetail = () => {
 
             </Flex>
             <div>
-              <Flex r>
+              <Flex>
                 {
                   AccommodationById?.idServices?.map((service) => {
                     return (
                       <>
                         {service.name === "Habitación" &&
-                          <span>&nbsp;· {service.quantity} dormitorios</span>
+                          <span>&nbsp;· {service.quantity} habitaciones</span>
                         }
                         {service.name === "Baño" &&
                           <span>{service.quantity} baño</span>
@@ -349,10 +357,11 @@ const AccommodationDetail = () => {
                       }}
                     />
                     <p></p>
-                    <Link to="/reservation">
+                    <Link to='/reservation'>
                       <Button
                         type="reserv"
                         block
+                        onClick={handleReservationClick}
                         style={{
                           backgroundColor: 'orange',
                           color: 'black',
