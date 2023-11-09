@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
+import dayjs from 'dayjs';
+import moment from "moment";
 import { useSelector, useDispatch } from 'react-redux';
 import { getUserData } from "../../redux/Actions/actions";
 import { updateUserInfo } from "../../redux/Actions/actions";
@@ -14,21 +16,27 @@ const cardStyle = {
 };
 
 const AccountPage = () => {
-  const [activeTab, setActiveTab] = useState('Perfil');
+
   const [formDisabled, setFormDisabled] = useState(true);
+  const toggleForm = () => {
+    setFormDisabled(!formDisabled);
+  };
+
+  const [activeTab, setActiveTab] = useState('Perfil');
+
   const dispatch = useDispatch();
   const userLoggedInfoFromRedux = useSelector((state) => state.userLogged);
 
   console.log(userLoggedInfoFromRedux._id);
 
   const [userLoggedInfo, setUserLoggedInfo] = useState({
-    firstName: userLoggedInfoFromRedux.firstName,
-    lastName: userLoggedInfoFromRedux.lastName,
+    firstName: "",
+    lastName: "",
+    birthdate: "",
   });
 
   const userId=userLoggedInfoFromRedux._id;
 
-console.log(userId);
 
   const handleUpdateUserInfo = async () => {
     // Realiza una solicitud PUT para actualizar el nombre y apellido del usuario
@@ -37,6 +45,7 @@ console.log(userId);
       
       firstName: userLoggedInfo.firstName,
       lastName: userLoggedInfo.lastName,
+      birthdate: userLoggedInfo.birthdate,
       })
   
   };
@@ -46,8 +55,14 @@ console.log(userId);
   }, [activeTab]);
 
   useEffect(() => {
-    dispatch(getUserData());
-  }, [dispatch]);
+    setUserLoggedInfo({
+      firstName: userLoggedInfoFromRedux.firstName,
+      lastName: userLoggedInfoFromRedux.lastName,
+      birthdate: userLoggedInfoFromRedux?.birthdate.split("T")[0],
+    });
+    console.log(userLoggedInfoFromRedux.birthdate);
+    console.log(moment(userLoggedInfoFromRedux.birthdate));
+  }, [userLoggedInfoFromRedux]);
 
   return (
     <>
@@ -100,7 +115,7 @@ console.log(userId);
                         </>
                         <>
                           <Form layout="horizontal">
-                            <Form.Item label="Apellidos">
+                            <Form.Item label="">
                               <Input
                                 className={style.userinfo}
                                 value={userLoggedInfo.lastName}
@@ -114,12 +129,18 @@ console.log(userId);
                           </Form>
                         </>
                         <>
+                        {console.log(typeof userLoggedInfo.birthdate)}
                           <Form layout="horizontal">
                             <Form.Item label="">
                               <DatePicker
                                 className={style.userinfo}
                                 disabled={formDisabled}
-                                value=""
+                                format='YYYY-MM-DD'
+                                defaultValue={dayjs(userLoggedInfo.birthdate,'YYYY-MM-DD')}
+                                // defaultValue={dayjs('2015/01/01', dateFormat)}
+                                onChange={(date, dateString) => {                                
+                                  setUserLoggedInfo({ ...userLoggedInfo, birthdate: dateString });
+                                }}
                                 placeholder=''
                               />
                             </Form.Item>
@@ -131,17 +152,17 @@ console.log(userId);
                               <Input
                                 className={style.userinfo}
                                 defaultValue="Email"
-                                value={userLoggedInfo.email}
+                                value={userLoggedInfoFromRedux.email}
                                 disabled={true}
                                 placeholder=""
                               />
                             </Form.Item>
                           </Form>
                         </>
-                        <Button onClick={handleUpdateUserInfo}>
+                        <Button onClick={() => { handleUpdateUserInfo(); toggleForm(); }}>
                           {formDisabled ? 'Editar Datos' : 'Aceptar Cambios'}
                         </Button>
-                        <Button onClick={handleUpdateUserInfo}>
+                        <Button >
                           Mandar datos
                         </Button>
                       </Flex>
