@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { clearDetail, getAccommodationById } from '../../../redux/Actions/actions';
-import { Col, DatePicker, Button, Anchor, Divider, InputNumber, Card, Row } from 'antd';
+import { Col, Button, Anchor, Divider, Card, Row } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { BsBoxArrowLeft } from "react-icons/bs"
 import style from './Reservation.module.css';
@@ -24,7 +24,6 @@ const Reservation = () => {
   const dispatch = useDispatch();
   let AccommodationById = useSelector((state) => state.accommodationById);
   let reservationData = useSelector((state) => state.reservationData);
-  const [total, setTotal] = useState(AccommodationById?.price);
 
   useEffect(() => {
     dispatch(getAccommodationById(id));
@@ -54,7 +53,7 @@ const Reservation = () => {
     <div className={style.reservationBox}>
       <div className={style.columnsBox}>
         <Row>
-          <Col span={16}>
+          <Col span={14}>
             <div className={style.detailContent}>
               <div className={style.returnReservation}>
                 <Button style={{
@@ -106,7 +105,7 @@ const Reservation = () => {
 
             </div>
           </Col>
-          <Col span={8}>
+          <Col span={10}>
             <div className={style.detailContent2}>
               <Anchor
                 className={style.checkout}
