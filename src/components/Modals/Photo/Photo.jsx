@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Form, Modal, Upload } from 'antd';
+import ImgCrop from 'antd-img-crop';
 import { Link } from 'react-router-dom';
-import Welcome from '../Welcome/Welcome';
 import style from './Photo.module.css';
 
 const buttonStyle = {
@@ -11,102 +11,62 @@ const buttonStyle = {
   height: "3rem",
 };
 
-const normFile = (e) => {
-  if (Array.isArray(e)) {
-    return e;
-  }
-  return e?.fileList;
-};
+const Photo = ({ showPhoto, userId }) => {
 
-const getBase64 = (file) =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-  });
-
-const Photo = ({ showPhoto }) => {
-
-  const [serverResponse, setServerResponse] = useState(null);
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState('');
-  const [fileList, setFileList] = useState([])
-
-
-  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
-
-  const handleCancel = () => setPreviewOpen(false);
-  const handlePreview = async (file) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-    setPreviewImage(file.url || file.preview);
-    setPreviewOpen(true);
+  console.log(userId);
+  const [fileList, setFileList] = useState([]);
+  const onChange = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
   };
 
-  const [showWelcomeModal, setShowWelcomeModal] = useState(false);
-  const [form] = Form.useForm();
-  const handleWelcomeClick = () => {
-    setShowWelcomeModal(true);
+  const props = {
+    beforeUpload: (file) => {
+      setFileList([...fileList, file]);
+      return false;
+    },
+    fileList,
   };
 
-  const handleLaterClick = () => {
-    form
-      .validateFields()
-      .then(() => {
-        onFinish(form.getFieldsValue());
-        setShowWelcomeModal(true);
-      })
-      .catch((errorInfo) => {
-        console.log('Validation failed:', errorInfo);
+  const onPreview = async (file) => {
+    let src = file.url;
+    if (!src) {
+      src = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.originFileObj);
+        reader.onload = () => resolve(reader.result);
       });
+    }
+    const image = new Image();
+    image.src = src;
+    const imgWindow = window.open(src);
+    imgWindow?.document.write(image.outerHTML);
   };
-
-  const uploadButton = (
-    <div>
-      <PlusOutlined />
-      <div
-        style={{
-          marginTop: 8,
-        }}
-      >
-        Upload
-      </div>
-    </div>
-  );
 
   const handleFormSubmit = async (values) => {
-    var form = document.querySelector('form');
-    let formDataToSend = new FormData(form);
-    if (values.image.length > 0) {
-      values.image.forEach((image) => {
-        formDataToSend.append("images", image.originFileObj);
-      })
-    }
-
     try {
-      // const URL = 'https://nomada-suite.onrender.com/api'
-      const URL = 'http://localhost:3001/api'
-      const response = await axios.post(`${URL}/accommodation/create`, formDataToSend, {
+      const formData = new FormData();
+      formData.append("images", values.image.originFileObj);
+      const response = await axios.put(`/user/update/${userId}`, formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      setServerResponse({ success: 'Foto registrada con éxito' });
+      console.log(response);
+      notification.success({
+        message: '¡Excelente!',
+        description: 'El registro de usuario se realizó con éxito.',
+        placement: 'bottomLeft'
+      });
     } catch (error) {
-      setServerResponse({ error: `No se pudo registrar el usuario. ${error.response.data.error}` });
+      console.log(error);
+      notification.error({
+        message: 'Error',
+        description: `Lo sentimos, ${(error.response.data.error).toLowerCase()}.`,
+        placement: 'bottomLeft'
+      });
     }
   }
-  const renderServerResponse = () => {
-    if (serverResponse) {
-      return (
-        <div className={serverResponse.error ? 'error' : 'success'}>
-          {serverResponse.error || serverResponse.success}
-        </div>
-      );
-    }
-  };
+
 
   return (
     <div className={`${style.photoContainer} ${showPhoto ? style.show : ""}`}>
@@ -128,34 +88,22 @@ const Photo = ({ showPhoto }) => {
         <Form.Item
           name="image"
           valuePropName="fileList"
-          getValueFromEvent={normFile}
         >
-          <Upload
-            accept="image/*"
-            className={style.upload}
-            fileList={fileList}
-            listType="picture-circle"
-            onPreview={handlePreview}
-            onChange={handleChange}
-            type="file"
-          >
-            {fileList.length >= 1 ? null : uploadButton}
-          </Upload>
+          <ImgCrop rotationSlider>
+            <Upload
+              {...props}
+              name="image"
+              accept="image/*"
+              className={style.upload}
+              listType="picture-circle"
+              onChange={onChange}
+              onPreview={onPreview}
+              type="file"
+            >
+              {fileList.length < 1 && '+ Upload'}
+            </Upload>
+          </ImgCrop>
         </Form.Item>
-        <hr />
-        <Modal
-          footer={null}
-          onCancel={handleCancel}
-          open={previewOpen}
-        >
-          <img
-            alt="example"
-            style={{
-              width: '100%',
-            }}
-            src={previewImage}
-          />
-        </Modal>
 
         {/* Photo end */}
 
@@ -164,29 +112,17 @@ const Photo = ({ showPhoto }) => {
             type="primary"
             htmlType="submit"
             style={buttonStyle}
-            onClick={handleWelcomeClick}
             block
           >
             Finalizar
           </Button>
         </Form.Item>
 
-        {renderServerResponse()}
-
         <Link>
-          <p onClick={handleLaterClick}>Lo haré más tarde</p>
+          <p>Lo haré más tarde</p>
         </Link>
+
       </Form>
-      <Modal
-        className={style.welcome}
-        title="Registro exitoso."
-        open={showWelcomeModal}
-        onOk={() => setShowWelcomeModal(false)}
-        onCancel={() => setShowWelcomeModal(false)}
-        footer={null}
-      >
-        <Welcome />
-      </Modal>
     </div>
   )
 };
