@@ -8,6 +8,7 @@ const Aux = () => {
     setFileList(newFileList);
   };
 
+  // Esto arregla el error
   const props = {
     beforeUpload: (file) => {
       setFileList([...fileList, file]);
@@ -15,6 +16,7 @@ const Aux = () => {
     },
     fileList,
   };
+  //____________________________________
 
   const onPreview = async (file) => {
     let src = file.url;
@@ -35,7 +37,7 @@ const Aux = () => {
   return (
     <ImgCrop rotationSlider>
       <Upload
-      {...props}
+        {...props}
         listType="picture-circle"
         fileList={fileList}
         onChange={onChange}
