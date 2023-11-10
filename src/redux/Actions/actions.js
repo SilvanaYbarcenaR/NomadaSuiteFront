@@ -75,16 +75,15 @@ const getServices = () => {
 };
 
 const getFilteredAccommodation = (values) => {
-  console.log(values);
-  const { city, country, startDate, endDate, rooms, min, max } = values
-  const cityName = city && `city=${city}`
-  const countryName = country && `&country=${country}`
-  const startDateNum = startDate && `&startDate=${startDate}`
-  const endDateNum = endDate && `&endDate=${endDate}`
-  const roomsNum = rooms && `&rooms=${rooms}`
-  const minPrice = `&min=${min}`
-  const maxPrice = max > 0 ? `&max=${max}` : ""
-  const endpoint = `/filtered/combinated?${cityName}${countryName}${roomsNum}${minPrice}${maxPrice}`
+  const { city, country, startDate, endDate, rooms, min, max } = values;
+  const cityName = city && `city=${city}`;
+  const countryName = country && `&country=${country}`;
+  const startDateNum = startDate && `&startDate=${startDate}`;
+  const endDateNum = endDate && `&endDate=${endDate}`;
+  const roomsNum = rooms && `&rooms=${rooms}`;
+  const minPrice = min >= 0 ? `&min=${min}` : "";
+  const maxPrice = max > 0 ? `&max=${max}` : "";
+  const endpoint = `/filtered/combinated?${cityName}${countryName}${roomsNum}${minPrice}${maxPrice}`;
   try {
     return async (dispatch) => {
       const { data } = await axios.get(endpoint);
