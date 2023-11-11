@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, DatePicker, Form, Input, notification } from 'antd';
+import { Button, DatePicker, Form, Input, Switch, notification } from 'antd';
 import { FcGoogle } from "react-icons/fc";
 import Photo from '../Photo/Photo';
 import axios from 'axios';
@@ -17,7 +17,6 @@ const buttonStyle = {
 const googleBtnStyle = {
   border: "1px solid black",
   height: "3rem",
-  paddingTop: "0.8rem"
 };
 
 const User = ({ closeUserModal }) => {
@@ -25,12 +24,15 @@ const User = ({ closeUserModal }) => {
   const dispatch = useDispatch();
   const [userId, setUserId] = useState(null);
   const [showPhotoUser, setShowPhotoUser] = useState(false);
+  const [notifications, setNotifications] = useState(true);
+
   const [formUser, setFormUser] = useState({
     firstName: '',
     lastName: '',
     email: '',
     password: '',
     birthdate: '',
+    wantsNotifications: true
   });
 
   const handleChange = (event) => {
@@ -61,6 +63,7 @@ const User = ({ closeUserModal }) => {
           email: formUser.email,
           password: formUser.password,
           birthdate: formUser.birthdate,
+          wantsNotifications: notifications
         });
         const data = response.data.userId
         setUserId(data)
@@ -186,11 +189,6 @@ const User = ({ closeUserModal }) => {
         </Form.Item>
 
         {/* Birthdate end*/}
-
-        <div className={style.ageField}>
-          <p>Este email será utilizado para el envío de notificaciones.</p>
-        </div>
-
         {/* Email */}
 
         <Form.Item
@@ -290,6 +288,21 @@ const User = ({ closeUserModal }) => {
         </Form.Item>
 
         {/* Confirm password end*/}
+        {/* Notifications */}
+
+        <div className={style.notification}>
+          <p>¿Desea recibir notificaciones?</p>
+          <Switch
+            checked={notifications}
+            checkedChildren="Si"
+            unCheckedChildren="No"
+            onChange={(value) => {
+              setNotifications(value);
+            }}
+          />
+        </div>
+
+        {/* Notifications end*/}
         {/* Button submit */}
 
         <Form.Item
