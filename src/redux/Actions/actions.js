@@ -1,6 +1,6 @@
 /* eslint-disable no-unreachable */
 import axios from "axios";
-import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING, GET_FILTERED_ACCOMMODATION, CLEAR_DETAIL, GET_COUNTRIES, GET_CITIES, GET_LOCATIONS, LOGIN_USER, LOGIN_GOOGLE, REGISTER_USER, GET_USER_DATA, LOG_OUT, SET_RESERVATION_DATA } from "./actions-types";
+import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING, GET_FILTERED_ACCOMMODATION, CLEAR_DETAIL, GET_COUNTRIES, GET_CITIES, GET_LOCATIONS, LOGIN_USER, LOGIN_GOOGLE, REGISTER_USER, GET_USER_DATA, LOG_OUT, SET_RESERVATION_DATA, CLEAR_DETAIL_TO_RESERVATION } from "./actions-types";
 
 
 const getAccommodations = () => {
@@ -117,6 +117,14 @@ const clearDetail = () => {
   return async (dispatch) => {
     dispatch({
       type: CLEAR_DETAIL,
+    });
+  }
+}
+
+const clearDetailToReservation = () => {
+  return async (dispatch) => {
+    dispatch({
+      type: CLEAR_DETAIL_TO_RESERVATION,
     });
   }
 }
@@ -264,6 +272,7 @@ export {
   orderByRating,
   getCities,
   clearDetail,
+  clearDetailToReservation,
   loginUser,
   loginGoogle,
   getUserData,

@@ -27,7 +27,6 @@ const AccommodationDetail = () => {
 
   useEffect(() => {
     dispatch(getAccommodationById(id));
-
     return () => {
       dispatch(clearDetail());
     }
@@ -78,10 +77,6 @@ const AccommodationDetail = () => {
     end_date: ''
   })
 
-  const habitaciones = AccommodationById?.idServices?.find(
-    (service) => service.name === "Habitación"
-  )?.quantity;
-
   const newObj =
   {
     "line_items": [
@@ -93,7 +88,6 @@ const AccommodationDetail = () => {
           "currency": "usd",
           "unit_amount": total
         },
-        "quantity": habitaciones
       }
     ],
     "duration": {

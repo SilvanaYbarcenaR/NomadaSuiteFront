@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import dayjs from 'dayjs';
-import customParseFormat from 'dayjs/plugin/customParseFormat';
-import { clearDetail, getAccommodationById } from '../../../redux/Actions/actions';
 import { Col, Button, Anchor, Divider, Card, Row } from 'antd';
-import { useSelector, useDispatch } from 'react-redux';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { BsBoxArrowLeft } from "react-icons/bs"
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import style from './Reservation.module.css';
+import dayjs from 'dayjs';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { getAccommodationById } from '../../../../redux/Actions/actions';
 
 dayjs.extend(customParseFormat);
 const buttonStyle = {
@@ -20,22 +20,28 @@ const buttonStyle = {
 
 const Reservation = () => {
 
-  const id = useParams().id;
-  const dispatch = useDispatch();
-  let AccommodationById = useSelector((state) => state.accommodationById);
-  let reservationData = useSelector((state) => state.reservationData);
-  console.log(AccommodationById);
-  
+  const accommodationToReservation = useSelector((state) => state.accommodationToReservation);
+  const reservationData = useSelector((state) => state.reservationData);
+  const initialId = localStorage.getItem('accommodationId') || null;
+  const [id, setId] = useState()
+  const dispatch = useDispatch()
+  console.log(initialId);
+  console.log(reservationData)
+
   useEffect(() => {
-    dispatch(getAccommodationById(id));
-    return () => {
-      dispatch(clearDetail());
+
+    if (accommodationToReservation && accommodationToReservation._id !== id) {
+      setId(accommodationToReservation._id);
+      dispatch(getAccommodationById(accommodationToReservation._id));
+
+      // Almacenar el ID en localStorage
+      localStorage.setItem('accommodationId', accommodationToReservation._id);
     }
-  }, [])
+  }, [accommodationToReservation, id, dispatch]);
 
   const handle = () => {
-    const URL = 'https://nomada-suite.onrender.com/api'
-    // const URL = 'http://localhost:3001/api'
+    // const URL = 'https://nomada-suite.onrender.com/api'
+    const URL = 'http://localhost:3001/api'
     axios.post(`${URL}/stripe/charge`, reservationData)
       .then((response) => {
         window.location.href = response.data.url;
@@ -46,8 +52,7 @@ const Reservation = () => {
   const end_date = reservationData?.duration?.end_date;
   const formattedStartDate = dayjs(start_date).format('DD-MM-YYYY');
   const formattedEndDate = dayjs(end_date).format('DD-MM-YYYY');
-  const name = reservationData?.line_items[0]?.price_data?.product_data?.name;
-  const quantity = reservationData?.line_items[0]?.quantity;
+  const quantity = accommodationToReservation?.idServices.find(service => service.name === 'Habitación')?.quantity;
   const unit_amount = reservationData?.line_items[0]?.price_data?.unit_amount;
 
   return (
@@ -122,7 +127,7 @@ const Reservation = () => {
                        } */
                       /* extra={<a href="#">Precio por 30 días</a>} */
                       >
-                        <p className={style.accommodation}>{name}</p>
+                        <p className={style.accommodation}>Alojamiento en {accommodationToReservation.name}</p>
                         <Divider />
                         <span style={{ fontSize: '20px', justifyContent: 'space-between', display: 'flex' }}>
                           <p>
