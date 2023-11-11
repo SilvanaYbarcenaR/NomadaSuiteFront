@@ -7,7 +7,6 @@ import Home from './views/Home/Home';
 import Footer from './components/Footer/Footer.jsx';
 import Reservation from './views/Register/Reservation/Reservation';
 import './App.css'
-import Aux from './components/Modals/Photo/auxx.jsx';
 function App() {
 
   return (
@@ -19,7 +18,6 @@ function App() {
         <Route path="/register-accommodation" element={<Accommodation />} />
         <Route path="/reservation" element={<Reservation />} />
         <Route path="/cancellation" element={<Cancellation />} />
-        <Route path="/aux" element={<Aux />} />
       </Routes>
       <Footer />
     </div>

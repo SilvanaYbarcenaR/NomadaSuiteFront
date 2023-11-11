@@ -38,7 +38,7 @@ const Login = ({ closeModal }) => {
       password: userData.password
     }))
       .then(() => {
-        handleWelcomeClick();
+        handleWelcomeClick(true);
         closeModal();
       })
       .catch(() => {
@@ -58,8 +58,8 @@ const Login = ({ closeModal }) => {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
 
-  const handleWelcomeClick = () => {
-    setShowWelcomeModal(true);
+  const handleWelcomeClick = (open) => {
+    setShowWelcomeModal(open);
   };
 
   const handleRememberChange = (event) => {
@@ -78,9 +78,9 @@ const Login = ({ closeModal }) => {
   const loginGoogleAccount = useGoogleLogin({
     onSuccess: (googleUser) => {
       dispatch(loginGoogle(googleUser))
-      .then(()=>{
-        closeModal();
-      })
+        .then(() => {
+          closeModal();
+        })
     },
     onError: (error) => console.log('Login Failed:', error)
   });
@@ -233,7 +233,7 @@ const Login = ({ closeModal }) => {
         onCancel={() => setShowWelcomeModal(false)}
         footer={null}
       >
-        <Welcome />
+        <Welcome handleWelcomeClick={handleWelcomeClick} />
       </Modal>
     </div>
   )

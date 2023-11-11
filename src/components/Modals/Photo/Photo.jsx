@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { PlusOutlined } from '@ant-design/icons';
-import { Button, Form, Modal, Upload } from 'antd';
+import { Button, Form, Modal, Upload, notification } from 'antd';
 import ImgCrop from 'antd-img-crop';
-import { Link } from 'react-router-dom';
 import style from './Photo.module.css';
+import axios from 'axios';
 
 const buttonStyle = {
   background: "#231CA7",
@@ -11,57 +10,64 @@ const buttonStyle = {
   height: "3rem",
 };
 
-const Photo = ({ showPhoto, userId }) => {
+const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
 
-  console.log(userId);
+const Photo = ({ showPhoto, userId, closeUserModal }) => {
+
   const [fileList, setFileList] = useState([]);
+  const [formDataToSend, setFormDataToSend] = useState(new FormData());
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+
   const onChange = ({ fileList: newFileList }) => {
     setFileList(newFileList);
   };
 
-  const props = {
-    beforeUpload: (file) => {
-      setFileList([...fileList, file]);
-      return false;
-    },
-    fileList,
+  const beforeUpload = (file) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      setFileList(() => [{ url: reader.result }]);
+    };
+    return false;
   };
 
-  const onPreview = async (file) => {
-    let src = file.url;
-    if (!src) {
-      src = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file.originFileObj);
-        reader.onload = () => resolve(reader.result);
-      });
+  const handleCancel = () => setPreviewOpen(false);
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
     }
-    const image = new Image();
-    image.src = src;
-    const imgWindow = window.open(src);
-    imgWindow?.document.write(image.outerHTML);
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
   };
 
-  const handleFormSubmit = async (values) => {
+  const handleFormSubmit = async () => {
     try {
-      const formData = new FormData();
-      formData.append("images", values.image.originFileObj);
-      const response = await axios.put(`/user/update/${userId}`, formDataToSend, {
+      formDataToSend.delete('images');
+      formDataToSend.append('images', fileList[0].originFileObj);
+      await axios.put(`/user/update/${userId}`, formDataToSend, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          'Content-Type': 'multipart/form-data',
         },
       });
-      console.log(response);
       notification.success({
         message: '¡Excelente!',
-        description: 'El registro de usuario se realizó con éxito.',
+        description: 'Tu foto se subió con éxito.',
         placement: 'bottomLeft'
       });
+      setTimeout(() => {
+        closeUserModal()
+      }, "1000");
     } catch (error) {
-      console.log(error);
       notification.error({
         message: 'Error',
-        description: `Lo sentimos, ${(error.response.data.error).toLowerCase()}.`,
+        description: `Lo sentimos, no se pudo actualizar la foto.`,
         placement: 'bottomLeft'
       });
     }
@@ -79,7 +85,6 @@ const Photo = ({ showPhoto, userId }) => {
           maxWidth: 600,
         }}
       >
-        <hr />
         <h1>Añade una foto</h1>
         <p>Elige una imagen que muestre tu rostro.</p>
 
@@ -91,18 +96,31 @@ const Photo = ({ showPhoto, userId }) => {
         >
           <ImgCrop rotationSlider>
             <Upload
-              {...props}
-              name="image"
               accept="image/*"
+              beforeUpload={beforeUpload}
               className={style.upload}
+              fileList={fileList}
               listType="picture-circle"
               onChange={onChange}
-              onPreview={onPreview}
+              onPreview={handlePreview}
               type="file"
             >
               {fileList.length < 1 && '+ Upload'}
             </Upload>
           </ImgCrop>
+          <Modal
+            footer={null}
+            onCancel={handleCancel}
+            open={previewOpen}
+          >
+            <img
+              alt="example"
+              style={{
+                width: '100%',
+              }}
+              src={previewImage}
+            />
+          </Modal>
         </Form.Item>
 
         {/* Photo end */}
@@ -118,9 +136,7 @@ const Photo = ({ showPhoto, userId }) => {
           </Button>
         </Form.Item>
 
-        <Link>
-          <p>Lo haré más tarde</p>
-        </Link>
+        <a className={style.textAfter} onClick={closeUserModal}>Lo haré más tarde</a>
 
       </Form>
     </div>

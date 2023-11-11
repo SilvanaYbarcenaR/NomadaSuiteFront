@@ -309,9 +309,6 @@ const User = ({ closeUserModal }) => {
           </div>
 
           {/* Button submit end */}
-
-          <Photo showPhoto={showPhotoUser} userId={userId} />
-
           {/* Google */}
 
           <div className={style.googleBtn}>
@@ -330,6 +327,9 @@ const User = ({ closeUserModal }) => {
         {/* Google end*/}
 
       </Form>
+
+      <Photo showPhoto={showPhotoUser} userId={userId} closeUserModal={closeUserModal} />
+
     </div>
   )
 };
