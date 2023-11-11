@@ -8,10 +8,8 @@ const buttonStyle = {
   height: "3rem",
 };
 
-const Welcome = () => {
-  const handleReload = () => {
-    window.location.reload();
-  };
+const Welcome = ({ handleWelcomeClick }) => {
+  
   return (
     <div>
       <div className={style.modalBox}>
@@ -24,7 +22,7 @@ const Welcome = () => {
           <Button
             block style={buttonStyle}
             type="primary"
-            onClick={handleReload}
+            onClick={() => handleWelcomeClick(false)}
           >
             Ingresar
           </Button>
