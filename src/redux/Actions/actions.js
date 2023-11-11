@@ -1,6 +1,6 @@
 /* eslint-disable no-unreachable */
 import axios from "axios";
-import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING, GET_FILTERED_ACCOMMODATION, CLEAR_DETAIL, GET_COUNTRIES, GET_CITIES, GET_LOCATIONS, LOGIN_USER, LOGIN_GOOGLE, REGISTER_USER, GET_USER_DATA, LOG_OUT, SET_RESERVATION_DATA } from "./actions-types";
+import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING, GET_FILTERED_ACCOMMODATION, CLEAR_DETAIL, GET_COUNTRIES, GET_CITIES, GET_LOCATIONS, LOGIN_USER, LOGIN_GOOGLE, REGISTER_USER, GET_USER_DATA, LOG_OUT, UPDATE_USER_INFO, SET_RESERVATION_DATA } from "./actions-types";
 
 
 const getAccommodations = () => {
@@ -248,6 +248,24 @@ const logOut = () => {
   }
 }
 
+const updateUserInfo = (userId, firstName, lastName) => {
+  return async (dispatch) => {
+    try {
+      const endpoint = `/user/update/${userId}`; // Ruta en el servidor para actualizar el nombre y apellido
+      const userData = { firstName: firstName, lastName: lastName };
+      const response = await axios.put(endpoint, userData);
+
+      dispatch({
+        type: UPDATE_USER_INFO,
+        payload: { firstName, lastName },
+      });
+    } catch (error) {
+      console.log(error.response.data.error);
+      // Puedes manejar errores aquí, como mostrar un mensaje al usuario
+    }
+  };
+};
+
 const setReservationData = (data) => ({
   type: SET_RESERVATION_DATA,
   payload: data
@@ -268,5 +286,6 @@ export {
   loginGoogle,
   getUserData,
   setReservationData,
+  updateUserInfo,
   logOut
 }

@@ -27,15 +27,19 @@ const AccountPage = () => {
   const dispatch = useDispatch();
   const userLoggedInfoFromRedux = useSelector((state) => state.userLogged);
 
-  console.log(userLoggedInfoFromRedux._id);
+  console.log(userLoggedInfoFromRedux.birthdate);
+
+  
 
   const [userLoggedInfo, setUserLoggedInfo] = useState({
     firstName: "",
     lastName: "",
-    birthdate: "",
+    birthdate: moment(userLoggedInfoFromRedux.birthdate).format("YYYY-MM-DD"),
   });
 
+
   const userId=userLoggedInfoFromRedux._id;
+console.log(userLoggedInfoFromRedux)
 
 
   const handleUpdateUserInfo = async () => {
@@ -58,11 +62,18 @@ const AccountPage = () => {
     setUserLoggedInfo({
       firstName: userLoggedInfoFromRedux.firstName,
       lastName: userLoggedInfoFromRedux.lastName,
-      birthdate: userLoggedInfoFromRedux?.birthdate.split("T")[0],
+      birthdate: moment(userLoggedInfoFromRedux.birthdate).format("YYYY-MM-DD"),
     });
-    console.log(userLoggedInfoFromRedux.birthdate);
-    console.log(moment(userLoggedInfoFromRedux.birthdate));
+    console.log(moment(userLoggedInfo.birthdate));
+    console.log(dayjs(userLoggedInfoFromRedux.birthdate));
   }, [userLoggedInfoFromRedux]);
+
+  const calculateAge = (birthdate) => {
+    const currentDate = new Date();
+    const birthdateDate = new Date(birthdate);
+    const age = currentDate.getFullYear() - birthdateDate.getFullYear();
+    return age;
+  };
 
   return (
     <>
@@ -128,23 +139,25 @@ const AccountPage = () => {
                             </Form.Item>
                           </Form>
                         </>
+                        {console.log(userLoggedInfo.birthdate)}
                         <>
-                        {console.log(typeof userLoggedInfo.birthdate)}
-                          <Form layout="horizontal">
-                            <Form.Item label="">
-                              <DatePicker
-                                className={style.userinfo}
-                                disabled={formDisabled}
-                                format='YYYY-MM-DD'
-                                defaultValue={dayjs(userLoggedInfo.birthdate,'YYYY-MM-DD')}
-                                // defaultValue={dayjs('2015/01/01', dateFormat)}
-                                onChange={(date, dateString) => {                                
-                                  setUserLoggedInfo({ ...userLoggedInfo, birthdate: dateString });
-                                }}
-                                placeholder=''
-                              />
-                            </Form.Item>
-                          </Form>
+                        <Form layout="horizontal">
+                          <Form.Item label="">
+                            <DatePicker
+                              className={style.userinfo}
+                              disabled={formDisabled}
+                              value={userLoggedInfo.birthdate ? dayjs(userLoggedInfo.birthdate,"YYYY-MM-DD") : null}
+                              onChange={(date, dateString) => {
+                                setUserLoggedInfo({ ...userLoggedInfo, birthdate: dateString });
+                              }}
+                              disabledDate={(current) => {
+                                // Deshabilitar fechas donde la edad sea menor que 18 años
+                                return calculateAge(current) < 18;
+                              }}
+                              placeholder=''
+                            />
+                          </Form.Item>
+                        </Form>
                         </>
                         <>
                           <Form layout="horizontal">
@@ -161,9 +174,6 @@ const AccountPage = () => {
                         </>
                         <Button onClick={() => { handleUpdateUserInfo(); toggleForm(); }}>
                           {formDisabled ? 'Editar Datos' : 'Aceptar Cambios'}
-                        </Button>
-                        <Button >
-                          Mandar datos
                         </Button>
                       </Flex>
                     </Flex>
