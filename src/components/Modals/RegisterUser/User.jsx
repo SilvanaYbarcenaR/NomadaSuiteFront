@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { Button, Carousel, DatePicker, Form, Input } from 'antd';
+import React, { useState } from 'react';
+import { Button, DatePicker, Form, Input, notification } from 'antd';
 import { FcGoogle } from "react-icons/fc";
 import Photo from '../Photo/Photo';
 import axios from 'axios';
@@ -23,8 +23,8 @@ const googleBtnStyle = {
 const User = ({ closeUserModal }) => {
 
   const dispatch = useDispatch();
+  const [userId, setUserId] = useState(null);
   const [showPhotoUser, setShowPhotoUser] = useState(false);
-  const [serverResponse, setServerResponse] = useState(null);
   const [formUser, setFormUser] = useState({
     firstName: '',
     lastName: '',
@@ -36,20 +36,10 @@ const User = ({ closeUserModal }) => {
   const handleChange = (event) => {
     const property = event.target.name;
     const value = event.target.value;
-    if (property === 'firstName') {
-      const names = value.split(' ');
-      const updatedFirstName = names[0];
-      setFormUser({
-        ...formUser,
-        [property]: value,
-        userName: updatedFirstName,
-      });
-    } else {
-      setFormUser({
-        ...formUser,
-        [property]: value
-      });
-    }
+    setFormUser({
+      ...formUser,
+      [property]: value
+    });
   };
 
   const handleDateChange = (date, dateString) => {
@@ -64,33 +54,30 @@ const User = ({ closeUserModal }) => {
     const birthdate = new Date(formUser.birthdate);
     const age = currentDate.getFullYear() - birthdate.getFullYear();
     if (formUser.firstName && formUser.lastName && formUser.email && formUser.password && formUser.password === formUser.confirm && age >= 18) {
-      const URL = 'https://nomada-suite.onrender.com/api'
-      // const URL = 'http://localhost:3001/api'
       try {
-        await axios.post(`${URL}/user/register`, {
-          userName: formUser.userName,
+        const response = await axios.post('/user/register', {
           firstName: formUser.firstName,
           lastName: formUser.lastName,
           email: formUser.email,
           password: formUser.password,
           birthdate: formUser.birthdate,
         });
-        setServerResponse({ success: 'Usuario registrado con éxito' });
+        const data = response.data.userId
+        setUserId(data)
         setShowPhotoUser(true);
+        notification.success({
+          message: '¡Excelente!',
+          description: 'El registro de usuario se realizó con éxito.',
+          placement: 'bottomLeft'
+        });
       } catch (error) {
-        setServerResponse({ error: `No se pudo registrar el usuario. ${error.response.data.error}` });
+        notification.error({
+          message: 'Error',
+          description: `Lo sentimos, ${(error.response.data.error).toLowerCase()}.`,
+          placement: 'bottomLeft'
+        });
       };
     };
-  };
-
-  const renderServerResponse = () => {
-    if (serverResponse) {
-      return (
-        <div className={serverResponse.error ? 'error' : 'success'}>
-          {serverResponse.error || serverResponse.success}
-        </div>
-      );
-    }
   };
 
   const loginGoogleAccount = useGoogleLogin({
@@ -107,6 +94,7 @@ const User = ({ closeUserModal }) => {
     <div>
       <Form
         name="user"
+        onFinish={handleSubmit}
         labelCol={{
           span: 8,
         }}
@@ -253,7 +241,7 @@ const User = ({ closeUserModal }) => {
               message: 'La contraseña debe contener al menos una letra mayúscula',
             },
             {
-              pattern: /^(?=.*[!@#$%^&*]).*$/,
+              pattern: /^(?=.*[.!@#$%^&*]).*$/,
               message: 'La contraseña debe contener al menos un carácter especial (por ejemplo: !@#$%^&*)',
             },
           ]}
@@ -313,7 +301,6 @@ const User = ({ closeUserModal }) => {
             <Button
               block
               htmlType="submit"
-              onClick={handleSubmit}
               style={buttonStyle}
               type="primary"
             >
@@ -322,9 +309,6 @@ const User = ({ closeUserModal }) => {
           </div>
 
           {/* Button submit end */}
-
-          <Photo showPhoto={showPhotoUser} />
-
           {/* Google */}
 
           <div className={style.googleBtn}>
@@ -342,9 +326,10 @@ const User = ({ closeUserModal }) => {
 
         {/* Google end*/}
 
-        {renderServerResponse()}
-        
       </Form>
+
+      <Photo showPhoto={showPhotoUser} userId={userId} closeUserModal={closeUserModal} />
+
     </div>
   )
 };
