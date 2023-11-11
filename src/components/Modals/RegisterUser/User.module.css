@@ -13,8 +13,21 @@
   width: 100%;
 }
 
-.ageField p {
+.ageField p,
+.notification p {
   font-size: .8rem;
+}
+
+.notification {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 1.5rem;
+}
+
+.notification button[type='button'] {
+  margin-top: 0;
+  margin-left: 1rem;
 }
 
 .emailField Input {

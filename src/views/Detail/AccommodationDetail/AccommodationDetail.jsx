@@ -109,7 +109,6 @@ const AccommodationDetail = () => {
   return (
     // primera fila
     <>
-      {console.log(AccommodationById)}
       <Divider />
       <Row>
         <Col className="gutter-row" span={12}>
