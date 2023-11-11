@@ -1,7 +1,7 @@
 import { getCities, getCountries, getServices } from "../../../redux/Actions/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { Button, Checkbox, Col, Form, Input, InputNumber, Modal, Row, Select, Upload } from "antd";
+import { Button, Checkbox, Col, Form, Input, InputNumber, Modal, Row, Select, Upload, notification } from "antd";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import { PlusOutlined } from "@ant-design/icons";
 import style from "./Accommodation.module.css"
@@ -44,7 +44,6 @@ const center = {
 const Accommodation = () => {
 
   const [fileList, setFileList] = useState([]);
-  const [serverResponse, setServerResponse] = useState(null);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [servicesGroup, setServicesGroup] = useState([]);
   const [previewImage, setPreviewImage] = useState("");
@@ -154,16 +153,22 @@ const Accommodation = () => {
     }
 
     try {
-      // const URL = 'https://nomada-suite.onrender.com/api'
-      const URL = 'http://localhost:3001/api'
-      const response = await axios.post(`${URL}/accommodation/create`, formDataToSend, {
+      await axios.post('/accommodation/create', formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      setServerResponse({ success: "Alojamiento registrado con éxito" });
+      notification.success({
+        message: 'Hemos recibido tu formulario.',
+        description: 'Estamos en proceso de revisión.',
+        placement: 'bottomLeft'
+      });
     } catch (error) {
-      setServerResponse({ error: "No se pudo registrar el alojamiento" });
+      notification.error({
+        message: 'Lo sentimos.',
+        description: 'el registro no se ha completado.',
+        placement: 'bottomLeft'
+      });
     }
   }
 
@@ -521,14 +526,6 @@ const Accommodation = () => {
                 </Button>
               </Form.Item>
 
-              {
-                serverResponse && (
-                  <div className={serverResponse.error ? 'error' : 'success'}>
-                    {serverResponse.error || serverResponse.success}
-                  </div>
-                )
-              }
-              
             </Col>
           </Row>
         </Form >
