@@ -75,15 +75,17 @@ const getServices = () => {
 };
 
 const getFilteredAccommodation = (values) => {
-  const { city, country, startDate, endDate, rooms, min, max } = values;
-  const cityName = city && `city=${city}`;
-  const countryName = country && `&country=${country}`;
-  const startDateNum = startDate && `&startDate=${startDate}`;
-  const endDateNum = endDate && `&endDate=${endDate}`;
-  const roomsNum = rooms && `&rooms=${rooms}`;
-  const minPrice = min >= 0 ? `&min=${min}` : "";
-  const maxPrice = max > 0 ? `&max=${max}` : "";
-  const endpoint = `/filtered/combinated?${cityName}${countryName}${roomsNum}${minPrice}${maxPrice}`;
+  const { city, country, startDate, endDate, rooms, min, max, orderByRating } = values;
+  console.log(city, country);
+  const cityName = city !== null ? `city=${city}` : "";
+  const countryName = country !== null ? `&country=${country}` : "";
+  const startDateNum = startDate !== null ? `&startDate=${startDate}` : "";
+  const endDateNum = endDate !== null ? `&endDate=${endDate}` : "";
+  const roomsNum = rooms !== null ? `&rooms=${rooms}` : "";
+  const minPrice = min && min !== null ? `&min=${min}` : "";
+  const maxPrice = max && max !== null ? `&max=${max}` : "";
+  const orderRating = orderByRating && orderByRating !== null ? `&orderByRating=${orderByRating}` : "";
+  const endpoint = `/filtered/combinated?${cityName}${countryName}${roomsNum}${minPrice}${maxPrice}${orderRating}`;
   try {
     return async (dispatch) => {
       const { data } = await axios.get(endpoint);

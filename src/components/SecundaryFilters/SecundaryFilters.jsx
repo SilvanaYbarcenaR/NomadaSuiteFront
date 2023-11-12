@@ -32,7 +32,15 @@ const SecundaryFilters = ({ handleSecValues, show }) => {
     })
   };
   const handleChange = (value) => {
-    dispatch(orderByRating(value));
+    /* dispatch(orderByRating(value)); */
+    setValues({
+      ...values,
+      orderByRating: value
+    });
+    handleSecValues({
+      ...values,
+      orderByRating: value
+    })
   };
 
   return (
@@ -62,7 +70,7 @@ const SecundaryFilters = ({ handleSecValues, show }) => {
               style={{ width: "120px" }}
               placeholder="Orden"
               onChange={handleChange}
-              options={[{ value: "asc", label: "Ascendente" }, { value: "desc", label: "Descendente" }]}
+              options={[{ value: "min-max", label: "Ascendente" }, { value: "max-min", label: "Descendente" }]}
             />
           </Form.Item>
         </Flex>
