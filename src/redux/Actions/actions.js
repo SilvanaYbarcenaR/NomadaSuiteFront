@@ -76,7 +76,6 @@ const getServices = () => {
 
 const getFilteredAccommodation = (values) => {
   const { city, country, startDate, endDate, rooms, min, max, orderByRating } = values;
-  console.log(city, country);
   const cityName = city !== null ? `city=${city}` : "";
   const countryName = country !== null ? `&country=${country}` : "";
   const startDateNum = startDate !== null ? `&startDate=${startDate}` : "";

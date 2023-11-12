@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Input, Button, Checkbox, Form, Modal } from 'antd';
+import { Input, Button, Checkbox, Form, Modal, notification } from 'antd';
 import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import style from "./Login.module.css";
@@ -19,7 +19,6 @@ const buttonStyle = {
 const googleBtnStyle = {
   border: "1px solid black",
   height: "3rem",
-  paddingTop: "0.8rem"
 };
 
 const Login = ({ closeModal }) => {
@@ -28,8 +27,6 @@ const Login = ({ closeModal }) => {
     email: '',
     password: ''
   });
-
-  const [errors, setErrors] = useState(null);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -41,8 +38,12 @@ const Login = ({ closeModal }) => {
         handleWelcomeClick(true);
         closeModal();
       })
-      .catch(() => {
-        setErrors("Credenciales inválidas. Por favor, verifica tu correo y contraseña.");
+      .catch((error) => {
+        notification.error({
+          message: 'Error',
+          description: `Lo sentimos, ${error.message}`,
+          placement: 'bottomLeft'
+        });
       })
   };
 
@@ -155,7 +156,6 @@ const Login = ({ closeModal }) => {
             />
           </div>
         </Form.Item>
-        {errors && <p className={style.errorText}>{errors}</p>}
 
         {/* Password end*/}
         {/* Remember */}
