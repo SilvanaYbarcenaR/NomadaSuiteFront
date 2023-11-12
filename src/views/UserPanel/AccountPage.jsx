@@ -8,7 +8,7 @@ import { updateUserInfo } from "../../redux/Actions/actions";
 import style from "../UserPanel/AccountPage.module.css";
 import { Button, Form, Input, Card, Flex, DatePicker, Tabs } from 'antd';
 import Photo from "../UserPanel/Photo/PhotoAcc";
-import SimpleReservation from "../UserPanel/Reservations";
+import Reservations from "../UserPanel/Reservations";
 import Acommodation from "../Register/Accommodation/Accommodation";
 
 const cardStyle = {
@@ -34,6 +34,7 @@ const AccountPage = () => {
   const [userLoggedInfo, setUserLoggedInfo] = useState({
     firstName: "",
     lastName: "",
+    password: "",
     birthdate: moment(userLoggedInfoFromRedux.birthdate).format("YYYY-MM-DD"),
   });
 
@@ -49,6 +50,7 @@ console.log(userLoggedInfoFromRedux)
       
       firstName: userLoggedInfo.firstName,
       lastName: userLoggedInfo.lastName,
+      password: userLoggedInfo.password,
       birthdate: userLoggedInfo.birthdate,
       })
   
@@ -62,6 +64,7 @@ console.log(userLoggedInfoFromRedux)
     setUserLoggedInfo({
       firstName: userLoggedInfoFromRedux.firstName,
       lastName: userLoggedInfoFromRedux.lastName,
+      password: userLoggedInfoFromRedux.password,
       birthdate: moment(userLoggedInfoFromRedux.birthdate).format("YYYY-MM-DD"),
     });
     console.log(moment(userLoggedInfo.birthdate));
@@ -100,7 +103,7 @@ console.log(userLoggedInfoFromRedux)
                     }}
                   >
                     <Flex justify="space-between">
-                      <Photo />
+                      <Photo userId={userId} />
                       <Flex
                         vertical
                         align="flex-end"
@@ -132,6 +135,21 @@ console.log(userLoggedInfoFromRedux)
                                 value={userLoggedInfo.lastName}
                                 onChange={(e) => {
                                   setUserLoggedInfo({ ...userLoggedInfo, lastName: e.target.value });
+                                }}
+                                disabled={formDisabled}
+                                placeholder=""
+                              />
+                            </Form.Item>
+                          </Form>
+                        </>
+                        <>
+                          <Form layout="horizontal">
+                            <Form.Item label="">
+                              <Input
+                                className={style.userinfo}
+                                value={userLoggedInfo.password}
+                                onChange={(e) => {
+                                  setUserLoggedInfo({ ...userLoggedInfo, password: e.target.value });
                                 }}
                                 disabled={formDisabled}
                                 placeholder=""
@@ -185,7 +203,7 @@ console.log(userLoggedInfoFromRedux)
               key: 'Reservaciones',
               children:
                 <div style={{ alignItems: 'center', justifyContent: 'flex-end' }}>
-                  <SimpleReservation />
+                  <Reservations userId={userId} />
                 </div>
             },
             {

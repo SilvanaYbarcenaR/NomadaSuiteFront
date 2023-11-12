@@ -1,102 +1,124 @@
-import React, { useState } from 'react';
-import { PlusOutlined } from '@ant-design/icons';
-import { Button, Form, Modal, Upload } from 'antd';
-import { Link } from 'react-router-dom';
-import style from '../Photo/PhotoAcc.module.css';
-import Welcome from '../../../components/Modals/Welcome/Welcome';
+  import React, { useState } from 'react';
+  import { PlusOutlined } from '@ant-design/icons';
+  import ImgCrop from 'antd-img-crop';
+  import { Button, Form, Modal, Upload, notification } from 'antd';
+  import axios from 'axios';
+  import style from '../Photo/PhotoAcc.module.css';
 
-
-
-const getBase64 = (file) =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-  });
-const normFile = (e) => {
-  if (Array.isArray(e)) {
-    return e;
-  }
-  return e?.fileList;
-};
-
-const Photo = () => {
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState('');
-  const [previewTitle, setPreviewTitle] = useState('');
-  const [fileList, setFileList] = useState([])
-  const handleCancel = () => setPreviewOpen(false);
-  const handlePreview = async (file) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-    setPreviewImage(file.url || file.preview);
-    setPreviewOpen(true);
-    setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
-  };
-  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
-  const uploadButton = (
-    <div>
-      <PlusOutlined />
-      <div
-        style={{
-          marginTop: 8,
-        }}
-      >
-        Upload
-      </div>
-    </div>
-  );
-
-  const onFinish = (values) => {
-    console.log('Success:', values);
-  };
-
-  const [showWelcomeModal, setShowWelcomeModal] = useState(false);
-  const [form] = Form.useForm();
-  const handleWelcomeClick = () => {
-    setShowWelcomeModal(true);
+  const buttonStyle = {
+    background: "#231CA7",
+    color: "white",
+    height: "3rem",
   };
 
 
-  return (
-    <div>
-      <Form
-        form={form}
-        className={style.formBox}
-        name="photo"
-        labelCol={{
-          span: 4,
-        }}
-        wrapperCol={{
-          span: 24,
-        }}
-        layout="horizontal"
-        style={{
-          maxWidth: 600,
-        }}
-        onFinish={onFinish}
-      >
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-          <hr />
-          <h1 style={{ marginTop: '30px', fontWeight: 'bold' }}>Añade o Modifica</h1>
-          <h1 style={{ fontWeight: 'bold' }}>Tu foto</h1>
-            <Form.Item valuePropName="fileList" getValueFromEvent={normFile}>
-              <Upload
-                accept='image/png, image/jpeg'
-                action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-                className={style.upload}
-                fileList={fileList}
-                listType="picture-circle"
-                name='imagen'
-                onPreview={handlePreview}
-                onChange={handleChange}
-                type='file'
+
+  const getBase64 = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+
+
+    const Photo = ({ userId }) => {
+
+      const [fileList, setFileList] = useState([]);
+      const [formDataToSend, setFormDataToSend] = useState(new FormData());
+      const [previewOpen, setPreviewOpen] = useState(false);
+      const [previewImage, setPreviewImage] = useState("");
+    
+      const onChange = ({ fileList: newFileList }) => {
+        setFileList(newFileList);
+      };
+    
+      const beforeUpload = (file) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          setFileList(() => [{ url: reader.result }]);
+        };
+        return false;
+      };
+    
+      const handleCancel = () => setPreviewOpen(false);
+      const handlePreview = async (file) => {
+        if (!file.url && !file.preview) {
+          file.preview = await getBase64(file.originFileObj);
+        }
+        setPreviewImage(file.url || file.preview);
+        setPreviewOpen(true);
+      };
+    
+      const handleFormSubmit = async () => {
+      
+        try {
+          formDataToSend.delete('images');
+          formDataToSend.append('images', fileList[0].originFileObj);
+          await axios.put(`/user/update/${userId}`, formDataToSend, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+          notification.success({
+            message: '¡Excelente!',
+            description: 'Tu foto se subió con éxito.',
+            placement: 'bottomLeft'
+          });
+        } catch (error) {
+          notification.error({
+            message: 'Error',
+            description: `Lo sentimos, no se pudo actualizar la foto.`,
+            placement: 'bottomLeft'
+          });
+        }
+      }
+    
+    
+      return (
+        <div className={`${style.photoContainer} ${style.show}`} >
+          <Form
+            name="photo"
+            onFinish={handleFormSubmit}
+            className={style.formBox}
+            layout="horizontal"
+            style={{
+              maxWidth: 600,
+              marginTop: 70,
+            }}
+          >
+            <h1>Añade una foto</h1>
+            <p>Elige una imagen que muestre tu rostro.</p>
+    
+            {/* Photo */}
+    
+            <Form.Item
+              name="image"
+              valuePropName="fileList"
+            >
+              <ImgCrop rotationSlider>
+                <Upload
+                  accept="image/*"
+                  beforeUpload={beforeUpload}
+                  className={style.upload}
+                  fileList={fileList}
+                  listType="picture-circle"
+                  onChange={onChange}
+                  onPreview={handlePreview}
+                  type="file"
+                >
+                  {fileList.length < 1 && '+ Upload'}
+                </Upload>
+              </ImgCrop>
+            </Form.Item>
+    
+            {/* Photo end */}
+              <Modal
+                footer={null}
+                onCancel={handleCancel}
+                open={previewOpen}
               >
-                {fileList.length >= 1 ? null : uploadButton}
-              </Upload>
-              <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
                 <img
                   alt="example"
                   style={{
@@ -105,17 +127,23 @@ const Photo = () => {
                   src={previewImage}
                 />
               </Modal>
+    
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                style={buttonStyle}
+                block
+              >
+                Actualizar foto
+              </Button>
             </Form.Item>
-            <span style={{ marginLeft: '30px', fontWeight: 'bold', color: '#231CA7', fontSize: '12px' }}>
-              RECUERDA, los anfitriones no podrán ver tu foto de perfil hasta que se confirme tu reserva.
-            </span>
+    
+        
+    
+          </Form>
         </div>
-        
-        
-      </Form>
-      
-    </div>
-  )
-};
-
-export default Photo;
+      )
+    };
+    
+    export default Photo;
