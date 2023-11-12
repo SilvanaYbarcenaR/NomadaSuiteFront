@@ -65,25 +65,23 @@ const SearchBar = () => {
   };
 
   const onChange = (data) => {
-    if (/^[a-zA-Z, ]*$/.test(data)) {
-      const input = data.split(',').map(item => item.trim());
+    const input = data.split(',').map(item => item.trim());
 
-      if (input.length === 2) {
-        const city = input[0];
-        const country = input[1];
+    if (input.length === 2) {
+      const city = input[0];
+      const country = input[1];
 
-        setValues({
-          ...values,
-          city: city,
-          country: country
-        });
-      } else if (input.length === 1) {
-        setValues({
-          ...values,
-          city: input[0],
-          country: ''
-        });
-      }
+      setValues({
+        ...values,
+        city: city,
+        country: country
+      });
+    } else if (input.length === 1) {
+      setValues({
+        ...values,
+        city: input[0],
+        country: ''
+      });
     }
   };
 
