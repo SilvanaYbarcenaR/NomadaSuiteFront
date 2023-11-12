@@ -75,7 +75,6 @@ const getServices = () => {
 };
 
 const getFilteredAccommodation = (values) => {
-  console.log(values);
   const { city, country, startDate, endDate, rooms, min, max } = values
   const cityName = city && `city=${city}`
   const countryName = country && `&country=${country}`
@@ -134,7 +133,7 @@ const getCountries = () => {
     try {
       const response = await axios.get('https://www.universal-tutorial.com/api/countries/', {
         headers: {
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJoaC5yb2JpbnNvbjk1QGdtYWlsLmNvbSIsImFwaV90b2tlbiI6IlFrSm5hWUs4OVZfODA3eWV1SkxWQXJJZHVodWxJaThxankwZnBXenNBYno5VjBUTWZPOEpjbllTdzV4OS00Uk1rMzAifSwiZXhwIjoxNjk5NjczMDU2fQ.ULPt9to_kInK04j5qJ2ObyYdzGJEEeQd-aiQKTf9QoU',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJoaC5yb2JpbnNvbjk1QGdtYWlsLmNvbSIsImFwaV90b2tlbiI6IlFrSm5hWUs4OVZfODA3eWV1SkxWQXJJZHVodWxJaThxankwZnBXenNBYno5VjBUTWZPOEpjbllTdzV4OS00Uk1rMzAifSwiZXhwIjoxNjk5ODMzNDMzfQ.DXJBA7rb9BHw_3dsPB9oSA-AAgMFBUkjuoP8_VhsdKk',
           'Accept': 'application/json',
         }
       })
@@ -153,7 +152,7 @@ const getCities = (name) => {
     try {
       const response = await axios.get(`https://www.universal-tutorial.com/api/states/${name}`, {
         headers: {
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJoaC5yb2JpbnNvbjk1QGdtYWlsLmNvbSIsImFwaV90b2tlbiI6IlFrSm5hWUs4OVZfODA3eWV1SkxWQXJJZHVodWxJaThxankwZnBXenNBYno5VjBUTWZPOEpjbllTdzV4OS00Uk1rMzAifSwiZXhwIjoxNjk5NjczMDU2fQ.ULPt9to_kInK04j5qJ2ObyYdzGJEEeQd-aiQKTf9QoU',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJoaC5yb2JpbnNvbjk1QGdtYWlsLmNvbSIsImFwaV90b2tlbiI6IlFrSm5hWUs4OVZfODA3eWV1SkxWQXJJZHVodWxJaThxankwZnBXenNBYno5VjBUTWZPOEpjbllTdzV4OS00Uk1rMzAifSwiZXhwIjoxNjk5ODMzNDMzfQ.DXJBA7rb9BHw_3dsPB9oSA-AAgMFBUkjuoP8_VhsdKk',
           'Accept': 'application/json',
         }
       })
