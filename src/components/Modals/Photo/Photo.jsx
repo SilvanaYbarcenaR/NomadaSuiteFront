@@ -33,7 +33,7 @@ const Photo = ({ showPhoto, userId, closeUserModal }) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
-      setFileList(() => [{ url: reader.result }]);
+      setFileList(() => [{ url: reader.result, originFileObj: file }]);
     };
     return false;
   };
@@ -48,6 +48,7 @@ const Photo = ({ showPhoto, userId, closeUserModal }) => {
   };
 
   const handleFormSubmit = async () => {
+    
     try {
       formDataToSend.delete('images');
       formDataToSend.append('images', fileList[0].originFileObj);
