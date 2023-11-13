@@ -122,7 +122,7 @@ const Reservation = ({ userId }) => {
                         <div style={{ display: 'flex', alignItems: 'center' }} >
                           <span style={{ marginRight: '70px', fontWeight: 'bold' }}>Dias Reservados:</span>
                           {/* Aquí debes mostrar la información correcta de los días reservados */}
-                          <span style={{ fontWeight: 'bold' }}>{reservation.daysReserved}</span>
+                          <span style={{ fontWeight: 'bold', marginLeft: '50px' }}>{reservation.daysReserved}</span>
                         </div>
                       </Space>
 
@@ -132,7 +132,7 @@ const Reservation = ({ userId }) => {
                         <div style={{ display: 'flex', alignItems: 'center' }} >
                           <span style={{ marginRight: '80px', fontWeight: 'bold', fontSize: '20px' }}>Total Pagado:</span>
                           {/* Aquí debes mostrar la información correcta del total pagado */}
-                          <span style={{ fontWeight: 'bold', fontSize: '18px', textDecoration: 'underline'  }}>${reservation.totalPrice}</span>
+                          <span style={{ fontWeight: 'bold', fontSize: '18px' }}>${reservation.totalPrice}</span>
                         </div>
                       </Space>
                     </div>

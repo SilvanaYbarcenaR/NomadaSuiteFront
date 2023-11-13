@@ -3,6 +3,7 @@ import axios from "axios";
 import dayjs from 'dayjs';
 import moment from "moment";
 import { useSelector, useDispatch } from 'react-redux';
+import { NavLink } from 'react-router-dom';
 import { getUserData } from "../../redux/Actions/actions";
 import { updateUserInfo } from "../../redux/Actions/actions";
 import style from "../UserPanel/AccountPage.module.css";
@@ -57,7 +58,7 @@ console.log(userLoggedInfoFromRedux)
   };
 
   useEffect(() => {
-    window.location.hash = activeTab;
+    window.location.hash = `/${activeTab}`;
   }, [activeTab]);
 
   useEffect(() => {
@@ -91,7 +92,10 @@ console.log(userLoggedInfoFromRedux)
           tabBarGutter={86}
           items={[
             {
-              label: <div className={`${activeTab === 'Perfil' ? style.activeLabel : style.inactiveLabel}`}><b>Mi Perfil</b></div>,
+              label: 
+              <NavLink 
+              to="/account#/Perfil"
+              className={`${activeTab === 'Perfil' ? style.activeLabel : style.inactiveLabel}`}><b>Mi Perfil</b></NavLink>,
               key: 'Perfil',
               children:
                 <Flex style={{ alignItems: 'center', justifyContent: 'center', display: 'flex' }}>
@@ -199,7 +203,10 @@ console.log(userLoggedInfoFromRedux)
                 </Flex>
             },
             {
-              label: <div className={`${activeTab === 'Reservaciones' ? style.activeLabel : style.inactiveLabel}`}><b>Mis Reservaciones</b></div>,
+              label: 
+              <NavLink
+              to="/account#/Reservaciones"
+              className={`${activeTab === 'Reservaciones' ? style.activeLabel : style.inactiveLabel}`}><b>Mis Reservaciones</b></NavLink>,
               key: 'Reservaciones',
               children:
                 <div style={{ alignItems: 'center', justifyContent: 'flex-end' }}>
@@ -207,7 +214,10 @@ console.log(userLoggedInfoFromRedux)
                 </div>
             },
             {
-              label: <div className={`${activeTab === 'Accommodations' ? style.activeLabel : style.inactiveLabel}`}><b>Mis Accommodations</b></div>,
+              label: 
+              <NavLink
+              to="/account#/Accommodations"
+              className={`${activeTab === 'Accommodations' ? style.activeLabel : style.inactiveLabel}`}><b>Mis Accommodations</b></NavLink>,
               key: 'Accommodations',
               children:
                 <div style={{ alignItems: 'center', justifyContent: 'flex-end' }}>
