@@ -6,6 +6,7 @@ import Header from './components/Header/Header.jsx';
 import Home from './views/Home/Home';
 import Footer from './components/Footer/Footer.jsx';
 import Reservation from './views/Register/Reservation/Reservation';
+import AccountPage from './views/UserPanel/AccountPage.jsx';
 import './App.css'
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
         <Route path="/register-accommodation" element={<Accommodation />} />
         <Route path="/reservation" element={<Reservation />} />
         <Route path="/cancellation" element={<Cancellation />} />
+        <Route path="/account" element={<AccountPage />} />
       </Routes>
       <Footer />
     </div>
