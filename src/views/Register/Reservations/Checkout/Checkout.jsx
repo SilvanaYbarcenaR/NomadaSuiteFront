@@ -1,13 +1,29 @@
-import { Col, Divider, Row } from "antd";
+import { Carousel, Col, Divider, Row } from "antd";
 import style from "./Checkout.module.css";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import dayjs from "dayjs";
 
 const Checkout = () => {
 
-  const accommodationToReservation = useSelector((state) => state.accommodationToReservation);
-  console.log(accommodationToReservation)
+  const accommodation = JSON.parse(localStorage.getItem('accommodationData'));
+  const checkout = JSON.parse(localStorage.getItem('checkoutData'));
+  console.log(accommodation);
+  console.log(checkout);
 
+  const name = accommodation.name
+  const start_date = checkout?.reservationDetails?.startDate;
+  const start = dayjs(start_date).format('DD-MM-YYYY');
+  const end_date = checkout?.reservationDetails?.endDate;
+  const end = dayjs(end_date).format('DD-MM-YYYY');
+  const startDateObj = new Date(start_date);
+  const endDateObj = new Date(end_date);
+  const timeDifference = endDateObj - startDateObj;
+  const nights = timeDifference / (1000 * 3600 * 24);
+  const habitacionService = accommodation?.idServices?.find(service => service.name === 'Habitación');
+  const quantity = habitacionService ? habitacionService.quantity : null;
+
+  // const id = 'http://localhost:5173/reservation/cs_test_a1VQ7rup7EVfElqSq98yt9qymyAW39sCsg0E2DeGUyaQ0BmWG7d8PkeZ0F'
+  
   return (
     <div className={style.checkout}>
       <div className={style.columnsBox}>
@@ -16,23 +32,14 @@ const Checkout = () => {
           <Col span={12}>
             <div className={style.boxes}>
               <div>
-                <h2>{"Nombre del alojamiento"}</h2>
+                <h2>{name}</h2>
                 <img className={style.imgLogo} src="../../../src/assets/image/logo.png" />
               </div>
-              {/* <Carousel className={detailStyles.carouselContainerDetail} arrows>
-                {
-                  AccommodationById?.photos?.map((photo, index) => {
-                    return (
-                      <div key={index} className={detailStyles.carouselSlide}><img src={photo} /></div>
-                      )
-                    })
-                  }
-                </Carousel> */}
-              <h3>{"Cantidad de noches"} en {"Alojamiento"}</h3>
+              <h3>{nights} noches en {name}</h3>
               <Divider />
               <img className={style.img} src="../../../src/assets/image/logo.png" />
-              <p>{"Start_date"} ➡ {"End_date"}</p>
-              <p>Alojamiento ▪ {"Número de habitaciones"}</p>
+              <p>{start} ➡ {end}</p>
+              <p>Alojamiento ▪ {quantity} habitaciones</p>
               <h6>Anfitrión: {"Nombre del anfitrión"}</h6>
               <h6>Viajero: {"Nombre del nómada"}</h6>
               <Divider />

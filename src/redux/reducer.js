@@ -155,6 +155,7 @@ const rootReducer = (state = initialState, { type, payload }) => {
         userGoogle: {}
       }
     case SET_RESERVATION_DATA:
+      console.log(payload);
       return {
         ...state,
         reservationData: payload
