@@ -261,7 +261,6 @@ const updateUserInfo = (userId, firstName, lastName) => {
       });
     } catch (error) {
       console.log(error.response.data.error);
-      // Puedes manejar errores aquí, como mostrar un mensaje al usuario
     }
   };
 };

@@ -10,7 +10,7 @@ import style from "../UserPanel/AccountPage.module.css";
 import { Button, Form, Input, Card, Flex, DatePicker, Tabs } from 'antd';
 import Photo from "../UserPanel/Photo/PhotoAcc";
 import Reservations from "../UserPanel/Reservations";
-import Acommodation from "../Register/Accommodation/Accommodation";
+import Accommodation from "../UserPanel/Accommodation";
 
 const cardStyle = {
   width: 720,
@@ -221,7 +221,7 @@ console.log(userLoggedInfoFromRedux)
               key: 'Accommodations',
               children:
                 <div style={{ alignItems: 'center', justifyContent: 'flex-end' }}>
-                  <Acommodation />
+                  <Accommodation userId={userId} />
                 </div>
             },
           ]}
