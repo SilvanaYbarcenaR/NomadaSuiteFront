@@ -1,9 +1,14 @@
-import { Carousel, Col, Divider, Row } from "antd";
+import { Col, Divider, Row } from "antd";
+import { useDispatch } from "react-redux";
 import style from "./Checkout.module.css";
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 
 const Checkout = () => {
+
+  const id = useParams().checkoutId;
+  const dispatch = useDispatch();
+  let AccommodationById = useSelector((state) => state.accommodationById);
 
   const accommodation = JSON.parse(localStorage.getItem('accommodationData'));
   const checkout = JSON.parse(localStorage.getItem('checkoutData'));
@@ -22,7 +27,7 @@ const Checkout = () => {
   const habitacionService = accommodation?.idServices?.find(service => service.name === 'Habitación');
   const quantity = habitacionService ? habitacionService.quantity : null;
 
-  // const id = 'http://localhost:5173/reservation/cs_test_a1VQ7rup7EVfElqSq98yt9qymyAW39sCsg0E2DeGUyaQ0BmWG7d8PkeZ0F'
+  const idpd = 'http://localhost:3001/api/reservation/checkout/:checkoutId'
   
   return (
     <div className={style.checkout}>
