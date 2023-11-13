@@ -1,5 +1,6 @@
 /* eslint-disable no-case-declarations */
-import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_FILTERED_ACCOMMODATION, GET_NEXT_ACCOMMODATIONS, GET_SERVICES, ORDER_BY_RATING, CLEAR_DETAIL, GET_COUNTRIES, GET_CITIES, GET_LOCATIONS, LOGIN_USER, LOGIN_GOOGLE, REGISTER_USER, GET_USER_DATA, LOG_OUT, SET_RESERVATION_DATA, CLEAR_DETAIL_TO_RESERVATION } from "./Actions/actions-types";
+
+import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_FILTERED_ACCOMMODATION, GET_NEXT_ACCOMMODATIONS, GET_SERVICES, ORDER_BY_RATING, CLEAR_DETAIL, GET_COUNTRIES, GET_CITIES, GET_LOCATIONS, LOGIN_USER, LOGIN_GOOGLE, REGISTER_USER, GET_USER_DATA, LOG_OUT, SET_RESERVATION_DATA, CLEAR_DETAIL_TO_RESERVATION, UPDATE_USER_INFO } from "./Actions/actions-types";
 
 let initialState = {
   accommodations: [],
@@ -160,6 +161,15 @@ const rootReducer = (state = initialState, { type, payload }) => {
         ...state,
         reservationData: payload
       }
+    case UPDATE_USER_INFO:
+      return {
+        ...state,
+        userLogged: {
+          ...state.userLogged,
+          firstName: payload.firstName,
+          lastName: payload.lastName,
+        },
+      };
 
     default:
       return {

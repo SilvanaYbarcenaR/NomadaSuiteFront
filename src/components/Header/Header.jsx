@@ -5,7 +5,7 @@ import { Space, Dropdown, Modal } from 'antd';
 import User from '../Modals/RegisterUser/User';
 import Login from '../Modals/Login/Login';
 import SearchBar from '../SearchBar/SearchBar';
-import { Link, NavLink } from 'react-router-dom/dist';
+import { Link, NavLink, useLocation } from 'react-router-dom/dist';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserData, logOut } from '../../redux/Actions/actions';
 
@@ -15,6 +15,8 @@ function Header() {
   const [isUserModalVisible, setIsUserModalVisible] = useState(false);
   const [isLoginModalVisible, setIsLoginModalVisible] = useState(false);
   const userLoggedInfo = useSelector((state) => state.userLogged);
+
+  const currentPath = useLocation();
 
   const closeUserModal = () => {
     setIsUserModalVisible(false);
@@ -35,11 +37,11 @@ function Header() {
       key: '1',
     },
     {
-      label: Object.keys(userLoggedInfo).length !== 0 && <NavLink to="#">Cuenta</NavLink>,
+      label: Object.keys(userLoggedInfo).length !== 0 && <NavLink to="/account#Perfil">Cuenta</NavLink>,
       key: '3',
     },
     {
-      label: Object.keys(userLoggedInfo).length !== 0 && <NavLink to="#">Mis reservas</NavLink>,
+      label: Object.keys(userLoggedInfo).length !== 0 && <NavLink to="/account#/Reservaciones">Mis reservas</NavLink>,
       key: '4',
     },
     {
@@ -74,7 +76,7 @@ function Header() {
 
           {/* end logo */}
 
-          <SearchBar />
+          {currentPath.pathname === "/" && <SearchBar />}
 
           {/* publish */}
 

@@ -1,7 +1,6 @@
 /* eslint-disable no-unreachable */
 import axios from "axios";
-import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING, GET_FILTERED_ACCOMMODATION, CLEAR_DETAIL, GET_COUNTRIES, GET_CITIES, GET_LOCATIONS, LOGIN_USER, LOGIN_GOOGLE, REGISTER_USER, GET_USER_DATA, LOG_OUT, SET_RESERVATION_DATA, CLEAR_DETAIL_TO_RESERVATION } from "./actions-types";
-
+import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING, GET_FILTERED_ACCOMMODATION, CLEAR_DETAIL, GET_COUNTRIES, GET_CITIES, GET_LOCATIONS, LOGIN_USER, LOGIN_GOOGLE, REGISTER_USER, GET_USER_DATA, LOG_OUT, SET_RESERVATION_DATA, CLEAR_DETAIL_TO_RESERVATION, UPDATE_USER_INFO } from "./actions-types";
 
 const getAccommodations = () => {
   const endpoint = "/accommodation/";
@@ -75,15 +74,16 @@ const getServices = () => {
 };
 
 const getFilteredAccommodation = (values) => {
-  const { city, country, startDate, endDate, rooms, min, max } = values
-  const cityName = city && `city=${city}`
-  const countryName = country && `&country=${country}`
-  const startDateNum = startDate && `&startDate=${startDate}`
-  const endDateNum = endDate && `&endDate=${endDate}`
-  const roomsNum = rooms && `&rooms=${rooms}`
-  const minPrice = `&min=${min}`
-  const maxPrice = max > 0 ? `&max=${max}` : ""
-  const endpoint = `/filtered/combinated?${cityName}${countryName}${roomsNum}${minPrice}${maxPrice}`
+  const { city, country, startDate, endDate, rooms, min, max, orderByRating } = values;
+  const cityName = city !== null ? `city=${city}` : "";
+  const countryName = country !== null ? `&country=${country}` : "";
+  const startDateNum = startDate !== null ? `&startDate=${startDate}` : "";
+  const endDateNum = endDate !== null ? `&endDate=${endDate}` : "";
+  const roomsNum = rooms !== null ? `&rooms=${rooms}` : "";
+  const minPrice = min && min !== null ? `&min=${min}` : "";
+  const maxPrice = max && max !== null ? `&max=${max}` : "";
+  const orderRating = orderByRating && orderByRating !== null ? `&orderByRating=${orderByRating}` : "";
+  const endpoint = `/filtered/combinated?${cityName}${countryName}${roomsNum}${minPrice}${maxPrice}${orderRating}`;
   try {
     return async (dispatch) => {
       const { data } = await axios.get(endpoint);
@@ -255,6 +255,23 @@ const logOut = () => {
   }
 }
 
+const updateUserInfo = (userId, firstName, lastName) => {
+  return async (dispatch) => {
+    try {
+      const endpoint = `/user/update/${userId}`; // Ruta en el servidor para actualizar el nombre y apellido
+      const userData = { firstName: firstName, lastName: lastName };
+      const response = await axios.put(endpoint, userData);
+
+      dispatch({
+        type: UPDATE_USER_INFO,
+        payload: { firstName, lastName },
+      });
+    } catch (error) {
+      console.log(error.response.data.error);
+    }
+  };
+};
+
 const setReservationData = (data) => ({
   type: SET_RESERVATION_DATA,
   payload: data
@@ -276,5 +293,6 @@ export {
   loginGoogle,
   getUserData,
   setReservationData,
+  updateUserInfo,
   logOut
 }
