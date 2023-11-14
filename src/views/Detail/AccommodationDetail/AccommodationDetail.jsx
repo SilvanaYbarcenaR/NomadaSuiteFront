@@ -22,8 +22,8 @@ const AccommodationDetail = () => {
   const id = useParams().id;
   const dispatch = useDispatch();
   let AccommodationById = useSelector((state) => state.accommodationById);
+  const userId = localStorage.getItem('userId');
   const [total, setTotal] = useState();
-
 
   useEffect(() => {
     dispatch(getAccommodationById(id));
@@ -81,10 +81,7 @@ const AccommodationDetail = () => {
   const endDate = new Date(date.end_date);
   const timeDifference = endDate - startDate;
   const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-
-  console.log(total);
   const totalPrice = total?.replace('.', '');
-  console.log(totalPrice);
 
   const checkoutStripe =
   {
@@ -101,7 +98,7 @@ const AccommodationDetail = () => {
       },
     ],
     "reservationDetails": {
-      "userId": "653c324dfab58cc2336a4b1d",
+      "userId": userId,
       "accommodationId": AccommodationById._id,
       "monthlyRate": AccommodationById.price,
       "daysReserved": days,

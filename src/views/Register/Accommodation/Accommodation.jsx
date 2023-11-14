@@ -130,6 +130,9 @@ const Accommodation = () => {
       lng: event.latLng.lng(),
     });
   };
+  
+  const userId = localStorage.getItem('userId');
+  console.log(userId);
 
   const handleFormSubmit = async (values) => {
     var form = document.querySelector('form');
@@ -148,6 +151,7 @@ const Accommodation = () => {
     formDataToSend.append("description", values.description);
     formDataToSend.append("price", values.price);
     formDataToSend.append("coordinates", formData.coordinates);
+    formDataToSend.append("ownerId", userId);
     if (values.image.length > 0) {
       values.image.forEach((image) => {
         formDataToSend.append("images", image.originFileObj);

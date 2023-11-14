@@ -21,24 +21,22 @@ const Reservation = () => {
 
   const accommodationToReservation = useSelector((state) => state.accommodationToReservation);
   const reservationData = useSelector((state) => state.reservationData);
-  const [checkout, setCheckout] = useState()
-  const [accommodation, setAccommodation] = useState()
+  const [accommodation, setAccommodation] = useState(JSON.parse(localStorage.getItem('accommodationData')));
+  const [checkout, setCheckout] = useState(JSON.parse(localStorage.getItem('checkoutData')));
   const navigate = useNavigate()
-
+  console.log(accommodation);
   console.log(checkout);
 
   useEffect(() => {
-    if (accommodationToReservation) {
+    if (Object.keys(accommodationToReservation).length !== 0) {
       if (accommodation) {
         localStorage.removeItem('accommodationData');
       }
       localStorage.setItem('accommodationData', JSON.stringify(accommodationToReservation));
       setAccommodation(JSON.parse(localStorage.getItem('accommodationData')))
     }
-  }, []);
-
-  useEffect(() => {
-    if (reservationData) {
+    if (Object.keys(reservationData).length !== 0) {
+      console.log(reservationData);
       if (checkout) {
         localStorage.removeItem('checkoutData');
       }
@@ -49,7 +47,7 @@ const Reservation = () => {
 
   const handle = () => {
     console.log(checkout);
-    axios.post('https://nomada-suite.onrender.com/api/stripe/charge', checkout)
+    axios.post('/stripe/charge', checkout)
       .then((response) => {
         window.location.href = response.data.url;
       });

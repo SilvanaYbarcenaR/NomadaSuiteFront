@@ -20,7 +20,7 @@ function App() {
         <Route path="/register-accommodation" element={<Accommodation />} />
         <Route path="/reservation" element={<Reservation />} />
         <Route path="/cancellation" element={<Cancellation />} />
-        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/reservation/:checkoutId" element={<Checkout />} />
         <Route path="/account" element={<AccountPage />} />
       </Routes>
       <Footer />

@@ -1,6 +1,6 @@
 /* eslint-disable no-unreachable */
 import axios from "axios";
-import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING, GET_FILTERED_ACCOMMODATION, CLEAR_DETAIL, GET_COUNTRIES, GET_CITIES, GET_LOCATIONS, LOGIN_USER, LOGIN_GOOGLE, REGISTER_USER, GET_USER_DATA, LOG_OUT, SET_RESERVATION_DATA, CLEAR_DETAIL_TO_RESERVATION, UPDATE_USER_INFO } from "./actions-types";
+import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING, GET_FILTERED_ACCOMMODATION, CLEAR_DETAIL, GET_COUNTRIES, GET_CITIES, GET_LOCATIONS, LOGIN_USER, LOGIN_GOOGLE, REGISTER_USER, GET_USER_DATA, LOG_OUT, SET_RESERVATION_DATA, CLEAR_DETAIL_TO_RESERVATION, UPDATE_USER_INFO, GET_RESERVATION_BY_ID } from "./actions-types";
 
 const getAccommodations = () => {
   const endpoint = "/accommodation/";
@@ -133,7 +133,7 @@ const getCountries = () => {
     try {
       const response = await axios.get('https://www.universal-tutorial.com/api/countries/', {
         headers: {
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJoaC5yb2JpbnNvbjk1QGdtYWlsLmNvbSIsImFwaV90b2tlbiI6IlFrSm5hWUs4OVZfODA3eWV1SkxWQXJJZHVodWxJaThxankwZnBXenNBYno5VjBUTWZPOEpjbllTdzV4OS00Uk1rMzAifSwiZXhwIjoxNjk5ODMzNDMzfQ.DXJBA7rb9BHw_3dsPB9oSA-AAgMFBUkjuoP8_VhsdKk',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJoaC5yb2JpbnNvbjk1QGdtYWlsLmNvbSIsImFwaV90b2tlbiI6IlFrSm5hWUs4OVZfODA3eWV1SkxWQXJJZHVodWxJaThxankwZnBXenNBYno5VjBUTWZPOEpjbllTdzV4OS00Uk1rMzAifSwiZXhwIjoxNzAwMDIyMDQ1fQ.ehlsEWtEmwdf0WoVsQQAKrDtWUjtQisarYxZzROXkNI',
           'Accept': 'application/json',
         }
       })
@@ -152,7 +152,7 @@ const getCities = (name) => {
     try {
       const response = await axios.get(`https://www.universal-tutorial.com/api/states/${name}`, {
         headers: {
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJoaC5yb2JpbnNvbjk1QGdtYWlsLmNvbSIsImFwaV90b2tlbiI6IlFrSm5hWUs4OVZfODA3eWV1SkxWQXJJZHVodWxJaThxankwZnBXenNBYno5VjBUTWZPOEpjbllTdzV4OS00Uk1rMzAifSwiZXhwIjoxNjk5ODMzNDMzfQ.DXJBA7rb9BHw_3dsPB9oSA-AAgMFBUkjuoP8_VhsdKk',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJoaC5yb2JpbnNvbjk1QGdtYWlsLmNvbSIsImFwaV90b2tlbiI6IlFrSm5hWUs4OVZfODA3eWV1SkxWQXJJZHVodWxJaThxankwZnBXenNBYno5VjBUTWZPOEpjbllTdzV4OS00Uk1rMzAifSwiZXhwIjoxNzAwMDIyMDQ1fQ.ehlsEWtEmwdf0WoVsQQAKrDtWUjtQisarYxZzROXkNI',
           'Accept': 'application/json',
         }
       })
@@ -193,8 +193,8 @@ const loginGoogle = (userData) => {
       });
       const profileUser = await axios.get(`${endpoint}${userData?.access_token}`, {
         headers: {
-            Authorization: `Bearer ${userData?.access_token}`,
-            Accept: 'application/json'
+          Authorization: `Bearer ${userData?.access_token}`,
+          Accept: 'application/json'
         }
       })
       const { email, family_name, given_name, id, picture } = await profileUser.data;
@@ -219,13 +219,13 @@ const registerUser = (userData, accessToken) => {
       const response = await axios.post(endpoint, userData);
       dispatch({
         type: REGISTER_USER,
-        payload: {...response.data.user, accessToken}
+        payload: { ...response.data.user, accessToken }
       })
     } catch (error) {
-      if(error.response.data.userFound) {
+      if (error.response.data.userFound) {
         dispatch({
           type: REGISTER_USER,
-          payload: {...error.response.data.userFound, accessToken}
+          payload: { ...error.response.data.userFound, accessToken }
         })
       }
     }
@@ -277,6 +277,22 @@ const setReservationData = (data) => ({
   payload: data
 });
 
+const getReservationById = (id) => {
+  console.log(id);
+  const endpoint = `/reservation/checkout/${id}`;
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.get(endpoint);
+      dispatch({
+        type: GET_RESERVATION_BY_ID,
+        payload: data,
+      });
+    } catch (error) {
+      console.log(error.response.data.error);
+    }
+  }
+};
+
 export {
   getAccommodations,
   getAccommodationById,
@@ -294,5 +310,6 @@ export {
   getUserData,
   setReservationData,
   updateUserInfo,
-  logOut
+  logOut,
+  getReservationById
 }
