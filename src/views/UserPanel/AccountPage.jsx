@@ -3,7 +3,7 @@ import axios from "axios";
 import dayjs from 'dayjs';
 import moment from "moment";
 import { useSelector, useDispatch } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import { getUserData } from "../../redux/Actions/actions";
 import { updateUserInfo } from "../../redux/Actions/actions";
 import style from "../UserPanel/AccountPage.module.css";
@@ -17,20 +17,16 @@ const cardStyle = {
 };
 
 const AccountPage = () => {
-
+  const params = useParams();
+  const activeTabParam = params.tab;
   const [formDisabled, setFormDisabled] = useState(true);
   const toggleForm = () => {
     setFormDisabled(!formDisabled);
   };
 
-  const [activeTab, setActiveTab] = useState('Perfil');
+  const [activeTab, setActiveTab] = useState(activeTabParam);
 
-  const dispatch = useDispatch();
   const userLoggedInfoFromRedux = useSelector((state) => state.userLogged);
-
-  console.log(userLoggedInfoFromRedux.birthdate);
-
-  
 
   const [userLoggedInfo, setUserLoggedInfo] = useState({
     firstName: "",
@@ -41,25 +37,17 @@ const AccountPage = () => {
 
 
   const userId=userLoggedInfoFromRedux._id;
-console.log(userLoggedInfoFromRedux)
-
 
   const handleUpdateUserInfo = async () => {
     // Realiza una solicitud PUT para actualizar el nombre y apellido del usuario
     await axios.put(`/user/update/${userId}`, {
-
-      
       firstName: userLoggedInfo.firstName,
       lastName: userLoggedInfo.lastName,
       password: userLoggedInfo.password,
       birthdate: userLoggedInfo.birthdate,
       })
-  
   };
 
-  useEffect(() => {
-    window.location.hash = `/${activeTab}`;
-  }, [activeTab]);
 
   useEffect(() => {
     setUserLoggedInfo({
@@ -68,9 +56,11 @@ console.log(userLoggedInfoFromRedux)
       password: userLoggedInfoFromRedux.password,
       birthdate: moment(userLoggedInfoFromRedux.birthdate).format("YYYY-MM-DD"),
     });
-    console.log(moment(userLoggedInfo.birthdate));
-    console.log(dayjs(userLoggedInfoFromRedux.birthdate));
   }, [userLoggedInfoFromRedux]);
+
+  useEffect(() => {
+    setActiveTab(activeTabParam);
+  }, [activeTabParam])
 
   const calculateAge = (birthdate) => {
     const currentDate = new Date();
@@ -83,7 +73,7 @@ console.log(userLoggedInfoFromRedux)
     <>
       <div style={{ marginTop: '50px' }}>
         <Tabs
-          defaultActiveKey="Perfil"
+          defaultActiveKey={activeTab}
           activeKey={activeTab}
           onChange={(key) => setActiveTab(key)}
           type="card"
@@ -94,9 +84,9 @@ console.log(userLoggedInfoFromRedux)
             {
               label: 
               <NavLink 
-              to="/account#/Perfil"
-              className={`${activeTab === 'Perfil' ? style.activeLabel : style.inactiveLabel}`}><b>Mi Perfil</b></NavLink>,
-              key: 'Perfil',
+              to="/account/perfil"
+              className={`${activeTab === 'perfil' ? style.activeLabel : style.inactiveLabel}`}><b>Mi Perfil</b></NavLink>,
+              key: 'perfil',
               children:
                 <Flex style={{ alignItems: 'center', justifyContent: 'center', display: 'flex' }}>
                   <Card
@@ -161,7 +151,7 @@ console.log(userLoggedInfoFromRedux)
                             </Form.Item>
                           </Form>
                         </>
-                        {console.log(userLoggedInfo.birthdate)}
+                        
                         <>
                         <Form layout="horizontal">
                           <Form.Item label="">
@@ -205,9 +195,9 @@ console.log(userLoggedInfoFromRedux)
             {
               label: 
               <NavLink
-              to="/account#/Reservaciones"
-              className={`${activeTab === 'Reservaciones' ? style.activeLabel : style.inactiveLabel}`}><b>Mis Reservaciones</b></NavLink>,
-              key: 'Reservaciones',
+              to="/account/reservaciones"
+              className={`${activeTab === 'reservaciones' ? style.activeLabel : style.inactiveLabel}`}><b>Mis Reservaciones</b></NavLink>,
+              key: 'reservaciones',
               children:
                 <div style={{ alignItems: 'center', justifyContent: 'flex-end' }}>
                   <Reservations userId={userId} />
@@ -216,9 +206,9 @@ console.log(userLoggedInfoFromRedux)
             {
               label: 
               <NavLink
-              to="/account#/Accommodations"
-              className={`${activeTab === 'Accommodations' ? style.activeLabel : style.inactiveLabel}`}><b>Mis Accommodations</b></NavLink>,
-              key: 'Accommodations',
+              to="/account/accommodations"
+              className={`${activeTab === 'accommodations' ? style.activeLabel : style.inactiveLabel}`}><b>Mis Accommodations</b></NavLink>,
+              key: 'accommodations',
               children:
                 <div style={{ alignItems: 'center', justifyContent: 'flex-end' }}>
                   <Accommodation userId={userId} />

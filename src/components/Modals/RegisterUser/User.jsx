@@ -348,7 +348,7 @@ const User = ({ closeUserModal }) => {
 
       </Form>
 
-      <Photo showPhoto={true} userId={userId} closeUserModal={closeUserModal} />
+      <Photo showPhoto={showPhotoUser} userId={userId} closeUserModal={closeUserModal} />
 
     </div>
   )

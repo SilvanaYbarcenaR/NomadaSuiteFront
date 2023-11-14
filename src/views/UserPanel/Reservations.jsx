@@ -20,15 +20,18 @@ const Reservation = ({ userId }) => {
 
   
 
-  useEffect( async ()=> {
-    try {
-      const response = await axios.get(`http://localhost:3001/api/reservation/${userId}`);
-      console.log(response.data);
-      // Aquí deberías manejar la respuesta según la estructura de datos que recibas
-      setData(response.data);      
-    } catch (error) {
-      console.error('Error al obtener las reservaciones:', error);
-    }
+  useEffect(() => {
+    const getReservation = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3001/api/reservation/${userId}`);
+        console.log(response.data);
+        // Aquí deberías manejar la respuesta según la estructura de datos que recibas
+        setData(response.data);      
+      } catch (error) {
+        console.error('Error al obtener las reservaciones:', error);
+      }
+    } 
+    getReservation();
   }, []);
 
   let idAccommodationArray;

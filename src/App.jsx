@@ -19,7 +19,7 @@ function App() {
         <Route path="/register-accommodation" element={<Accommodation />} />
         <Route path="/reservation" element={<Reservation />} />
         <Route path="/cancellation" element={<Cancellation />} />
-        <Route path="/account" element={<AccountPage />} />
+        <Route path="/account/:tab" element={<AccountPage />} />
       </Routes>
       <Footer />
     </div>
