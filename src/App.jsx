@@ -22,6 +22,7 @@ function App() {
         <Route path="/cancellation" element={<Cancellation />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/account" element={<AccountPage />} />
+        <Route path="/account/:tab" element={<AccountPage />} />
       </Routes>
       <Footer />
     </div>

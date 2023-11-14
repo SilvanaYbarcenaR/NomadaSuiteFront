@@ -2,33 +2,55 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import CardsStyles from '../../components/CardsContainer/CardsContainer.module.css';
 import Cardbox from "../../components/CardBox/CardBox";
-import { DatePicker, Space, Row, Col, Divider } from 'antd';
-import InfiniteScroll from 'react-infinite-scroll-component';
+import { DatePicker, Space, Row, Col, Divider, Input, Rate } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+
+const { TextArea } = Input;
 
 dayjs.extend(customParseFormat);
 const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY/MM/DD';
 
-const fecha = '2035/01/01';
+const fechaActual = '';
 
 const Reservation = ({ userId }) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [accommodationDataArray, setAccommodationDataArray] = useState([]);
+  const [fechaActualizada, setFechaActualizada] = useState('');
+
+  useEffect(() => {
+    // Mueve la lógica para obtener la fecha actualizada aquí
+    fetch('http://worldtimeapi.org/api/ip')
+      .then(response => response.json())
+      .then(data => {
+        var fechaHoraInternet = new Date(data.utc_datetime);
+        var ano = fechaHoraInternet.getUTCFullYear();
+        var mes = ('0' + (fechaHoraInternet.getUTCMonth() + 1)).slice(-2);
+        var dia = ('0' + fechaHoraInternet.getUTCDate()).slice(-2);
+        var fechaActualizada = ano + '-' + mes + '-' + dia;
+        
+        console.log('Fecha actual según Internet (formato YYYY-MM-DD):', fechaActualizada);
+        setFechaActualizada(fechaActualizada); // Actualiza el estado con la fecha actualizada
+      })
+      .catch(error => console.error('Error al obtener la fecha y hora desde Internet:', error));
+  }, []); // El segundo argumento [] significa que este efecto se ejecutará solo una vez al montar el componente
 
   
 
-  useEffect( async ()=> {
-    try {
-      const response = await axios.get(`http://localhost:3001/api/reservation/${userId}`);
-      console.log(response.data);
-      // Aquí deberías manejar la respuesta según la estructura de datos que recibas
-      setData(response.data);      
-    } catch (error) {
-      console.error('Error al obtener las reservaciones:', error);
-    }
+  useEffect(() => {
+    const getReservation = async () => {
+      try {
+        const response = await axios.get(`/reservation/${userId}`);
+        console.log(response.data);
+        // Aquí deberías manejar la respuesta según la estructura de datos que recibas
+        setData(response.data);      
+      } catch (error) {
+        console.error('Error al obtener las reservaciones:', error);
+      }
+    } 
+    getReservation();
   }, []);
 
   let idAccommodationArray;
@@ -46,7 +68,7 @@ const Reservation = ({ userId }) => {
       const accommodationDataArray = await Promise.all(
         idAccommodationArray.map(async (id) => {
           try {
-            const accommodationResponse = await axios.get(`http://localhost:3001/api/accommodation/${id}`);
+            const accommodationResponse = await axios.get(`/accommodation/${id}`);
             return accommodationResponse.data; // Contiene la información del alojamiento
           } catch (error) {
             console.error(`Error al obtener la información del alojamiento ${id}:`, error);
@@ -135,6 +157,18 @@ const Reservation = ({ userId }) => {
                           <span style={{ fontWeight: 'bold', fontSize: '18px' }}>${reservation.totalPrice}</span>
                         </div>
                       </Space>
+
+                      <Divider />
+
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }} >
+
+                        <span style={{ marginBottom: '30px',fontWeight: 'bold',fontSize: '15px',backgroundColor: 'blue',color: 'white',borderRadius: '10px',padding: '10px' 
+                          }}>Ingresa tu Review</span>
+                          <Rate defaultValue={0} disabled={reservation.endDate > fechaActualizada} style={{ marginBottom: '15px' }} />
+                          <TextArea rows={4} placeholder="Describe tu experiencia" maxLength={150} disabled={reservation.endDate > fechaActual} />
+                        <span className="ant-rate-text"></span>
+
+                      </div>
                     </div>
                   </div>
                 </Col>
