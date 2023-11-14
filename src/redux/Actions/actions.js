@@ -293,6 +293,26 @@ const getReservationById = (id) => {
   }
 };
 
+//TODO__________________________________ ADMIN __________________________________
+
+//Accommodations
+const deleteAccommodationAdmin = () => { };
+const getAccommodationByIdAdmin = (id) => { }
+const getAccommodationsAdmin = () => { };
+const getDesactiveAccommodationAdmin = () => { };
+const getPendingAccommodationAdmin = () => { };
+const postAccommodationsAdmin = () => { };
+const updateAccommodationAdmin = () => { };
+
+//Users
+const delete_user = () => { };
+const get_user_by_id = () => { };
+const get_users_actives_false = () => { };
+const get_users_actives = () => { };
+const login_user = () => { };
+const post_user = () => { };
+const put_user = () => { };
+
 export {
   getAccommodations,
   getAccommodationById,

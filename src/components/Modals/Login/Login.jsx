@@ -35,8 +35,9 @@ const Login = ({ closeModal }) => {
       password: userData.password
     }))
       .then(() => {
-        handleWelcomeClick(true);
+        // handleWelcomeClick(true);
         closeModal();
+        setShowWelcomeModal(true)
       })
       .catch((error) => {
         notification.error({

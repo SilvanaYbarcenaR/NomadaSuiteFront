@@ -116,16 +116,14 @@ const Reservation = () => {
               <Divider />
               <p className={style.pSubmit}>Al seleccionar el botón que aparece a continuación, acepto las siguientes políticas: Reglas del anfitrión de la casa, Reglas fundamentales para los huéspedes. Acepto pagar el monto total indicado si el anfitrión acepta mi solicitud de reservación.</p>
 
-              <Link to='/checkout'>
                 <Button
-                  // onClick={handle}
+                  onClick={handle}
                   style={buttonStyle}
                   type="primary"
                   htmlType="submit"
                 >
                   Realizar el pago
                 </Button>
-              </Link>
 
             </div>
           </Col>
