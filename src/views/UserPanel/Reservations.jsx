@@ -8,7 +8,8 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 const { TextArea } = Input;
 
-// Realiza una solicitud a WorldTimeAPI para obtener la hora actual
+let fechaActualizada; // Declarar la variable fuera del bloque fetch
+
 fetch('http://worldtimeapi.org/api/ip')
   .then(response => response.json())
   .then(data => {
@@ -21,19 +22,28 @@ fetch('http://worldtimeapi.org/api/ip')
     var dia = ('0' + fechaHoraInternet.getUTCDate()).slice(-2); // Añade un cero inicial y toma los últimos dos dígitos
 
     // Formatea la fecha en el formato deseado
-    var fechaActualizada = ano + '-' + mes + '-' + dia;
+    fechaActualizada = ano + '-' + mes + '-' + dia;
 
     console.log('Fecha actual según Internet (formato YYYY-MM-DD):', fechaActualizada);
-    const fechaActual = fechaActualizada;
+
+    // Puedes realizar cualquier acción adicional con la fecha actualizada aquí
+    // ...
+
+    // Ahora la variable fechaActualizada tiene el valor correcto
   })
   .catch(error => console.error('Error al obtener la fecha y hora desde Internet:', error));
 
+// Puedes usar la variable fechaActualizada aquí fuera del bloque fetch
+console.log('Fecha actual fuera del bloque fetch:', fechaActualizada);
+
+console.log(fechaActualizada)
+const fechaActual = fechaActualizada;
+console.log(fechaActual)
 
 dayjs.extend(customParseFormat);
 const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY/MM/DD';
 
-const fechaActual = '';
 
 const Reservation = ({ userId }) => {
   const [loading, setLoading] = useState(false);
@@ -59,6 +69,7 @@ const Reservation = ({ userId }) => {
     console.log('IdAccommodation Array:', idAccommodationArray);
   }, [data]);
   console.log(idAccommodationArray)
+  console.log(fechaActual)
   
 
   useEffect(() => {
@@ -165,7 +176,7 @@ const Reservation = ({ userId }) => {
                         <span style={{ marginBottom: '30px',fontWeight: 'bold',fontSize: '15px',backgroundColor: 'blue',color: 'white',borderRadius: '10px',padding: '10px' 
                           }}>Ingresa tu Review</span>
                           <Rate defaultValue={0} disabled={reservation.endDate > fechaActual} style={{ marginBottom: '15px' }} />
-                          <TextArea rows={4} placeholder="Describe tu experiencia" maxLength={150} />
+                          <TextArea rows={4} placeholder="Describe tu experiencia" maxLength={150} disabled={reservation.endDate > fechaActual} />
                         <span className="ant-rate-text"></span>
 
                       </div>

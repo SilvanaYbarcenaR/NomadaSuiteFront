@@ -10,7 +10,7 @@ console.log(userId)
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/api/accommodation/user/${userId}`);
+        const response = await axios.get(`/accommodation/user/${userId}`);
         setData(response.data);
       } catch (error) {
         console.error('Error al obtener las reservaciones:', error);
