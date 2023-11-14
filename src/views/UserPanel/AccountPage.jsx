@@ -139,15 +139,24 @@ const AccountPage = () => {
                         <>
                           <Form layout="horizontal">
                             <Form.Item label="">
-                              <Input
-                                className={style.userinfo}
-                                value={userLoggedInfo.password}
-                                onChange={(e) => {
+                            <Input
+                              className={style.userinfo}
+                              value={userLoggedInfo.password}
+                              onChange={(e) => {
+                                if (!formDisabled) {
                                   setUserLoggedInfo({ ...userLoggedInfo, password: e.target.value });
-                                }}
-                                disabled={formDisabled}
-                                placeholder=""
-                              />
+                                }
+                              }}
+                              onFocus={() => {
+                                if (!formDisabled) {
+                                  setUserLoggedInfo({ ...userLoggedInfo, password: '' });
+                                }
+                              }}
+                              disabled={formDisabled}
+                              placeholder=""
+                            />
+
+
                             </Form.Item>
                           </Form>
                         </>
