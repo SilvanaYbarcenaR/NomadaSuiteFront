@@ -42,7 +42,7 @@ const Reservation = ({ userId }) => {
   useEffect(() => {
     const getReservation = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/api/reservation/${userId}`);
+        const response = await axios.get(`/reservation/${userId}`);
         console.log(response.data);
         // Aquí deberías manejar la respuesta según la estructura de datos que recibas
         setData(response.data);      
@@ -68,7 +68,7 @@ const Reservation = ({ userId }) => {
       const accommodationDataArray = await Promise.all(
         idAccommodationArray.map(async (id) => {
           try {
-            const accommodationResponse = await axios.get(`http://localhost:3001/api/accommodation/${id}`);
+            const accommodationResponse = await axios.get(`/accommodation/${id}`);
             return accommodationResponse.data; // Contiene la información del alojamiento
           } catch (error) {
             console.error(`Error al obtener la información del alojamiento ${id}:`, error);

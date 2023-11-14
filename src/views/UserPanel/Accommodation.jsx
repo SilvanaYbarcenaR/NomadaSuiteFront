@@ -39,7 +39,19 @@ console.log(userId)
                     location={`${accommodation.idLocation?.city}, ${accommodation.idLocation?.country}`}
                   />
                   <div className={AccStyles.buttonContainer}>
-                    <Button type="danger" onClick={() => handleDeleteAccommodation(accommodation._id)}>Eliminar</Button>
+                    <div>
+                      
+                    <span className={AccStyles.delButton}>
+                      Si deseas eliminar tu alojamiento,
+                      <br />
+                      haz click en el botón eliminar.
+                    </span>
+                    </div>
+                    <div style={{ textAlign: 'center' }}>
+                    <Button type="primary" danger className={AccStyles.redButton} onClick={() => handleDeleteAccommodation(accommodation._id)}>
+                    Eliminar
+                    </Button>
+                    </div>
                   </div>
                 </div>
               </Col>

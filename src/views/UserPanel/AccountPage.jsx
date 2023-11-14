@@ -153,7 +153,7 @@ const AccountPage = () => {
                                 }
                               }}
                               disabled={formDisabled}
-                              placeholder=""
+                              placeholder="Password"
                             />
 
 
