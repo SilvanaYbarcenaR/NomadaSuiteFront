@@ -1,13 +1,12 @@
-import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import dayjs from 'dayjs';
-import customParseFormat from 'dayjs/plugin/customParseFormat';
-import { clearDetail, getAccommodationById } from '../../../redux/Actions/actions';
 import { Col, Button, Anchor, Divider, Card, Row } from 'antd';
-import { useSelector, useDispatch } from 'react-redux';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { BsBoxArrowLeft } from "react-icons/bs"
+import { useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
 import style from './Reservation.module.css';
+import dayjs from 'dayjs';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 dayjs.extend(customParseFormat);
 const buttonStyle = {
@@ -20,34 +19,53 @@ const buttonStyle = {
 
 const Reservation = () => {
 
-  const id = useParams().id;
-  const dispatch = useDispatch();
-  let AccommodationById = useSelector((state) => state.accommodationById);
-  let reservationData = useSelector((state) => state.reservationData);
-  
+  const accommodationToReservation = useSelector((state) => state.accommodationToReservation);
+  const reservationData = useSelector((state) => state.reservationData);
+  const [checkout, setCheckout] = useState()
+  const [accommodation, setAccommodation] = useState()
+  const navigate = useNavigate()
+
+  console.log(checkout);
+
   useEffect(() => {
-    dispatch(getAccommodationById(id));
-    return () => {
-      dispatch(clearDetail());
+    if (accommodationToReservation) {
+      if (accommodation) {
+        localStorage.removeItem('accommodationData');
+      }
+      localStorage.setItem('accommodationData', JSON.stringify(accommodationToReservation));
+      setAccommodation(JSON.parse(localStorage.getItem('accommodationData')))
     }
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    if (reservationData) {
+      if (checkout) {
+        localStorage.removeItem('checkoutData');
+      }
+      localStorage.setItem('checkoutData', JSON.stringify(reservationData));
+      setCheckout(JSON.parse(localStorage.getItem('checkoutData')))
+    }
+  }, []);
 
   const handle = () => {
-    const URL = 'https://nomada-suite.onrender.com/api'
-    // const URL = 'http://localhost:3001/api'
-    axios.post(`${URL}/stripe/charge`, reservationData)
+    console.log(checkout);
+    axios.post('https://nomada-suite.onrender.com/api/stripe/charge', checkout)
       .then((response) => {
         window.location.href = response.data.url;
       });
   };
 
-  const start_date = reservationData?.duration?.start_date;
-  const end_date = reservationData?.duration?.end_date;
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+
+  const start_date = checkout?.reservationDetails?.startDate;
+  const end_date = checkout?.reservationDetails?.endDate;
   const formattedStartDate = dayjs(start_date).format('DD-MM-YYYY');
   const formattedEndDate = dayjs(end_date).format('DD-MM-YYYY');
-  const name = reservationData?.line_items[0]?.price_data?.product_data?.name;
-  const quantity = reservationData?.line_items[0]?.quantity;
-  const unit_amount = reservationData?.line_items[0]?.price_data?.unit_amount;
+  const habitacionService = accommodation?.idServices?.find(service => service.name === 'Habitación');
+  const quantityOfHabitacion = habitacionService ? habitacionService.quantity : null;
+  const totalPrice = checkout?.reservationDetails?.totalPrice;
 
   return (
     <div className={style.reservationBox}>
@@ -56,9 +74,14 @@ const Reservation = () => {
           <Col span={14}>
             <div className={style.detailContent}>
               <div className={style.returnReservation}>
-                <Button style={{
-                  backgroundColor: '#231CA7',
-                }} size={64} icon={<BsBoxArrowLeft />} />
+                <Button
+                  onClick={handleGoBack}
+                  style={{
+                    backgroundColor: '#231CA7',
+                  }}
+                  size={64}
+                  icon={<BsBoxArrowLeft />}
+                />
                 <p style={{ fontWeight: 'bold', fontSize: '25px' }}>
                   Solicita reservar
                 </p>
@@ -73,7 +96,7 @@ const Reservation = () => {
               </div>
               <div className={style.habitaciones}>
                 <h5>Habitaciones</h5>
-                <p>{quantity} habitaciones</p>
+                <p>{quantityOfHabitacion} habitaciones</p>
               </div>
 
               <Divider />
@@ -94,14 +117,17 @@ const Reservation = () => {
 
               <Divider />
               <p className={style.pSubmit}>Al seleccionar el botón que aparece a continuación, acepto las siguientes políticas: Reglas del anfitrión de la casa, Reglas fundamentales para los huéspedes. Acepto pagar el monto total indicado si el anfitrión acepta mi solicitud de reservación.</p>
-              <Button
-                onClick={handle}
-                style={buttonStyle}
-                type="primary"
-                htmlType="submit"
-              >
-                Realizar el pago
-              </Button>
+
+              <Link to='/checkout'>
+                <Button
+                  // onClick={handle}
+                  style={buttonStyle}
+                  type="primary"
+                  htmlType="submit"
+                >
+                  Realizar el pago
+                </Button>
+              </Link>
 
             </div>
           </Col>
@@ -121,7 +147,7 @@ const Reservation = () => {
                        } */
                       /* extra={<a href="#">Precio por 30 días</a>} */
                       >
-                        <p className={style.accommodation}>{name}</p>
+                        <p className={style.accommodation}>Alojamiento en {accommodationToReservation.name}</p>
                         <Divider />
                         <span style={{ fontSize: '20px', justifyContent: 'space-between', display: 'flex' }}>
                           <p>
@@ -132,7 +158,7 @@ const Reservation = () => {
                           <p>
                             <b>Tarifa por servicio</b>
                           </p>
-                          <p>{unit_amount} USD</p>
+                          <p>{totalPrice} USD</p>
                         </span>
                         <p></p>
                         <Button
@@ -156,7 +182,7 @@ const Reservation = () => {
                           <p>
                             <b>Total a pagar:</b>
                           </p>
-                          <p>{unit_amount} USD</p>
+                          <p>{totalPrice} USD</p>
                         </span>
 
                       </Card>

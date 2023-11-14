@@ -27,7 +27,6 @@ const AccommodationDetail = () => {
 
   useEffect(() => {
     dispatch(getAccommodationById(id));
-
     return () => {
       dispatch(clearDetail());
     }
@@ -66,44 +65,54 @@ const AccommodationDetail = () => {
     setDate({
       start_date: dateStrings[0],
       end_date: dateStrings[1]
-    })
+    });
   };
 
   useEffect(() => {
     setTotal(AccommodationById?.price);
-  }, [])
+  }, []);
 
   const [date, setDate] = useState({
     start_date: '',
     end_date: ''
-  })
+  });
 
-  const habitaciones = AccommodationById?.idServices?.find(
-    (service) => service.name === "Habitación"
-  )?.quantity;
+  const startDate = new Date(date.start_date);
+  const endDate = new Date(date.end_date);
+  const timeDifference = endDate - startDate;
+  const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
 
-  const newObj =
+  console.log(total);
+  const totalPrice = total?.replace('.', '');
+  console.log(totalPrice);
+
+  const checkoutStripe =
   {
     "line_items": [
       {
         "price_data": {
           "product_data": {
-            "name": `Alojamiento en: ${AccommodationById.name}`
+            "name": AccommodationById.name,
           },
           "currency": "usd",
-          "unit_amount": total
+          "unit_amount": totalPrice
         },
-        "quantity": habitaciones
-      }
+        "quantity": 1
+      },
     ],
-    "duration": {
-      "start_date": date.start_date,
-      "end_date": date.end_date
+    "reservationDetails": {
+      "userId": "653c324dfab58cc2336a4b1d",
+      "accommodationId": AccommodationById._id,
+      "monthlyRate": AccommodationById.price,
+      "daysReserved": days,
+      "startDate": date.start_date,
+      "endDate": date.end_date,
+      "totalPrice": total
     }
-  }
+  };
 
   const handleReservationClick = () => {
-    dispatch(setReservationData(newObj))
+    dispatch(setReservationData(checkoutStripe))
   };
 
   return (

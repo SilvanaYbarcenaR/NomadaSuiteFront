@@ -1,7 +1,6 @@
 /* eslint-disable no-unreachable */
 import axios from "axios";
-import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING, GET_FILTERED_ACCOMMODATION, CLEAR_DETAIL, GET_COUNTRIES, GET_CITIES, GET_LOCATIONS, LOGIN_USER, LOGIN_GOOGLE, REGISTER_USER, GET_USER_DATA, LOG_OUT, UPDATE_USER_INFO, SET_RESERVATION_DATA } from "./actions-types";
-
+import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING, GET_FILTERED_ACCOMMODATION, CLEAR_DETAIL, GET_COUNTRIES, GET_CITIES, GET_LOCATIONS, LOGIN_USER, LOGIN_GOOGLE, REGISTER_USER, GET_USER_DATA, LOG_OUT, SET_RESERVATION_DATA, CLEAR_DETAIL_TO_RESERVATION, UPDATE_USER_INFO } from "./actions-types";
 
 const getAccommodations = () => {
   const endpoint = "/accommodation/";
@@ -121,12 +120,20 @@ const clearDetail = () => {
   }
 }
 
+const clearDetailToReservation = () => {
+  return async (dispatch) => {
+    dispatch({
+      type: CLEAR_DETAIL_TO_RESERVATION,
+    });
+  }
+}
+
 const getCountries = () => {
   return async (dispatch) => {
     try {
       const response = await axios.get('https://www.universal-tutorial.com/api/countries/', {
         headers: {
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJoaC5yb2JpbnNvbjk1QGdtYWlsLmNvbSIsImFwaV90b2tlbiI6IlFrSm5hWUs4OVZfODA3eWV1SkxWQXJJZHVodWxJaThxankwZnBXenNBYno5VjBUTWZPOEpjbllTdzV4OS00Uk1rMzAifSwiZXhwIjoxNjk5NjczMDU2fQ.ULPt9to_kInK04j5qJ2ObyYdzGJEEeQd-aiQKTf9QoU',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJoaC5yb2JpbnNvbjk1QGdtYWlsLmNvbSIsImFwaV90b2tlbiI6IlFrSm5hWUs4OVZfODA3eWV1SkxWQXJJZHVodWxJaThxankwZnBXenNBYno5VjBUTWZPOEpjbllTdzV4OS00Uk1rMzAifSwiZXhwIjoxNjk5ODMzNDMzfQ.DXJBA7rb9BHw_3dsPB9oSA-AAgMFBUkjuoP8_VhsdKk',
           'Accept': 'application/json',
         }
       })
@@ -145,7 +152,7 @@ const getCities = (name) => {
     try {
       const response = await axios.get(`https://www.universal-tutorial.com/api/states/${name}`, {
         headers: {
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJoaC5yb2JpbnNvbjk1QGdtYWlsLmNvbSIsImFwaV90b2tlbiI6IlFrSm5hWUs4OVZfODA3eWV1SkxWQXJJZHVodWxJaThxankwZnBXenNBYno5VjBUTWZPOEpjbllTdzV4OS00Uk1rMzAifSwiZXhwIjoxNjk5NjczMDU2fQ.ULPt9to_kInK04j5qJ2ObyYdzGJEEeQd-aiQKTf9QoU',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJoaC5yb2JpbnNvbjk1QGdtYWlsLmNvbSIsImFwaV90b2tlbiI6IlFrSm5hWUs4OVZfODA3eWV1SkxWQXJJZHVodWxJaThxankwZnBXenNBYno5VjBUTWZPOEpjbllTdzV4OS00Uk1rMzAifSwiZXhwIjoxNjk5ODMzNDMzfQ.DXJBA7rb9BHw_3dsPB9oSA-AAgMFBUkjuoP8_VhsdKk',
           'Accept': 'application/json',
         }
       })
@@ -281,6 +288,7 @@ export {
   orderByRating,
   getCities,
   clearDetail,
+  clearDetailToReservation,
   loginUser,
   loginGoogle,
   getUserData,
