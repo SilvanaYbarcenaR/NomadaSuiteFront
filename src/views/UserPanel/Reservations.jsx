@@ -8,47 +8,34 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 const { TextArea } = Input;
 
-let fechaActualizada; // Declarar la variable fuera del bloque fetch
-
-fetch('http://worldtimeapi.org/api/ip')
-  .then(response => response.json())
-  .then(data => {
-    // La respuesta contiene la información de fecha y hora
-    var fechaHoraInternet = new Date(data.utc_datetime);
-
-    // Obtiene el año, mes y día
-    var ano = fechaHoraInternet.getUTCFullYear();
-    var mes = ('0' + (fechaHoraInternet.getUTCMonth() + 1)).slice(-2); // Añade un cero inicial y toma los últimos dos dígitos
-    var dia = ('0' + fechaHoraInternet.getUTCDate()).slice(-2); // Añade un cero inicial y toma los últimos dos dígitos
-
-    // Formatea la fecha en el formato deseado
-    fechaActualizada = ano + '-' + mes + '-' + dia;
-
-    console.log('Fecha actual según Internet (formato YYYY-MM-DD):', fechaActualizada);
-
-    // Puedes realizar cualquier acción adicional con la fecha actualizada aquí
-    // ...
-
-    // Ahora la variable fechaActualizada tiene el valor correcto
-  })
-  .catch(error => console.error('Error al obtener la fecha y hora desde Internet:', error));
-
-// Puedes usar la variable fechaActualizada aquí fuera del bloque fetch
-console.log('Fecha actual fuera del bloque fetch:', fechaActualizada);
-
-console.log(fechaActualizada)
-const fechaActual = fechaActualizada;
-console.log(fechaActual)
-
 dayjs.extend(customParseFormat);
 const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY/MM/DD';
 
+const fechaActual = '';
 
 const Reservation = ({ userId }) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [accommodationDataArray, setAccommodationDataArray] = useState([]);
+  const [fechaActualizada, setFechaActualizada] = useState('');
+
+  useEffect(() => {
+    // Mueve la lógica para obtener la fecha actualizada aquí
+    fetch('http://worldtimeapi.org/api/ip')
+      .then(response => response.json())
+      .then(data => {
+        var fechaHoraInternet = new Date(data.utc_datetime);
+        var ano = fechaHoraInternet.getUTCFullYear();
+        var mes = ('0' + (fechaHoraInternet.getUTCMonth() + 1)).slice(-2);
+        var dia = ('0' + fechaHoraInternet.getUTCDate()).slice(-2);
+        var fechaActualizada = ano + '-' + mes + '-' + dia;
+        
+        console.log('Fecha actual según Internet (formato YYYY-MM-DD):', fechaActualizada);
+        setFechaActualizada(fechaActualizada); // Actualiza el estado con la fecha actualizada
+      })
+      .catch(error => console.error('Error al obtener la fecha y hora desde Internet:', error));
+  }, []); // El segundo argumento [] significa que este efecto se ejecutará solo una vez al montar el componente
 
   
 
@@ -69,7 +56,6 @@ const Reservation = ({ userId }) => {
     console.log('IdAccommodation Array:', idAccommodationArray);
   }, [data]);
   console.log(idAccommodationArray)
-  console.log(fechaActual)
   
 
   useEffect(() => {
@@ -175,7 +161,7 @@ const Reservation = ({ userId }) => {
 
                         <span style={{ marginBottom: '30px',fontWeight: 'bold',fontSize: '15px',backgroundColor: 'blue',color: 'white',borderRadius: '10px',padding: '10px' 
                           }}>Ingresa tu Review</span>
-                          <Rate defaultValue={0} disabled={reservation.endDate > fechaActual} style={{ marginBottom: '15px' }} />
+                          <Rate defaultValue={0} disabled={reservation.endDate > fechaActualizada} style={{ marginBottom: '15px' }} />
                           <TextArea rows={4} placeholder="Describe tu experiencia" maxLength={150} disabled={reservation.endDate > fechaActual} />
                         <span className="ant-rate-text"></span>
 

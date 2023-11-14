@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import AccStyles from "./Accommodation.module.css"
 import CardsStyles from '../../components/CardsContainer/CardsContainer.module.css';
 import Cardbox from "../../components/CardBox/CardBox";
-import { Row, Col } from 'antd';
+import { Row, Col, Button } from 'antd';
 
 const Accommodation = ({ userId }) => {
   const [data, setData] = useState([]);
@@ -37,6 +38,9 @@ console.log(userId)
                     price={accommodation.price}
                     location={`${accommodation.idLocation?.city}, ${accommodation.idLocation?.country}`}
                   />
+                  <div className={AccStyles.buttonContainer}>
+                    <Button type="danger" onClick={() => handleDeleteAccommodation(accommodation._id)}>Eliminar</Button>
+                  </div>
                 </div>
               </Col>
             ))}
