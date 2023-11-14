@@ -24,7 +24,7 @@
     border: 2px rgba(0, 0, 0, 0.100) solid;
     padding: 2rem;
     margin-top: 2rem;
-    margin-bottom: 2.4rem;
+    margin-bottom: 1.5rem;
 }
 
 .boxes div {
@@ -34,14 +34,15 @@
 }
 
 .imgLogo {
-
     width: 30%;
     padding-bottom: 2rem;
 }
 
 .img {
+    height: 11rem;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
     width: 100%;
-    padding-bottom: 1.2rem;
 }
 
 .boxes h2,

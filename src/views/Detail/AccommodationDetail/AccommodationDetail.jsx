@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { clearDetail, getAccommodationById, setReservationData } from '../../../redux/Actions/actions';
 import { UserOutlined, CarOutlined, CoffeeOutlined, LaptopOutlined, WifiOutlined } from '@ant-design/icons';
-import { Col, DatePicker, Button, Anchor, Divider, InputNumber, Avatar, Card, Row, Carousel, Flex, Rate } from 'antd';
+import { Col, DatePicker, Button, Anchor, Divider, InputNumber, Avatar, Card, Row, Carousel, Flex, Rate, Modal } from 'antd';
 import { LiaToiletSolid } from 'react-icons/lia';
 import { GiForkKnifeSpoon } from 'react-icons/gi';
 import { LuRefrigerator } from 'react-icons/lu';
@@ -14,6 +14,7 @@ import { BiSolidDryer } from 'react-icons/bi';
 import { useSelector, useDispatch } from 'react-redux';
 import detailStyles from './AccommodationDetail.module.css';
 import { GoogleMap, LoadScript } from '@react-google-maps/api';
+import Login from '../../../components/Modals/Login/Login';
 
 dayjs.extend(customParseFormat);
 
@@ -22,8 +23,9 @@ const AccommodationDetail = () => {
   const id = useParams().id;
   const dispatch = useDispatch();
   let AccommodationById = useSelector((state) => state.accommodationById);
+  const userId = localStorage.getItem('userId');
+  const [isLoginModalVisible, setIsLoginModalVisible] = useState(false);
   const [total, setTotal] = useState();
-
 
   useEffect(() => {
     dispatch(getAccommodationById(id));
@@ -81,10 +83,7 @@ const AccommodationDetail = () => {
   const endDate = new Date(date.end_date);
   const timeDifference = endDate - startDate;
   const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-
-  console.log(total);
   const totalPrice = total?.replace('.', '');
-  console.log(totalPrice);
 
   const checkoutStripe =
   {
@@ -101,7 +100,7 @@ const AccommodationDetail = () => {
       },
     ],
     "reservationDetails": {
-      "userId": "653c324dfab58cc2336a4b1d",
+      "userId": userId,
       "accommodationId": AccommodationById._id,
       "monthlyRate": AccommodationById.price,
       "daysReserved": days,
@@ -112,7 +111,11 @@ const AccommodationDetail = () => {
   };
 
   const handleReservationClick = () => {
-    dispatch(setReservationData(checkoutStripe))
+    dispatch(setReservationData(checkoutStripe));
+  };
+
+  const closeLoginModal = () => {
+    setIsLoginModalVisible(false);
   };
 
   return (
@@ -365,11 +368,11 @@ const AccommodationDetail = () => {
                       }}
                     />
                     <p></p>
-                    <Link to='/reservation'>
+                    <Link to={userId ? '/reservation' : '#'}>
                       <Button
                         type="reserv"
                         block
-                        onClick={handleReservationClick}
+                        onClick={userId ? handleReservationClick : setIsLoginModalVisible}
                         style={{
                           backgroundColor: 'orange',
                           color: 'black',
@@ -399,6 +402,17 @@ const AccommodationDetail = () => {
               },
             ]}
           />
+          {isLoginModalVisible && (
+            <Modal
+              className="modalRegister"
+              title="Bienvenido a NómadaSuite"
+              open={isLoginModalVisible}
+              onCancel={closeLoginModal}
+              footer={null}
+            >
+              <Login closeModal={closeLoginModal} />
+            </Modal>
+          )}
         </Col>
       </Row>
     </>
