@@ -2,16 +2,38 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import CardsStyles from '../../components/CardsContainer/CardsContainer.module.css';
 import Cardbox from "../../components/CardBox/CardBox";
-import { DatePicker, Space, Row, Col, Divider } from 'antd';
-import InfiniteScroll from 'react-infinite-scroll-component';
+import { DatePicker, Space, Row, Col, Divider, Input, Rate } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+
+const { TextArea } = Input;
+
+// Realiza una solicitud a WorldTimeAPI para obtener la hora actual
+fetch('http://worldtimeapi.org/api/ip')
+  .then(response => response.json())
+  .then(data => {
+    // La respuesta contiene la información de fecha y hora
+    var fechaHoraInternet = new Date(data.utc_datetime);
+
+    // Obtiene el año, mes y día
+    var ano = fechaHoraInternet.getUTCFullYear();
+    var mes = ('0' + (fechaHoraInternet.getUTCMonth() + 1)).slice(-2); // Añade un cero inicial y toma los últimos dos dígitos
+    var dia = ('0' + fechaHoraInternet.getUTCDate()).slice(-2); // Añade un cero inicial y toma los últimos dos dígitos
+
+    // Formatea la fecha en el formato deseado
+    var fechaActualizada = ano + '-' + mes + '-' + dia;
+
+    console.log('Fecha actual según Internet (formato YYYY-MM-DD):', fechaActualizada);
+    const fechaActual = fechaActualizada;
+  })
+  .catch(error => console.error('Error al obtener la fecha y hora desde Internet:', error));
+
 
 dayjs.extend(customParseFormat);
 const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY/MM/DD';
 
-const fecha = '2035/01/01';
+const fechaActual = '';
 
 const Reservation = ({ userId }) => {
   const [loading, setLoading] = useState(false);
@@ -135,6 +157,18 @@ const Reservation = ({ userId }) => {
                           <span style={{ fontWeight: 'bold', fontSize: '18px' }}>${reservation.totalPrice}</span>
                         </div>
                       </Space>
+
+                      <Divider />
+
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }} >
+
+                        <span style={{ marginBottom: '30px',fontWeight: 'bold',fontSize: '15px',backgroundColor: 'blue',color: 'white',borderRadius: '10px',padding: '10px' 
+                          }}>Ingresa tu Review</span>
+                          <Rate defaultValue={0} disabled={reservation.endDate > fechaActual} style={{ marginBottom: '15px' }} />
+                          <TextArea rows={4} placeholder="Describe tu experiencia" maxLength={150} />
+                        <span className="ant-rate-text"></span>
+
+                      </div>
                     </div>
                   </div>
                 </Col>

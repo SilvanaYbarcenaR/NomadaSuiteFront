@@ -37,7 +37,7 @@ function Header() {
       key: '1',
     },
     {
-      label: Object.keys(userLoggedInfo).length !== 0 && <NavLink to="/account#Perfil">Cuenta</NavLink>,
+      label: Object.keys(userLoggedInfo).length !== 0 && <NavLink to="/account#/Perfil">Cuenta</NavLink>,
       key: '3',
     },
     {

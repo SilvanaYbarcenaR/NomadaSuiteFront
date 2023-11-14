@@ -217,7 +217,7 @@ console.log(userLoggedInfoFromRedux)
               label: 
               <NavLink
               to="/account#/Accommodations"
-              className={`${activeTab === 'Accommodations' ? style.activeLabel : style.inactiveLabel}`}><b>Mis Accommodations</b></NavLink>,
+              className={`${activeTab === 'Accommodations' ? style.activeLabel : style.inactiveLabel}`}><b>Mis Alojamientos</b></NavLink>,
               key: 'Accommodations',
               children:
                 <div style={{ alignItems: 'center', justifyContent: 'flex-end' }}>
