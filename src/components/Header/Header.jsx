@@ -37,11 +37,11 @@ function Header() {
       key: '1',
     },
     {
-      label: Object.keys(userLoggedInfo).length !== 0 && <NavLink to="/account#/Perfil">Cuenta</NavLink>,
+      label: Object.keys(userLoggedInfo).length !== 0 && <NavLink to="/account/perfil">Cuenta</NavLink>,
       key: '3',
     },
     {
-      label: Object.keys(userLoggedInfo).length !== 0 && <NavLink to="/account#/Reservaciones">Mis reservas</NavLink>,
+      label: Object.keys(userLoggedInfo).length !== 0 && <NavLink to="/account/reservaciones">Mis reservas</NavLink>,
       key: '4',
     },
     {
