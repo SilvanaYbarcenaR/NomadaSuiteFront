@@ -115,6 +115,7 @@ const AccountPage = () => {
                                 value={userLoggedInfo.firstName}
                                 onChange={(e) => {
                                   setUserLoggedInfo({ ...userLoggedInfo, firstName: e.target.value });
+                                  
                                 }}
                                 disabled={formDisabled}
                                 placeholder=""
@@ -138,6 +139,7 @@ const AccountPage = () => {
                           </Form>
                         </>
                         <>
+                        {!userLoggedInfoFromRedux.googleId && (
                           <Form layout="horizontal">
                             <Form.Item label="">                            
                             <Input.Password
@@ -154,6 +156,7 @@ const AccountPage = () => {
                             />
                             </Form.Item>
                           </Form>
+                          )}
                         </>
                         
                         <>
@@ -211,7 +214,7 @@ const AccountPage = () => {
               label: 
               <NavLink
               to="/account/accommodations"
-              className={`${activeTab === 'accommodations' ? style.activeLabel : style.inactiveLabel}`}><b>Mis Accommodations</b></NavLink>,
+              className={`${activeTab === 'accommodations' ? style.activeLabel : style.inactiveLabel}`}><b>Mis Alojamientos</b></NavLink>,
               key: 'accommodations',
               children:
                 <div style={{ alignItems: 'center', justifyContent: 'flex-end' }}>
