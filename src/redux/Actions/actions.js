@@ -1,6 +1,6 @@
 /* eslint-disable no-unreachable */
 import axios from "axios";
-import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING, GET_FILTERED_ACCOMMODATION, CLEAR_DETAIL, GET_COUNTRIES, GET_CITIES, GET_LOCATIONS, LOGIN_USER, LOGIN_GOOGLE, REGISTER_USER, GET_USER_DATA, LOG_OUT, SET_RESERVATION_DATA, CLEAR_DETAIL_TO_RESERVATION, UPDATE_USER_INFO, GET_RESERVATION_BY_ID, GET_ACTIVE_ACCOMMODATION, GET_ACCOMMODATION_PENDING_CONFIRMATION, GET_DISABLED_ACCOMMODATION, GET_ALL_ACCOMMODATION, GET_ACCOMMODATION_PERCENTAGE, DELETE_ACCOMMODATION, GET_ACCOMMODATION_BY_ID_A, UPDATE_ACCOMMODATION, GET_ALL_USERS, GET_USERS_ACTIVES, GET_USERS_ACTIVES_FALSE, GET_USER_BY_ID, LOGIN_USER_A, DELETE_USER, UPDATE_USER, GET_ACTIVE_REVIEWS, GET_REVIEWS_PENDING_CONFIRMATION, GET_REVIEWS_DISABLED } from "./actions-types";
+import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING, GET_FILTERED_ACCOMMODATION, CLEAR_DETAIL, GET_COUNTRIES, GET_CITIES, GET_LOCATIONS, LOGIN_USER, LOGIN_GOOGLE, REGISTER_USER, GET_USER_DATA, LOG_OUT, SET_RESERVATION_DATA, CLEAR_DETAIL_TO_RESERVATION, UPDATE_USER_INFO, GET_RESERVATION_BY_ID, GET_ACTIVE_ACCOMMODATION, GET_ACCOMMODATION_PENDING_CONFIRMATION, GET_DISABLED_ACCOMMODATION, GET_ALL_ACCOMMODATION, GET_ACCOMMODATION_PERCENTAGE, DELETE_ACCOMMODATION, GET_ACCOMMODATION_BY_ID_A, UPDATE_ACCOMMODATION, GET_ALL_USERS, GET_USERS_ACTIVES, GET_USERS_ACTIVES_FALSE, GET_USER_BY_ID, LOGIN_USER_A, DELETE_USER, UPDATE_USER, GET_ACTIVE_REVIEWS, GET_REVIEWS_PENDING_CONFIRMATION, GET_REVIEWS_DISABLED, GET_USER_BY_ID_CHECKOUT } from "./actions-types";
 
 const getAccommodations = () => {
   const endpoint = "/accommodation/";
@@ -292,6 +292,21 @@ const getReservationById = (id) => {
   };
 };
 
+const getUserById = (id) => {
+  const endpoint = `/user/${id}`;
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.get(endpoint);
+      dispatch({
+        type: GET_USER_BY_ID_CHECKOUT,
+        payload: data,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
 //TODO__________________________________ ADMIN __________________________________
 
 //Accommodations
@@ -371,10 +386,12 @@ const getAccommodationPercentage_A = () => {
 };
 
 const deleteAccommodation_A = (id) => {
+  console.log(id);
   const endpoint = `/accommodation/${id}`
   return async (dispatch) => {
     try {
       const { data } = await axios.delete(endpoint);
+      console.log(data);
       dispatch({
         type: DELETE_ACCOMMODATION,
         payload: data
@@ -385,7 +402,7 @@ const deleteAccommodation_A = (id) => {
   };
 };
 
-const getAccommodationBy_A = (id) => {
+const getAccommodationById_A = (id) => {
   const endpoint = `/accommodation/${id}`;
   return async (dispatch) => {
     try {
@@ -400,11 +417,15 @@ const getAccommodationBy_A = (id) => {
   };
 };
 
-const updateAccommodation_A = (id) => {
+const updateAccommodation_A = (id, formDataToSend) => {
   const endpoint = `/accommodation/${id}`;
   return async (dispatch) => {
     try {
-      const { data } = await axios.put(endpoint);
+      const { data } = await axios.put(endpoint, formDataToSend, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        }
+      })
       dispatch({
         type: UPDATE_ACCOMMODATION,
         payload: data,
@@ -586,6 +607,7 @@ export {
   updateUserInfo,
   logOut,
   getReservationById,
+  getUserById,
   //_____ADMIN_____
   getActiveAccommodation_A,
   getAccommodationPendingConfirmation_A,
@@ -593,7 +615,7 @@ export {
   getAllAccommodation_A,
   getAccommodationPercentage_A,
   deleteAccommodation_A,
-  getAccommodationBy_A,
+  getAccommodationById_A,
   updateAccommodation_A,
   getAllUers_A,
   getUsersActives_A,

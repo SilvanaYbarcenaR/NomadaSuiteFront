@@ -1,4 +1,4 @@
-import { getReservationById, getUserData } from "../../../../redux/Actions/actions";
+import { getReservationById, getUserById, getUserData } from "../../../../redux/Actions/actions";
 import { Button, Col, Divider, Row } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import style from "./Checkout.module.css";
@@ -18,38 +18,42 @@ const Checkout = () => {
   const id = useParams().checkoutId;
   const dispatch = useDispatch();
   const reservationById = useSelector((state) => state.reservationById);
-  const userLogged = useSelector((state) => state.userLogged)
+  const userById = useSelector((state) => state.userById)
   const accommodation = JSON.parse(localStorage.getItem('accommodationData'));
-  const checkout = JSON.parse(localStorage.getItem('checkoutData'));
   const userId = localStorage.getItem('userId');
-  console.log(reservationById);
 
   useEffect(() => {
     dispatch(getReservationById(id));
     dispatch(getUserData(userId));
+    dispatch(getUserById(accommodation.ownerId))
     return () => {
       localStorage.removeItem('checkoutData');
     }
   }, [])
 
-  console.log(accommodation);
-  console.log(checkout);
-
   const name = accommodation.name
-  const start_date = checkout?.reservationDetails?.startDate;
-  const start = dayjs(start_date).format('DD-MM-YYYY');
-  const end_date = checkout?.reservationDetails?.endDate;
-  const end = dayjs(end_date).format('DD-MM-YYYY');
-  const startDateObj = new Date(start_date);
-  const endDateObj = new Date(end_date);
-  const timeDifference = endDateObj - startDateObj;
-  const nights = timeDifference / (1000 * 3600 * 24);
+
+  const startDate = reservationById?.reservation?.startDate
+  const [onlyStartDate] = startDate ? startDate.split('T') : [null, null];
+  const start = dayjs(onlyStartDate).format('DD-MM-YYYY');
+  const endDate = reservationById?.reservation?.endDate
+  const [onlyEndDate] = endDate ? endDate.split('T') : [null, null];
+  const end = dayjs(onlyEndDate).format('DD-MM-YYYY');
+  
+  const nights = reservationById?.reservation?.daysReserved
   const habitacionService = accommodation?.idServices?.find(service => service.name === 'Habitación');
   const quantity = habitacionService ? habitacionService.quantity : null;
 
-  const [date, hour] = reservationById?.billingInfo?.created?.split('T')
+  const firstName = userById?.firstName
+  const lastName = userById?.lastName
+
+  const nomadic = reservationById?.billingInfo?.checkout_session?.customer_details?.name
+  const paymentMethod = reservationById?.billingInfo?.checkout_session?.payment_method_types
+
+  const dateHourString = reservationById?.billingInfo?.created;
+  const [date, hour] = dateHourString ? dateHourString.split('T') : [null, null];
   const checkoutDate = dayjs(date).format('DD-MM-YYYY');
-  const [checkoutHour] = hour.split('.')
+  const [checkoutHour] = hour ? hour.split('.') : [null];
 
   return (
     <div className={style.checkout}>
@@ -69,8 +73,8 @@ const Checkout = () => {
               </div>
               <p>{start} ➡ {end}</p>
               <p>Alojamiento ▪ {quantity} habitaciones</p>
-              <h6>Anfitrión: {"Nombre del anfitrión"}</h6>
-              <h6>Viajero: {userLogged.userName}</h6>
+              <h6>Anfitrión: {`${firstName} ${lastName}`}</h6>
+              <h6>Nómada: {nomadic}</h6>
               <Divider />
               <Link to="/cancellation"><h3>Políticas de cancelación</h3></Link>
             </div>
@@ -97,7 +101,7 @@ const Checkout = () => {
             <div className={style.boxesRight}>
               <h2>Pago</h2>
               <span style={{ justifyContent: 'space-between', display: 'flex' }}>
-                <p>{"Info. tarjeta"}</p>
+                <p>{`Método de pago: ${paymentMethod}`}</p>
                 <p>{reservationById?.reservation?.totalPrice} USD</p>
               </span>
               <h6>{checkoutDate}, {checkoutHour}</h6>

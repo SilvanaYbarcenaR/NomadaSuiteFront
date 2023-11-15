@@ -1,10 +1,10 @@
-import { Button, Flex, Space, Table, Input } from 'antd';
+import { Button, Flex, Space, Table, Input, notification, Tooltip } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
+import { MdDomainAdd, MdDomainDisabled } from "react-icons/md";
+import { DeleteOutlined } from '@ant-design/icons';
+import { AiOutlineDelete } from "react-icons/ai";
+
 import Highlighter from "react-highlight-words";
-import { FaRegEdit } from "react-icons/fa";
-import { TiDelete } from "react-icons/ti";
-
-
 
 import {
   EditOutlined,
@@ -12,17 +12,14 @@ import {
   SearchOutlined
 } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAccommodationPendingConfirmation_A, getActiveAccommodation_A, getDisabledAccommodation_A } from '../../../redux/Actions/actions';
+import { deleteAccommodation_A, getAccommodationPendingConfirmation_A, getActiveAccommodation_A, getDisabledAccommodation_A, updateAccommodation_A } from '../../../redux/Actions/actions';
 
 const AccommodationAdmin = () => {
-  // getAccommodationPercentage_A,
-  // deleteAccommodation_A,
-  // getAccommodationBy_A,
   // updateAccommodation_A,
   const activeAccommodation = useSelector((state) => state.activeAccommodation_A)
   const disabledAccommodation = useSelector((state) => state.disabledAccommodation_A)
   const accommodationPendingConfirmation = useSelector((state) => state.accommodationPendingConfirmation_A)
-  console.log(activeAccommodation);
+  console.log(disabledAccommodation);
 
   const [searchText, setSearchText] = useState('');
   const [searchedColumn, setSearchedColumn] = useState('');
@@ -33,6 +30,7 @@ const AccommodationAdmin = () => {
     dispatch(getActiveAccommodation_A());
     dispatch(getAccommodationPendingConfirmation_A());
     dispatch(getDisabledAccommodation_A());
+    // dispatch(getUserById(accommodation.ownerId))
   }, []);
 
   const dataActive = activeAccommodation.map((objeto, index) => {
@@ -82,6 +80,66 @@ const AccommodationAdmin = () => {
       rating: objeto.rating || 'N/A',
     };
   });
+
+  const handleDelete = (accommodationId) => {
+    dispatch(deleteAccommodation_A(accommodationId))
+      .then(() => {
+        notification.success({
+          message: '¡Excelente!',
+          description: 'El alojamiento se eliminó con éxito.',
+          placement: 'bottomLeft'
+        });
+      })
+      .catch((error) => {
+        notification.error({
+          message: 'Error',
+          description: `Lo sentimos, ${(error).toLowerCase()}.`,
+          placement: 'bottomLeft'
+        })
+      });
+  };
+
+  const handleActive = (accommodationId) => {
+    const dataToSend = {
+      isActive: true,
+    };
+    dispatch(updateAccommodation_A(accommodationId, dataToSend))
+      .then(() => {
+        notification.success({
+          message: '¡Excelente!',
+          description: 'El alojamiento se activó con éxito.',
+          placement: 'bottomLeft'
+        });
+      })
+      .catch((error) => {
+        notification.error({
+          message: 'Error',
+          description: `Lo sentimos, ${(error).toLowerCase()}.`,
+          placement: 'bottomLeft'
+        })
+      });
+  };
+
+  const handleDesactive = (accommodationId) => {
+    const dataToSend = {
+      isActive: false,
+    };
+    dispatch(updateAccommodation_A(accommodationId, dataToSend))
+      .then(() => {
+        notification.success({
+          message: '¡Excelente!',
+          description: 'El alojamiento se desactivó con éxito.',
+          placement: 'bottomLeft'
+        });
+      })
+      .catch((error) => {
+        notification.error({
+          message: 'Error',
+          description: `Lo sentimos, ${(error).toLowerCase()}.`,
+          placement: 'bottomLeft'
+        })
+      });
+  };
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -243,12 +301,24 @@ const AccommodationAdmin = () => {
       key: 'action',
       render: (text, record) => (
         <Space size="middle">
-          <Button onClick={() => handleEdit(record.id)}>
-            <FaRegEdit />
-          </Button>
-          <Button onClick={() => handleDelete(record.id)}>
-            <TiDelete style={{ fontSize: '20px' }} />
-          </Button>
+          <Tooltip title="El alojamiento se activará">
+            <MdDomainAdd
+              onClick={() => handleActive(record.id)}
+              style={{ cursor: 'pointer', maxWidth: '50px' }}
+            />
+          </Tooltip>
+          <Tooltip title="El alojamiento se desactivará">
+            <MdDomainDisabled
+              onClick={() => handleDesactive(record.id)}
+              style={{ cursor: 'pointer', maxWidth: '50px' }}
+            />
+          </Tooltip>
+          <Tooltip title="El alojamiento se eliminará de manera definitiva">
+            <AiOutlineDelete
+              onClick={() => handleDelete(record.id)}
+              style={{ cursor: 'pointer', maxWidth: '50px' }}
+            />
+          </Tooltip>
         </Space>
       ),
     },

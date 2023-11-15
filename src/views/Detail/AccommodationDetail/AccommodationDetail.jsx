@@ -42,7 +42,6 @@ const AccommodationDetail = () => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(`/user/${AccommodationById?.ownerId}`);
-        console.log('Respuesta del servidor:', response.data);
         const userFirst = response.data.firstName;
         setOwnerFirst(userFirst);
         const userLast = response.data.lastName;
