@@ -8,6 +8,7 @@ import { getUserData } from "../../redux/Actions/actions";
 import { updateUserInfo } from "../../redux/Actions/actions";
 import style from "../UserPanel/AccountPage.module.css";
 import { Button, Form, Input, Card, Flex, DatePicker, Tabs } from 'antd';
+import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import Photo from "../UserPanel/Photo/PhotoAcc";
 import Reservations from "../UserPanel/Reservations";
 import Accommodation from "../UserPanel/Accommodation";
@@ -114,6 +115,7 @@ const AccountPage = () => {
                                 value={userLoggedInfo.firstName}
                                 onChange={(e) => {
                                   setUserLoggedInfo({ ...userLoggedInfo, firstName: e.target.value });
+                                  
                                 }}
                                 disabled={formDisabled}
                                 placeholder=""
@@ -137,28 +139,24 @@ const AccountPage = () => {
                           </Form>
                         </>
                         <>
+                        {!userLoggedInfoFromRedux.googleId && (
                           <Form layout="horizontal">
-                            <Form.Item label="">
-                            <Input
+                            <Form.Item label="">                            
+                            <Input.Password
                               className={style.userinfo}
+                              iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
                               value={userLoggedInfo.password}
                               onChange={(e) => {
                                 if (!formDisabled) {
                                   setUserLoggedInfo({ ...userLoggedInfo, password: e.target.value });
                                 }
                               }}
-                              onFocus={() => {
-                                if (!formDisabled) {
-                                  setUserLoggedInfo({ ...userLoggedInfo, password: '' });
-                                }
-                              }}
                               disabled={formDisabled}
                               placeholder="Password"
                             />
-
-
                             </Form.Item>
                           </Form>
+                          )}
                         </>
                         
                         <>
@@ -216,7 +214,7 @@ const AccountPage = () => {
               label: 
               <NavLink
               to="/account/accommodations"
-              className={`${activeTab === 'accommodations' ? style.activeLabel : style.inactiveLabel}`}><b>Mis Accommodations</b></NavLink>,
+              className={`${activeTab === 'accommodations' ? style.activeLabel : style.inactiveLabel}`}><b>Mis Alojamientos</b></NavLink>,
               key: 'accommodations',
               children:
                 <div style={{ alignItems: 'center', justifyContent: 'flex-end' }}>

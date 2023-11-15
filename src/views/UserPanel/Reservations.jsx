@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import CardsStyles from '../../components/CardsContainer/CardsContainer.module.css';
 import Cardbox from "../../components/CardBox/CardBox";
-import { DatePicker, Space, Row, Col, Divider, Input, Rate } from 'antd';
+import { DatePicker, Space, Row, Col, Divider, Input, Rate, Button } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import ResStyles from "./Reservations.module.css";
 
 const { TextArea } = Input;
 
@@ -12,33 +13,39 @@ dayjs.extend(customParseFormat);
 const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY/MM/DD';
 
-const fechaActual = '';
+const fechaActual = '2024/03/02';
 
 const Reservation = ({ userId }) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [accommodationDataArray, setAccommodationDataArray] = useState([]);
   const [fechaActualizada, setFechaActualizada] = useState('');
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [rateValues, setRateValues] = useState(0);
+  const [reviewTexts, setReviewTexts] = useState('');
+  const [showReviewForms, setShowReviewForms] = useState({});
 
+  
+  
   useEffect(() => {
     // Mueve la lógica para obtener la fecha actualizada aquí
     fetch('http://worldtimeapi.org/api/ip')
-      .then(response => response.json())
-      .then(data => {
-        var fechaHoraInternet = new Date(data.utc_datetime);
-        var ano = fechaHoraInternet.getUTCFullYear();
-        var mes = ('0' + (fechaHoraInternet.getUTCMonth() + 1)).slice(-2);
-        var dia = ('0' + fechaHoraInternet.getUTCDate()).slice(-2);
-        var fechaActualizada = ano + '-' + mes + '-' + dia;
-        
-        console.log('Fecha actual según Internet (formato YYYY-MM-DD):', fechaActualizada);
-        setFechaActualizada(fechaActualizada); // Actualiza el estado con la fecha actualizada
-      })
-      .catch(error => console.error('Error al obtener la fecha y hora desde Internet:', error));
+    .then(response => response.json())
+    .then(data => {
+      var fechaHoraInternet = new Date(data.utc_datetime);
+      var ano = fechaHoraInternet.getUTCFullYear();
+      var mes = ('0' + (fechaHoraInternet.getUTCMonth() + 1)).slice(-2);
+      var dia = ('0' + fechaHoraInternet.getUTCDate()).slice(-2);
+      var fechaActualizada = ano + '-' + mes + '-' + dia;
+      
+      console.log('Fecha actual según Internet (formato YYYY-MM-DD):', fechaActualizada);
+      setFechaActualizada(fechaActualizada); // Actualiza el estado con la fecha actualizada
+    })
+    .catch(error => console.error('Error al obtener la fecha y hora desde Internet:', error));
   }, []); // El segundo argumento [] significa que este efecto se ejecutará solo una vez al montar el componente
-
   
-
+  
+  
   useEffect(() => {
     const getReservation = async () => {
       try {
@@ -52,15 +59,14 @@ const Reservation = ({ userId }) => {
     } 
     getReservation();
   }, []);
-
+  
   let idAccommodationArray;
   useEffect(() => {
     const idAccommodationArray = data.map(item => item.idAccommodation);
     console.log('IdAccommodation Array:', idAccommodationArray);
   }, [data]);
-  console.log(idAccommodationArray)
   
-
+  
   useEffect(() => {
     const fetchAccommodationData = async () => {
       const idAccommodationArray = data.map((item) => item.idAccommodation);
@@ -75,14 +81,86 @@ const Reservation = ({ userId }) => {
             return null;
           }
         })
-      );
-      setAccommodationDataArray(accommodationDataArray);
-      // accommodationDataArray ahora contiene la información de todos los alojamientos asociados a las reservas
-      console.log('Accommodation Data Array:', accommodationDataArray);
+        );
+        setAccommodationDataArray(accommodationDataArray);
+        // accommodationDataArray ahora contiene la información de todos los alojamientos asociados a las reservas
+        console.log('Accommodation Data Array:', accommodationDataArray);
+      };
+      
+      fetchAccommodationData();
+    }, [data]);
+
+    useEffect(() => {
+      // Cuando cambia el conjunto de datos (data), inicializa el estado showReviewForms
+      const initialShowReviewForms = data.reduce((acc, reservation) => {
+        acc[reservation.idAccommodation] = false;
+        return acc;
+      }, {});
+    
+      setShowReviewForms(initialShowReviewForms);
+    }, [data]);
+
+    const handleRateChange = (value, reservationId) => {
+      // Al cambiar la calificación, actualizar el estado correspondiente
+      setRateValues(prevState => ({
+        ...prevState,
+        [reservationId]: value,
+      }));
     };
 
-    fetchAccommodationData();
-  }, [data]);
+    const handleButtonClick = (reservationId) => {
+      // Al hacer clic en el botón, establecer el estado para la reserva correspondiente
+      setShowReviewForms(prevState => ({
+        ...prevState,
+        [reservationId]: true,
+      }));
+    };
+  
+    const handleTextAreaChange = (e, reservationId) => {
+      // Al cambiar el texto del área de texto, actualizar el estado correspondiente
+      setReviewTexts(prevState => ({
+        ...prevState,
+        [reservationId]: e.target.value,
+      }));
+    };
+    const handleSubmitReview = async (reservationId) => {
+      try {
+        const idAccommodation = accommodationDataArray.find(item => item._id === reservationId)?._id;
+        console.log('ID del alojamiento antes de enviar la revisión:', idAccommodation);
+    
+        const comment = reviewTexts[reservationId];
+        const rating = rateValues[reservationId];
+    
+        console.log('Comment antes de enviar la revisión:', comment);
+        console.log('Rating antes de enviar la revisión:', rating);
+        const response = await axios.post('/reviews/create', {
+          idUser: userId,
+          idAccommodation: idAccommodation,
+          comment: reviewTexts[reservationId], // Utilizar el texto de revisión específico de esta reserva
+          rating: rateValues[reservationId],
+        });
+        console.log('ID del alojamiento después de enviar la revisión:', idAccommodation);
+        console.log('Respuesta del servidor al enviar la revisión:', response.data);
+    
+        setRateValues(prevState => ({
+          ...prevState,
+          [reservationId]: 0,
+        }));
+    
+        // Limpia el formulario de revisión específico de esta reserva
+        setReviewTexts(prevState => ({
+          ...prevState,
+          [reservationId]: '',
+        }));
+        setShowReviewForms(prevState => ({
+          ...prevState,
+          [reservationId]: false,
+        }));
+      } catch (error) {
+        console.error('Error al enviar la revisión:', error);
+        // Puedes manejar el error aquí
+      }
+    };
 
   return (
     <div className={CardsStyles.cardsContainer}>
@@ -92,6 +170,7 @@ const Reservation = ({ userId }) => {
           {data.length &&
             data?.map((reservation, index) => {
               const accommodationInfo = accommodationDataArray[index];
+              const reservationId = reservation.idAccommodation;
               return (
                 <Col key={index} span={24}>
                   <div style={{ borderRadius: '20px', border: '1px solid #eee', padding: '10px', margin: '10px', display: 'flex', justifyContent: 'space-evenly' }}>
@@ -160,14 +239,35 @@ const Reservation = ({ userId }) => {
 
                       <Divider />
 
-                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }} >
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                      <Button
+                        disabled={reservation.endDate > fechaActual}
+                        className={ResStyles.buttonStyle}
+                        onClick={() => handleButtonClick(reservationId)}
+                      >
+                        Ingresa tu Review
+                      </Button>
 
-                        <span style={{ marginBottom: '30px',fontWeight: 'bold',fontSize: '15px',backgroundColor: 'blue',color: 'white',borderRadius: '10px',padding: '10px' 
-                          }}>Ingresa tu Review</span>
-                          <Rate defaultValue={0} disabled={reservation.endDate > fechaActualizada} style={{ marginBottom: '15px' }} />
-                          <TextArea rows={4} placeholder="Describe tu experiencia" maxLength={150} disabled={reservation.endDate > fechaActual} />
-                        <span className="ant-rate-text"></span>
-
+                      {showReviewForms[reservationId] && (
+                        <div>
+                          <Rate
+                            defaultValue={0}
+                            style={{ marginBottom: '15px' }}
+                            onChange={(value) => handleRateChange(value, reservationId)}
+                          />
+                          <TextArea
+                            rows={4}
+                            placeholder="Describe tu experiencia"
+                            maxLength={150}
+                            value={reviewTexts[reservationId] || ''}
+                            onChange={(e) => handleTextAreaChange(e, reservationId)}
+                          />
+                          <span className="ant-rate-text"></span>
+                          <Button type="primary" onClick={() => handleSubmitReview(reservationId)}>
+                            Enviar Review
+                          </Button>
+                        </div>
+                      )}
                       </div>
                     </div>
                   </div>
