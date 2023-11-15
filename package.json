@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ant-design/pro-components": "^2.6.35",
     "@react-google-maps/api": "^2.19.2",
     "@react-oauth/google": "^0.11.1",
     "antd": "^5.10.2",
