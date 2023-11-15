@@ -24,8 +24,6 @@ const Reservation = () => {
   const [accommodation, setAccommodation] = useState(JSON.parse(localStorage.getItem('accommodationData')));
   const [checkout, setCheckout] = useState(JSON.parse(localStorage.getItem('checkoutData')));
   const navigate = useNavigate()
-  console.log(accommodation);
-  console.log(checkout);
 
   useEffect(() => {
     if (Object.keys(accommodationToReservation).length !== 0) {
@@ -36,17 +34,18 @@ const Reservation = () => {
       setAccommodation(JSON.parse(localStorage.getItem('accommodationData')))
     }
     if (Object.keys(reservationData).length !== 0) {
-      console.log(reservationData);
       if (checkout) {
         localStorage.removeItem('checkoutData');
       }
       localStorage.setItem('checkoutData', JSON.stringify(reservationData));
       setCheckout(JSON.parse(localStorage.getItem('checkoutData')))
     }
+    return () => {
+      localStorage.removeItem('checkoutData');
+    }
   }, []);
 
   const handle = () => {
-    console.log(checkout);
     axios.post('/stripe/charge', checkout)
       .then((response) => {
         window.location.href = response.data.url;

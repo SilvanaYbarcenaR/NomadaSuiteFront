@@ -44,7 +44,6 @@ const AccommodationDetail = () => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(`/user/${AccommodationById?.ownerId}`);
-        console.log('Respuesta del servidor:', response.data);
         const userFirst = response.data.firstName;
         setOwnerFirst(userFirst);
         const userLast = response.data.lastName;
@@ -235,7 +234,7 @@ const AccommodationDetail = () => {
         <Col span={16}>
           <div className={detailStyles.detailContent}>
             <Flex justify={"flex-start"} align={"flex-start"}>
-            <h1 style={style}>{ownerLast}, {ownerFirst}</h1>
+            <h1 style={style}>Anfitrion: {ownerFirst} {ownerLast}</h1>
 
               <Avatar style={{
                 backgroundColor: '#231CA7',
@@ -249,7 +248,7 @@ const AccommodationDetail = () => {
                     return (
                       <>
                         {service.name === "Habitación" &&
-                          <span>&nbsp;· {service.quantity} habitaciones</span>
+                          <span>▪{service.quantity} habitaciones ▪</span>
                         }
                         {service.name === "Baño" &&
                           <span>{service.quantity} baño</span>

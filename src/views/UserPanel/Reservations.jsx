@@ -56,7 +56,6 @@ const Reservation = ({ userId }) => {
     const getReservation = async () => {
       try {
         const response = await axios.get(`/reservation/${userId}`);
-        console.log(response.data);
         // Aquí deberías manejar la respuesta según la estructura de datos que recibas
         setData(response.data);      
       } catch (error) {
@@ -172,7 +171,6 @@ const Reservation = ({ userId }) => {
 
   return (
     <div className={CardsStyles.cardsContainer}>
-      {console.log(data)}
       <div className={CardsStyles.noScroll}>
         <Row gutter={24} align={'stretch'}>
           {data.length &&
@@ -193,7 +191,6 @@ const Reservation = ({ userId }) => {
                     location={`${accommodationInfo?.idLocation?.city}, ${accommodationInfo?.idLocation?.country}`}
                   />
                   
-                  {console.log(reservation.idAccommodation)}
                     <div>
                       <Space direction="vertical" size={12}>
                         <div style={{ display: 'flex', alignItems: 'center', marginTop: '30px' }} >

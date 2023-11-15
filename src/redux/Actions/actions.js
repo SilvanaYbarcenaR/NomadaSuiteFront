@@ -1,6 +1,6 @@
 /* eslint-disable no-unreachable */
 import axios from "axios";
-import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING, GET_FILTERED_ACCOMMODATION, CLEAR_DETAIL, GET_COUNTRIES, GET_CITIES, GET_LOCATIONS, LOGIN_USER, LOGIN_GOOGLE, REGISTER_USER, GET_USER_DATA, LOG_OUT, SET_RESERVATION_DATA, CLEAR_DETAIL_TO_RESERVATION, UPDATE_USER_INFO, GET_RESERVATION_BY_ID, GET_ACTIVE_ACCOMMODATION, GET_ACCOMMODATION_PENDING_CONFIRMATION, GET_DISABLED_ACCOMMODATION, GET_ALL_ACCOMMODATION, GET_ACCOMMODATION_PERCENTAGE, DELETE_ACCOMMODATION, GET_ACCOMMODATION_BY_ID_A, UPDATE_ACCOMMODATION, GET_ALL_USERS, GET_USERS_ACTIVES, GET_USERS_ACTIVES_FALSE, GET_USER_BY_ID, LOGIN_USER_A, DELETE_USER, UPDATE_USER, GET_ACTIVE_REVIEWS, GET_REVIEWS_PENDING_CONFIRMATION, GET_REVIEWS_DISABLED } from "./actions-types";
+import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING, GET_FILTERED_ACCOMMODATION, CLEAR_DETAIL, GET_COUNTRIES, GET_CITIES, GET_LOCATIONS, LOGIN_USER, LOGIN_GOOGLE, REGISTER_USER, GET_USER_DATA, LOG_OUT, SET_RESERVATION_DATA, CLEAR_DETAIL_TO_RESERVATION, UPDATE_USER_INFO, GET_RESERVATION_BY_ID, GET_ACTIVE_ACCOMMODATION, GET_ACCOMMODATION_PENDING_CONFIRMATION, GET_DISABLED_ACCOMMODATION, GET_ALL_ACCOMMODATION, GET_ACCOMMODATION_PERCENTAGE, DELETE_ACCOMMODATION, GET_ACCOMMODATION_BY_ID_A, UPDATE_ACCOMMODATION, GET_ALL_USERS, GET_USERS_ACTIVES, GET_USERS_ACTIVES_FALSE, GET_USER_BY_ID, LOGIN_USER_A, DELETE_USER, UPDATE_USER, GET_ACTIVE_REVIEWS, GET_REVIEWS_PENDING_CONFIRMATION, GET_REVIEWS_DISABLED, GET_USER_BY_ID_CHECKOUT } from "./actions-types";
 
 const getAccommodations = () => {
   const endpoint = "/accommodation/";
@@ -178,8 +178,8 @@ const loginUser = (userData) => {
     } catch (error) {
       throw Error(error.response.data.error);
     }
-  }
-}
+  };
+};
 
 const loginGoogle = (userData) => {
   const endpoint = 'https://www.googleapis.com/oauth2/v1/userinfo?access_token=';
@@ -209,8 +209,8 @@ const loginGoogle = (userData) => {
     } catch (error) {
       throw Error(error.response.data.error);
     }
-  }
-}
+  };
+};
 
 const registerUser = (userData, accessToken) => {
   const endpoint = '/user/register';
@@ -229,8 +229,8 @@ const registerUser = (userData, accessToken) => {
         })
       }
     }
-  }
-}
+  };
+};
 
 const getUserData = (userId) => {
   const endpoint = `/user/${userId}`;
@@ -244,16 +244,16 @@ const getUserData = (userId) => {
     } catch (error) {
       console.log(error.response.data.error);
     }
-  }
-}
+  };
+};
 
 const logOut = () => {
   return async (dispatch) => {
     dispatch({
       type: LOG_OUT
     });
-  }
-}
+  };
+};
 
 const updateUserInfo = (userId, firstName, lastName) => {
   return async (dispatch) => {
@@ -289,7 +289,22 @@ const getReservationById = (id) => {
     } catch (error) {
       console.log(error.response.data.error);
     }
-  }
+  };
+};
+
+const getUserById = (id) => {
+  const endpoint = `/user/${id}`;
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.get(endpoint);
+      dispatch({
+        type: GET_USER_BY_ID_CHECKOUT,
+        payload: data,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 };
 
 //TODO__________________________________ ADMIN __________________________________
@@ -300,30 +315,28 @@ const getActiveAccommodation_A = () => {
   return async (dispatch) => {
     try {
       const { data } = await axios.get(endpoint);
-      console.log(data);
       dispatch({
         type: GET_ACTIVE_ACCOMMODATION,
         payload: data
       });
     } catch (error) {
       console.log(error.response.data.error);
-    };
+    }
   };
-}
+};
 
 const getAccommodationPendingConfirmation_A = () => {
   const endpoint = '/accommodation/pending'
   return async (dispatch) => {
     try {
       const { data } = await axios.get(endpoint);
-      console.log(data);
       dispatch({
         type: GET_ACCOMMODATION_PENDING_CONFIRMATION,
         payload: data
       });
     } catch (error) {
       console.log(error.response.data.error);
-    };
+    }
   };
 };
 
@@ -332,14 +345,13 @@ const getDisabledAccommodation_A = () => {
   return async (dispatch) => {
     try {
       const { data } = await axios.get(endpoint);
-      console.log(data);
       dispatch({
         type: GET_DISABLED_ACCOMMODATION,
         payload: data
       });
     } catch (error) {
       console.log(error.response.data.error);
-    };
+    }
   };
 };
 
@@ -348,14 +360,13 @@ const getAllAccommodation_A = () => {
   return async (dispatch) => {
     try {
       const { data } = await axios.get(endpoint);
-      console.log(data);
       dispatch({
         type: GET_ALL_ACCOMMODATION,
         payload: data
       });
     } catch (error) {
       console.log(error.response.data.error);
-    };
+    }
   };
 };
 
@@ -364,18 +375,18 @@ const getAccommodationPercentage_A = () => {
   return async (dispatch) => {
     try {
       const { data } = await axios.get(endpoint);
-      console.log(data);
       dispatch({
         type: GET_ACCOMMODATION_PERCENTAGE,
         payload: data
       });
     } catch (error) {
       console.log(error.response.data.error);
-    };
+    }
   };
 };
 
 const deleteAccommodation_A = (id) => {
+  console.log(id);
   const endpoint = `/accommodation/${id}`
   return async (dispatch) => {
     try {
@@ -387,16 +398,15 @@ const deleteAccommodation_A = (id) => {
       });
     } catch (error) {
       console.log(error.response.data.error);
-    };
+    }
   };
 };
 
-const getAccommodationBy_A = (id) => {
+const getAccommodationById_A = (id) => {
   const endpoint = `/accommodation/${id}`;
   return async (dispatch) => {
     try {
       const { data } = await axios.get(endpoint);
-      console.log(data);
       dispatch({
         type: GET_ACCOMMODATION_BY_ID_A,
         payload: data,
@@ -404,15 +414,18 @@ const getAccommodationBy_A = (id) => {
     } catch (error) {
       console.log(error.response.data.error);
     }
-  }
+  };
 };
 
-const updateAccommodation_A = (id) => {
+const updateAccommodation_A = (id, formDataToSend) => {
   const endpoint = `/accommodation/${id}`;
   return async (dispatch) => {
     try {
-      const { data } = await axios.put(endpoint);
-      console.log(data);
+      const { data } = await axios.put(endpoint, formDataToSend, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        }
+      })
       dispatch({
         type: UPDATE_ACCOMMODATION,
         payload: data,
@@ -420,7 +433,7 @@ const updateAccommodation_A = (id) => {
     } catch (error) {
       console.log(error.response.data.error);
     }
-  }
+  };
 };
 
 //Users
@@ -429,7 +442,6 @@ const getAllUers_A = () => {
   return async (dispatch) => {
     try {
       const { data } = await axios.get(endpoint);
-      console.log(data);
       dispatch({
         type: GET_ALL_USERS,
         payload: data,
@@ -437,7 +449,7 @@ const getAllUers_A = () => {
     } catch (error) {
       console.log(error.response.data.error);
     }
-  }
+  };
 };
 
 const getUsersActives_A = () => {
@@ -445,7 +457,6 @@ const getUsersActives_A = () => {
   return async (dispatch) => {
     try {
       const { data } = await axios.get(endpoint);
-      console.log(data);
       dispatch({
         type: GET_USERS_ACTIVES,
         payload: data,
@@ -453,7 +464,7 @@ const getUsersActives_A = () => {
     } catch (error) {
       console.log(error.response.data.error);
     }
-  }
+  };
 };
 
 const getUsersActivesFalse_A = () => {
@@ -461,7 +472,6 @@ const getUsersActivesFalse_A = () => {
   return async (dispatch) => {
     try {
       const { data } = await axios.get(endpoint);
-      console.log(data);
       dispatch({
         type: GET_USERS_ACTIVES_FALSE,
         payload: data,
@@ -469,7 +479,7 @@ const getUsersActivesFalse_A = () => {
     } catch (error) {
       console.log(error.response.data.error);
     }
-  }
+  };
 };
 
 const getUserById_A = (id) => {
@@ -477,7 +487,6 @@ const getUserById_A = (id) => {
   return async (dispatch) => {
     try {
       const { data } = await axios.get(endpoint);
-      console.log(data);
       dispatch({
         type: GET_USER_BY_ID,
         payload: data,
@@ -485,7 +494,7 @@ const getUserById_A = (id) => {
     } catch (error) {
       console.log(error.response.data.error);
     }
-  }
+  };
 };
 
 const loginUser_A = (userData) => {
@@ -493,14 +502,13 @@ const loginUser_A = (userData) => {
   return async (dispatch) => {
     try {
       const { data } = await axios.post(endpoint, userData);
-      console.log(data);
       dispatch({
         type: LOGIN_USER_A,
         payload: data
       })
     } catch (error) {
-      throw Error(error.response.data.error);
-    };
+      console.log(error.response.data.error);
+    }
   };
 };
 
@@ -509,30 +517,28 @@ const deleteUser_A = (id) => {
   return async (dispatch) => {
     try {
       const { data } = await axios.delete(endpoint);
-      console.log(data);
       dispatch({
         type: DELETE_USER,
         payload: data
       })
     } catch (error) {
-      throw Error(error.response.data.error);
-    };
+      console.log(error.response.data.error);
+    }
   };
 };
 
-const updateUser_A = (id) => {
+const updateUser_A = (id, dataUser) => {
   const endpoint = `/user/update/${id}`;
   return async (dispatch) => {
     try {
-      const { data } = await axios.put(endpoint);
-      console.log(data);
+      const { data } = await axios.put(endpoint, dataUser);
       dispatch({
         type: UPDATE_USER,
         payload: data
       })
     } catch (error) {
-      throw Error(error.response.data.error);
-    };
+      console.log(error.response.data.error);
+    }
   };
 };
 
@@ -542,14 +548,13 @@ const getActiveReviews_A = () => {
   return async (dispatch) => {
     try {
       const { data } = await axios.get(endpoint);
-      console.log(data);
       dispatch({
         type: GET_ACTIVE_REVIEWS,
         payload: data
       })
     } catch (error) {
-      throw Error(error.response.data.error);
-    };
+      console.log(error.response.data.error);
+    }
   };
 };
 
@@ -558,14 +563,13 @@ const getReviewsPendingConfirmation_A = () => {
   return async (dispatch) => {
     try {
       const { data } = await axios.get(endpoint);
-      console.log(data);
       dispatch({
         type: GET_REVIEWS_PENDING_CONFIRMATION,
         payload: data
       })
     } catch (error) {
-      throw Error(error.response.data.error);
-    };
+      console.log(error.response.data.error);
+    }
   };
 };
 
@@ -574,14 +578,13 @@ const getReviewsDisabled_A = () => {
   return async (dispatch) => {
     try {
       const { data } = await axios.get(endpoint);
-      console.log(data);
       dispatch({
         type: GET_REVIEWS_DISABLED,
         payload: data
       })
     } catch (error) {
-      throw Error(error.response.data.error);
-    };
+      console.log(error.response.data.error);
+    }
   };
 };
 
@@ -604,6 +607,7 @@ export {
   updateUserInfo,
   logOut,
   getReservationById,
+  getUserById,
   //_____ADMIN_____
   getActiveAccommodation_A,
   getAccommodationPendingConfirmation_A,
@@ -611,7 +615,7 @@ export {
   getAllAccommodation_A,
   getAccommodationPercentage_A,
   deleteAccommodation_A,
-  getAccommodationBy_A,
+  getAccommodationById_A,
   updateAccommodation_A,
   getAllUers_A,
   getUsersActives_A,
