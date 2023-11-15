@@ -1,9 +1,13 @@
+import { deleteAccommodation_A, getAccommodationPendingConfirmation_A, getActiveAccommodation_A, getDisabledAccommodation_A, getServices, updateAccommodation_A } from '../../../redux/Actions/actions';
 import { Button, Flex, Space, Table, Input, notification, Tooltip, Modal, Form, Row, Col, Select, Checkbox, Upload, InputNumber } from 'antd';
-import React, { useEffect, useRef, useState } from 'react';
+import { EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import { MdDomainAdd, MdDomainDisabled } from "react-icons/md";
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { AiOutlineDelete } from "react-icons/ai";
 import Highlighter from "react-highlight-words";
 
+//Description
 const { TextArea } = Input;
 
 const buttonStyle = {
@@ -13,6 +17,7 @@ const buttonStyle = {
   width: "160%"
 };
 
+//image
 const normFile = (e) => {
   if (Array.isArray(e)) {
     return e;
@@ -27,14 +32,6 @@ const getBase64 = (file) =>
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
-
-import {
-  EditOutlined,
-  PlusOutlined,
-  SearchOutlined
-} from '@ant-design/icons';
-import { useDispatch, useSelector } from 'react-redux';
-import { deleteAccommodation_A, getAccommodationPendingConfirmation_A, getActiveAccommodation_A, getDisabledAccommodation_A, getServices, updateAccommodation_A } from '../../../redux/Actions/actions';
 
 const AccommodationAdmin = () => {
 
@@ -66,47 +63,6 @@ const AccommodationAdmin = () => {
     dispatch(getAccommodationPendingConfirmation_A());
     dispatch(getDisabledAccommodation_A());
     dispatch(getServices())
-    const dataColumns = [];
-    if (users.length > 0) {
-      users.reverse().map((user, index) => {
-        const tags = [];
-        const userId = user._id;
-        if (user.isActive) {
-          tags.push("Activo")
-        }
-        else {
-          tags.push("Inactivo")
-        }
-        if (user.isAdmin) {
-          tags.push("Admin")
-        }
-        dataColumns.push({
-          key: index,
-          avatar:
-            user.profileImage ?
-              <Image
-                width={30}
-                style={{ borderRadius: "50%" }}
-                src={user.profileImage}
-              />
-              :
-              <FaCircleUser style={{ fontSize: "30px", color: "#d3ceee" }} />,
-          name: user.firstName + " " + user.lastName,
-          email: user.email,
-          admin: <Switch className={userStyles.toggle} defaultChecked={user.isAdmin} onChange={(checked) => onChangeAdmin(checked, userId)} />,
-          active: <Switch className={userStyles.toggle} defaultChecked={user.isActive} onChange={(checked) => onChangeActive(checked, userId)} />,
-          tags: tags,
-          action:
-            <Space size="middle">
-              <a onClick={showModal}><EditOutlined /></a>
-              <Tooltip title="El usuario se eliminará de manera definitiva">
-                <DeleteOutlined onClick={onDelete} />
-              </Tooltip>
-            </Space>
-        })
-      })
-    }
-    setData(dataColumns);
   }, []);
 
   const handleFormChange = (field, value) => {
