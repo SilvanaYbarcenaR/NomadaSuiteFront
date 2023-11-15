@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import axios from 'axios';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { clearDetail, getAccommodationById, setReservationData } from '../../../redux/Actions/actions';
@@ -34,6 +35,25 @@ const AccommodationDetail = () => {
     }
   }, [])
 
+  const [ownerFirst, setOwnerFirst] = useState('');
+  const [ownerLast, setOwnerLast] = useState('');
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(`/user/${AccommodationById?.ownerId}`);
+        const userFirst = response.data.firstName;
+        setOwnerFirst(userFirst);
+        const userLast = response.data.lastName;
+        setOwnerLast(userLast);
+      } catch (error) {
+        console.error('Error al obtener la información del usuario:', error);
+      }
+    };
+  
+    fetchUserData();
+  }, [AccommodationById]);
+
   const { RangePicker } = DatePicker;
 
   const disabledDate = (current) => {
@@ -46,6 +66,8 @@ const AccommodationDetail = () => {
     padding: '30px 20px 10px 40px',
     fontWeight: 'bold',
     fontSize: '20px',
+    marginBottom: '20px',
+    marginRight: '80px',
 
   };
   const style2 = {
@@ -178,10 +200,8 @@ const AccommodationDetail = () => {
       <Row>
         <Col span={16}>
           <div className={detailStyles.detailContent}>
-            <Flex justify={"space-between"}>
-              <p style={{ fontWeight: 'bold', fontSize: '25px' }}>
-                Alojamiento entero. Anfitrión: Jeronimo
-              </p>
+            <Flex justify={"flex-start"} align={"flex-start"}>
+            <h1 style={style}>Anfitrion: {ownerFirst} {ownerLast}</h1>
 
               <Avatar style={{
                 backgroundColor: '#231CA7',
@@ -195,7 +215,7 @@ const AccommodationDetail = () => {
                     return (
                       <>
                         {service.name === "Habitación" &&
-                          <span>&nbsp;· {service.quantity} habitaciones</span>
+                          <span>▪{service.quantity} habitaciones ▪</span>
                         }
                         {service.name === "Baño" &&
                           <span>{service.quantity} baño</span>
