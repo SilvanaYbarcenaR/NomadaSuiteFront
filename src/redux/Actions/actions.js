@@ -417,11 +417,11 @@ const getAccommodationById_A = (id) => {
   };
 };
 
-const updateAccommodation_A = (id, formDataToSend) => {
+const updateAccommodation_A = (id, dataToSend) => {
   const endpoint = `/accommodation/${id}`;
   return async (dispatch) => {
     try {
-      const { data } = await axios.put(endpoint, formDataToSend, {
+      const { data } = await axios.put(endpoint, dataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         }
