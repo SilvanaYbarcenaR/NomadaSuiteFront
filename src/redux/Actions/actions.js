@@ -429,7 +429,6 @@ const getAllUers_A = () => {
   return async (dispatch) => {
     try {
       const { data } = await axios.get(endpoint);
-      console.log(data);
       dispatch({
         type: GET_ALL_USERS,
         payload: data,
@@ -520,12 +519,11 @@ const deleteUser_A = (id) => {
   };
 };
 
-const updateUser_A = (id) => {
+const updateUser_A = (id, dataUser) => {
   const endpoint = `/user/update/${id}`;
   return async (dispatch) => {
     try {
-      const { data } = await axios.put(endpoint);
-      console.log(data);
+      const { data } = await axios.put(endpoint, dataUser);
       dispatch({
         type: UPDATE_USER,
         payload: data

@@ -257,7 +257,6 @@ const rootReducer = (state = initialState, { type, payload }) => {
       }
 
     case GET_ALL_USERS:
-      console.log(payload);
       return {
         ...state,
         allUsers_A: payload
