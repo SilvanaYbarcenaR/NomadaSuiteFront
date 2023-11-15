@@ -27,6 +27,14 @@ nav {
   opacity: 0;
 }
 
+.adminPanelLink {
+  padding: 5px 10px;
+  color: white; /* Cambiado de text-color a color */
+  text-decoration: none; /* Para quitar el subrayado del enlace */
+  cursor: pointer;
+  font-weight: bold;
+}
+
 @keyframes zoom {
   0%	{ 
     opacity: 0;

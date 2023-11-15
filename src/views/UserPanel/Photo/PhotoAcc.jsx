@@ -9,6 +9,7 @@
     background: "#231CA7",
     color: "white",
     height: "3rem",
+    marginLeft: "1re"
   };
 
 
@@ -32,12 +33,13 @@
       const onChange = ({ fileList: newFileList }) => {
         setFileList(newFileList);
       };
-    
+      
       const beforeUpload = (file) => {
+        {console.log(file)}
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {
-          setFileList(() => [{ url: reader.result }]);
+          setFileList(() => [{ url: reader.result, originFileObj: file }]);
         };
         return false;
       };
@@ -52,7 +54,6 @@
       };
     
       const handleFormSubmit = async () => {
-      
         try {
           formDataToSend.delete('images');
           formDataToSend.append('images', fileList[0].originFileObj);
