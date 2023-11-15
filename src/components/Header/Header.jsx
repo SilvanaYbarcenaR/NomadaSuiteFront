@@ -26,6 +26,7 @@ function Header() {
   };
   const logOutUser = () => {
     dispatch(logOut());
+    window.location.reload();
   }
   const items = [
     {
