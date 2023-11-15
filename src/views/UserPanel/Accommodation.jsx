@@ -1,13 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import AccStyles from "./Accommodation.module.css"
 import CardsStyles from '../../components/CardsContainer/CardsContainer.module.css';
 import Cardbox from "../../components/CardBox/CardBox";
-import { Row, Col, Button } from 'antd';
+import AccStyles from "./Accommodation.module.css";
+import { Button } from 'antd';
+import { Row, Col } from 'antd';
 
 const Accommodation = ({ userId }) => {
   const [data, setData] = useState([]);
 console.log(userId)
+
+const handleDeleteAccommodation = async (accommodationId) => {
+  try {
+    // Realizar la solicitud para actualizar la propiedad isActive a false
+    await axios.put(`/accommodation/${accommodationId}`, { isActive: false });
+
+    // Actualizar el estado local para reflejar el cambio
+    setData(prevData => prevData.map(accommodation => (
+      accommodation._id === accommodationId ? { ...accommodation, isActive: false } : accommodation
+    )));
+  } catch (error) {
+    console.error('Error al eliminar el alojamiento:', error);
+  }
+};
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -27,6 +43,7 @@ console.log(userId)
         <Row gutter={24} align={'stretch'}>
           {data.length &&
             data?.map((accommodation, index) => (
+              accommodation.isActive && (
               <Col key={index} span={24}>
                 <div style={{ borderRadius: '20px', border: '1px solid #eee', padding: '10px', margin: '10px', display: 'flex', justifyContent: 'space-evenly' }}>
                   <Cardbox 
@@ -56,6 +73,7 @@ console.log(userId)
                   </div>
                 </div>
               </Col>
+              )
             ))}
         </Row>
       </div>
