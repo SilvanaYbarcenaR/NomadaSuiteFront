@@ -7,22 +7,22 @@ import { Button } from 'antd';
 import { Row, Col } from 'antd';
 
 const Accommodation = ({ userId }) => {
+
   const [data, setData] = useState([]);
-console.log(userId)
 
-const handleDeleteAccommodation = async (accommodationId) => {
-  try {
-    // Realizar la solicitud para actualizar la propiedad isActive a false
-    await axios.put(`/accommodation/${accommodationId}`, { isActive: false });
+  const handleDeleteAccommodation = async (accommodationId) => {
+    try {
+      // Realizar la solicitud para actualizar la propiedad isActive a false
+      await axios.put(`/accommodation/${accommodationId}`, { isActive: false });
 
-    // Actualizar el estado local para reflejar el cambio
-    setData(prevData => prevData.map(accommodation => (
-      accommodation._id === accommodationId ? { ...accommodation, isActive: false } : accommodation
-    )));
-  } catch (error) {
-    console.error('Error al eliminar el alojamiento:', error);
-  }
-};
+      // Actualizar el estado local para reflejar el cambio
+      setData(prevData => prevData.map(accommodation => (
+        accommodation._id === accommodationId ? { ...accommodation, isActive: false } : accommodation
+      )));
+    } catch (error) {
+      console.error('Error al eliminar el alojamiento:', error);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,35 +44,35 @@ const handleDeleteAccommodation = async (accommodationId) => {
           {data.length &&
             data?.map((accommodation, index) => (
               accommodation.isActive && (
-              <Col key={index} span={24}>
-                <div style={{ borderRadius: '20px', border: '1px solid #eee', padding: '10px', margin: '10px', display: 'flex', justifyContent: 'space-evenly' }}>
-                  <Cardbox 
-                    key={index}
-                    id={accommodation._id}
-                    photos={accommodation.photos}
-                    name={accommodation.name}
-                    rating={accommodation.rating}
-                    price={accommodation.price}
-                    location={`${accommodation.idLocation?.city}, ${accommodation.idLocation?.country}`}
-                  />
-                  <div className={AccStyles.buttonContainer}>
-                    <div>
-                      
-                    <span className={AccStyles.delButton}>
-                      Si deseas eliminar tu alojamiento,
-                      
-                      <br />
-                      haz click en el botón eliminar.
-                    </span>
-                    </div>
-                    <div style={{ textAlign: 'center' }}>
-                    <Button type="primary" danger className={AccStyles.redButton} onClick={() => handleDeleteAccommodation(accommodation._id)}>
-                    Eliminar
-                    </Button>
+                <Col key={index} span={24}>
+                  <div style={{ borderRadius: '20px', border: '1px solid #eee', padding: '10px', margin: '10px', display: 'flex', justifyContent: 'space-evenly' }}>
+                    <Cardbox
+                      key={index}
+                      id={accommodation._id}
+                      photos={accommodation.photos}
+                      name={accommodation.name}
+                      rating={accommodation.rating}
+                      price={accommodation.price}
+                      location={`${accommodation.idLocation?.city}, ${accommodation.idLocation?.country}`}
+                    />
+                    <div className={AccStyles.buttonContainer}>
+                      <div>
+
+                        <span className={AccStyles.delButton}>
+                          Si deseas eliminar tu alojamiento,
+
+                          <br />
+                          haz click en el botón eliminar.
+                        </span>
+                      </div>
+                      <div style={{ textAlign: 'center' }}>
+                        <Button type="primary" danger className={AccStyles.redButton} onClick={() => handleDeleteAccommodation(accommodation._id)}>
+                          Eliminar
+                        </Button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Col>
+                </Col>
               )
             ))}
         </Row>
