@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import CardsStyles from '../../components/CardsContainer/CardsContainer.module.css';
 import Cardbox from "../../components/CardBox/CardBox";
-import { DatePicker, Space, Row, Col, Divider, Input, Rate } from 'antd';
+import { DatePicker, Space, Row, Col, Divider, Input, Rate, Button } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import ResStyles from "./Reservations.module.css";
 
 const { TextArea } = Input;
 
@@ -12,13 +13,36 @@ dayjs.extend(customParseFormat);
 const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY/MM/DD';
 
-const fechaActual = '';
+const fechaActual = '2024/03/02';
 
 const Reservation = ({ userId }) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [accommodationDataArray, setAccommodationDataArray] = useState([]);
   const [fechaActualizada, setFechaActualizada] = useState('');
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [rateValue, setRateValue] = useState(0);
+  const [reviewText, setReviewText] = useState('');
+
+  const handleButtonClick = () => {
+    setShowReviewForm(true);
+  };
+
+  const handleRateChange = (value) => {
+    setRateValue(value);
+  };
+
+  const handleTextAreaChange = (e) => {
+    setReviewText(e.target.value);
+  };
+  const handleSubmitReview = () => {
+    console.log('Valor de la calificación:', rateValue);
+    console.log('Texto de la revisión:', reviewText);
+
+    setShowReviewForm(false);
+    setRateValue(0);
+    setReviewText('');
+  };
 
   useEffect(() => {
     // Mueve la lógica para obtener la fecha actualizada aquí
@@ -160,14 +184,30 @@ const Reservation = ({ userId }) => {
 
                       <Divider />
 
-                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }} >
-
-                        <span style={{ marginBottom: '30px',fontWeight: 'bold',fontSize: '15px',backgroundColor: 'blue',color: 'white',borderRadius: '10px',padding: '10px' 
-                          }}>Ingresa tu Review</span>
-                          <Rate defaultValue={0} disabled={reservation.endDate > fechaActualizada} style={{ marginBottom: '15px' }} />
-                          <TextArea rows={4} placeholder="Describe tu experiencia" maxLength={150} disabled={reservation.endDate > fechaActual} />
-                        <span className="ant-rate-text"></span>
-
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        <Button
+                          disabled={reservation.endDate > fechaActual}
+                          className={ResStyles.buttonStyle}
+                          onClick={handleButtonClick}
+                        >
+                          Ingresa tu Review
+                        </Button>
+                        {showReviewForm && (
+                          <div>
+                            <Rate defaultValue={0} style={{ marginBottom: '15px' }} onChange={handleRateChange} />
+                            <TextArea
+                              rows={4}
+                              placeholder="Describe tu experiencia"
+                              maxLength={150}
+                              value={reviewText}
+                              onChange={handleTextAreaChange}
+                            />
+                            <span className="ant-rate-text"></span>
+                            <Button type="primary" onClick={handleSubmitReview}>
+                              Enviar Review
+                            </Button>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>

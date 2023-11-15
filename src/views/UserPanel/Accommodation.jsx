@@ -43,6 +43,7 @@ console.log(userId)
                       
                     <span className={AccStyles.delButton}>
                       Si deseas eliminar tu alojamiento,
+                      
                       <br />
                       haz click en el botón eliminar.
                     </span>
