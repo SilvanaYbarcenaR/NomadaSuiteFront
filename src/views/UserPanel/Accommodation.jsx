@@ -5,6 +5,7 @@ import Cardbox from "../../components/CardBox/CardBox";
 import AccStyles from "./Accommodation.module.css";
 import { Button } from 'antd';
 import { Row, Col } from 'antd';
+import { NavLink } from 'react-router-dom/dist';
 
 const Accommodation = ({ userId }) => {
 
@@ -39,6 +40,14 @@ const Accommodation = ({ userId }) => {
 
   return (
     <div className={CardsStyles.cardsContainer}>
+      <div style={{ textAlign: 'center' }}>
+      <h2 className={AccStyles.pageHeader}>Si tienes un alojamiento, no pierdas la oportunidad de sacarle</h2>
+      <br />
+      <h1 className={AccStyles.pageHeader2}>probecho. ¡Comparte tu espacio! </h1>
+      <NavLink to="/register-accommodation" className={AccStyles.accButton} > 
+      <Button className={AccStyles.accButton}>Agregar Alojamiento</Button>
+      </NavLink>
+      </div>
       <div className={CardsStyles.noScroll}>
         <Row gutter={24} align={'stretch'}>
           {data.length &&

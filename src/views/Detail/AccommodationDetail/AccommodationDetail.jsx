@@ -21,6 +21,8 @@ dayjs.extend(customParseFormat);
 
 const AccommodationDetail = () => {
 
+  const [unavailableRanges, setUnavailableRanges] = useState([]);
+
   const id = useParams().id;
   const dispatch = useDispatch();
   let AccommodationById = useSelector((state) => state.accommodationById);
@@ -54,10 +56,28 @@ const AccommodationDetail = () => {
     fetchUserData();
   }, [AccommodationById]);
 
+  useEffect(() => {
+    const fetchUnavailableRanges = async () => {
+      try {
+        console.log(AccommodationById._id);
+        const response = await axios.get(`/reservation/disponibility/${AccommodationById._id}`);
+        const data = response.data; // Asumiendo que la respuesta tiene el formato deseado
+        setUnavailableRanges(data.unavailableRanges);
+        console.log(data);
+      } catch (error) {
+        console.error('Error al obtener las fechas no disponibles:', error);
+      }
+    };
+
+    fetchUnavailableRanges();
+  }, [AccommodationById]);
+
   const { RangePicker } = DatePicker;
 
   const disabledDate = (current) => {
-    return current && current < dayjs().endOf('day');
+    return current && (current < dayjs().endOf('day') || unavailableRanges.some(range => (
+      (current >= dayjs(range.start) && current <= dayjs(range.end))
+    )));
   };
 
   // filas
@@ -86,10 +106,23 @@ const AccommodationDetail = () => {
     const days = Math.abs(new Date(dateStrings[1]) - new Date(dateStrings[0])) / (1000 * 3600 * 24);
     const totalPrice = (days * AccommodationById.price / 30).toFixed(2);
     setTotal(totalPrice);
-    setDate({
-      start_date: dateStrings[0],
-      end_date: dateStrings[1]
-    });
+
+    // Verificar si el rango seleccionado está dentro de las fechas no disponibles
+    const isRangeUnavailable = unavailableRanges.some(range => (
+      (new Date(dateStrings[0]) >= new Date(range.start) && new Date(dateStrings[0]) <= new Date(range.end)) ||
+      (new Date(dateStrings[1]) >= new Date(range.start) && new Date(dateStrings[1]) <= new Date(range.end))
+    ));
+
+    if (isRangeUnavailable) {
+      // Aquí puedes manejar el caso en que el rango seleccionado no esté disponible
+      // Por ejemplo, mostrar un mensaje al usuario
+      console.log('El rango seleccionado no está disponible');
+    } else {
+      setDate({
+        start_date: dateStrings[0],
+        end_date: dateStrings[1],
+      });
+    }
   };
 
   useEffect(() => {

@@ -13,19 +13,25 @@ dayjs.extend(customParseFormat);
 const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY/MM/DD';
 
-const fechaActual = '2024/03/02';
+const fechaActual = '2024/03/05';
 
 const Reservation = ({ userId }) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [accommodationDataArray, setAccommodationDataArray] = useState([]);
   const [fechaActualizada, setFechaActualizada] = useState('');
-  const [showReviewForm, setShowReviewForm] = useState(false);
   const [rateValues, setRateValues] = useState(0);
   const [reviewTexts, setReviewTexts] = useState('');
   const [showReviewForms, setShowReviewForms] = useState({});
+  const [reviewButtonEnabled, setReviewButtonEnabled] = useState(true);
 
-  
+  useEffect(() => {
+    const enableTimer = setTimeout(() => {
+      setReviewButtonEnabled(false);
+    }, 48 * 60 * 60 * 1000); // 48 horas en milisegundos
+
+    return () => clearTimeout(enableTimer); // Limpia el temporizador al desmontar el componente
+  }, []);
   
   useEffect(() => {
     // Mueve la lógica para obtener la fecha actualizada aquí
@@ -108,11 +114,13 @@ const Reservation = ({ userId }) => {
     };
 
     const handleButtonClick = (reservationId) => {
-      // Al hacer clic en el botón, establecer el estado para la reserva correspondiente
-      setShowReviewForms(prevState => ({
-        ...prevState,
-        [reservationId]: true,
-      }));
+      // Solo permite hacer clic en el botón si está habilitado
+      if (reviewButtonEnabled) {
+        setShowReviewForms((prevState) => ({
+          ...prevState,
+          [reservationId]: true,
+        }));
+      }
     };
   
     const handleTextAreaChange = (e, reservationId) => {
@@ -238,7 +246,7 @@ const Reservation = ({ userId }) => {
 
                       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                       <Button
-                        disabled={reservation.endDate > fechaActual}
+                        disabled={!reviewButtonEnabled || reservation.endDate > fechaActual}
                         className={ResStyles.buttonStyle}
                         onClick={() => handleButtonClick(reservationId)}
                       >

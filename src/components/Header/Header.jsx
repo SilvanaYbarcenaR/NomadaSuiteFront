@@ -1,7 +1,7 @@
 import './Header.css'
 import { useEffect, useState } from 'react';
 import NSlogo2 from "../../assets/image/logo.png"
-import { Space, Dropdown, Modal } from 'antd';
+import { Space, Dropdown, Modal, Divider } from 'antd';
 import User from '../Modals/RegisterUser/User';
 import Login from '../Modals/Login/Login';
 import SearchBar from '../SearchBar/SearchBar';
@@ -15,6 +15,7 @@ function Header() {
   const [isUserModalVisible, setIsUserModalVisible] = useState(false);
   const [isLoginModalVisible, setIsLoginModalVisible] = useState(false);
   const userLoggedInfo = useSelector((state) => state.userLogged);
+  console.log(userLoggedInfo.isAdmin)
 
   const currentPath = useLocation();
 
@@ -56,6 +57,11 @@ function Header() {
     {
       label: Object.keys(userLoggedInfo).length !== 0 && <a onClick={logOutUser}>Log out</a>,
       key: '7',
+    },
+    <Divider key="divider" />,
+    {
+      label: Object.keys(userLoggedInfo).length !== 0 && userLoggedInfo.isAdmin && <NavLink className="adminPanelLink" to="/admin">Admin Panel</NavLink>,
+      key: '8',
     },
   ];
 
