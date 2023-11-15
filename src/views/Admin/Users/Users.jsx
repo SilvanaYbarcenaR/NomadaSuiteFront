@@ -1,4 +1,4 @@
-import { Button, Flex, Space, Table, Tag, notification, Input, Image, Tooltip, Switch, Modal, Form } from 'antd';
+import { Button, Flex, Space, Table, Tag, notification, Input, Image, Tooltip, Switch, Modal, Form, Upload } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import Highlighter from "react-highlight-words";
 import { FaCircleUser } from "react-icons/fa6";
@@ -270,9 +270,23 @@ const Users = () => {
         <Button><PlusOutlined /> Añadir usuario</Button>
       </Flex>
       <Table columns={columns} dataSource={data} />
-      <Modal title="Editar Usuario" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+      <Modal title="Editar Usuario" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}
+      footer={[
+        <Button key="back" onClick={handleCancel}>
+          Canceler
+        </Button>,
+        <Button key="submit" type="primary" onClick={handleOk}>
+          Guardar
+        </Button>
+      ]}>
         <Form>
-          <Form.Item>
+          <Form.Item name="image" label="Imagen"> 
+            
+          </Form.Item>
+          <Form.Item name="userName" label="Nombre"> 
+            <Input/>
+          </Form.Item>
+          <Form.Item name="email" label="Email"> 
             <Input/>
           </Form.Item>
         </Form>
