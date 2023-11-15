@@ -1,6 +1,6 @@
 /* eslint-disable no-unreachable */
 import axios from "axios";
-import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING, GET_FILTERED_ACCOMMODATION, CLEAR_DETAIL, GET_COUNTRIES, GET_CITIES, GET_LOCATIONS, LOGIN_USER, LOGIN_GOOGLE, REGISTER_USER, GET_USER_DATA, LOG_OUT, SET_RESERVATION_DATA, CLEAR_DETAIL_TO_RESERVATION, UPDATE_USER_INFO, GET_RESERVATION_BY_ID } from "./actions-types";
+import { GET_ACCOMMODATIONS, GET_ACCOMMODATION_BY_ID, GET_SERVICES, GET_NEXT_ACCOMMODATIONS, ORDER_BY_RATING, GET_FILTERED_ACCOMMODATION, CLEAR_DETAIL, GET_COUNTRIES, GET_CITIES, GET_LOCATIONS, LOGIN_USER, LOGIN_GOOGLE, REGISTER_USER, GET_USER_DATA, LOG_OUT, SET_RESERVATION_DATA, CLEAR_DETAIL_TO_RESERVATION, UPDATE_USER_INFO, GET_RESERVATION_BY_ID, GET_ACTIVE_ACCOMMODATION, GET_ACCOMMODATION_PENDING_CONFIRMATION, GET_DISABLED_ACCOMMODATION, GET_ALL_ACCOMMODATION, GET_ACCOMMODATION_PERCENTAGE, DELETE_ACCOMMODATION, GET_ACCOMMODATION_BY_ID_A, UPDATE_ACCOMMODATION, GET_ALL_USERS, GET_USERS_ACTIVES, GET_USERS_ACTIVES_FALSE, GET_USER_BY_ID, LOGIN_USER_A, DELETE_USER, UPDATE_USER, GET_ACTIVE_REVIEWS, GET_REVIEWS_PENDING_CONFIRMATION, GET_REVIEWS_DISABLED } from "./actions-types";
 
 const getAccommodations = () => {
   const endpoint = "/accommodation/";
@@ -278,7 +278,6 @@ const setReservationData = (data) => ({
 });
 
 const getReservationById = (id) => {
-  console.log(id);
   const endpoint = `/reservation/checkout/${id}`;
   return async (dispatch) => {
     try {
@@ -296,22 +295,295 @@ const getReservationById = (id) => {
 //TODO__________________________________ ADMIN __________________________________
 
 //Accommodations
-const deleteAccommodationAdmin = () => { };
-const getAccommodationByIdAdmin = (id) => { }
-const getAccommodationsAdmin = () => { };
-const getDesactiveAccommodationAdmin = () => { };
-const getPendingAccommodationAdmin = () => { };
-const postAccommodationsAdmin = () => { };
-const updateAccommodationAdmin = () => { };
+const getActiveAccommodation_A = () => {
+  const endpoint = '/accommodation'
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.get(endpoint);
+      console.log(data);
+      dispatch({
+        type: GET_ACTIVE_ACCOMMODATION,
+        payload: data
+      });
+    } catch (error) {
+      console.log(error.response.data.error);
+    };
+  };
+}
+
+const getAccommodationPendingConfirmation_A = () => {
+  const endpoint = '/accommodation/pending'
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.get(endpoint);
+      console.log(data);
+      dispatch({
+        type: GET_ACCOMMODATION_PENDING_CONFIRMATION,
+        payload: data
+      });
+    } catch (error) {
+      console.log(error.response.data.error);
+    };
+  };
+};
+
+const getDisabledAccommodation_A = () => {
+  const endpoint = '/accommodation/desactive'
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.get(endpoint);
+      console.log(data);
+      dispatch({
+        type: GET_DISABLED_ACCOMMODATION,
+        payload: data
+      });
+    } catch (error) {
+      console.log(error.response.data.error);
+    };
+  };
+};
+
+const getAllAccommodation_A = () => {
+  const endpoint = '/accommodation/all'
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.get(endpoint);
+      console.log(data);
+      dispatch({
+        type: GET_ALL_ACCOMMODATION,
+        payload: data
+      });
+    } catch (error) {
+      console.log(error.response.data.error);
+    };
+  };
+};
+
+const getAccommodationPercentage_A = () => {
+  const endpoint = '/accommodation/statistics'
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.get(endpoint);
+      console.log(data);
+      dispatch({
+        type: GET_ACCOMMODATION_PERCENTAGE,
+        payload: data
+      });
+    } catch (error) {
+      console.log(error.response.data.error);
+    };
+  };
+};
+
+const deleteAccommodation_A = (id) => {
+  const endpoint = `/accommodation/${id}`
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.delete(endpoint);
+      console.log(data);
+      dispatch({
+        type: DELETE_ACCOMMODATION,
+        payload: data
+      });
+    } catch (error) {
+      console.log(error.response.data.error);
+    };
+  };
+};
+
+const getAccommodationBy_A = (id) => {
+  const endpoint = `/accommodation/${id}`;
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.get(endpoint);
+      console.log(data);
+      dispatch({
+        type: GET_ACCOMMODATION_BY_ID_A,
+        payload: data,
+      });
+    } catch (error) {
+      console.log(error.response.data.error);
+    }
+  }
+};
+
+const updateAccommodation_A = (id) => {
+  const endpoint = `/accommodation/${id}`;
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.put(endpoint);
+      console.log(data);
+      dispatch({
+        type: UPDATE_ACCOMMODATION,
+        payload: data,
+      });
+    } catch (error) {
+      console.log(error.response.data.error);
+    }
+  }
+};
 
 //Users
-const delete_user = () => { };
-const get_user_by_id = () => { };
-const get_users_actives_false = () => { };
-const get_users_actives = () => { };
-const login_user = () => { };
-const post_user = () => { };
-const put_user = () => { };
+const getAllUers_A = () => {
+  const endpoint = '/user';
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.get(endpoint);
+      console.log(data);
+      dispatch({
+        type: GET_ALL_USERS,
+        payload: data,
+      });
+    } catch (error) {
+      console.log(error.response.data.error);
+    }
+  }
+};
+
+const getUsersActives_A = () => {
+  const endpoint = '/user/actives/true';
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.get(endpoint);
+      console.log(data);
+      dispatch({
+        type: GET_USERS_ACTIVES,
+        payload: data,
+      });
+    } catch (error) {
+      console.log(error.response.data.error);
+    }
+  }
+};
+
+const getUsersActivesFalse_A = () => {
+  const endpoint = '/user/actives/false';
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.get(endpoint);
+      console.log(data);
+      dispatch({
+        type: GET_USERS_ACTIVES_FALSE,
+        payload: data,
+      });
+    } catch (error) {
+      console.log(error.response.data.error);
+    }
+  }
+};
+
+const getUserById_A = (id) => {
+  const endpoint = `/user/${id}`;
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.get(endpoint);
+      console.log(data);
+      dispatch({
+        type: GET_USER_BY_ID,
+        payload: data,
+      });
+    } catch (error) {
+      console.log(error.response.data.error);
+    }
+  }
+};
+
+const loginUser_A = (userData) => {
+  const endpoint = '/user/login';
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.post(endpoint, userData);
+      console.log(data);
+      dispatch({
+        type: LOGIN_USER_A,
+        payload: data
+      })
+    } catch (error) {
+      throw Error(error.response.data.error);
+    };
+  };
+};
+
+const deleteUser_A = (id) => {
+  const endpoint = `/user/delete/${id}`;
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.delete(endpoint);
+      console.log(data);
+      dispatch({
+        type: DELETE_USER,
+        payload: data
+      })
+    } catch (error) {
+      throw Error(error.response.data.error);
+    };
+  };
+};
+
+const updateUser_A = (id) => {
+  const endpoint = `/user/update/${id}`;
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.put(endpoint);
+      console.log(data);
+      dispatch({
+        type: UPDATE_USER,
+        payload: data
+      })
+    } catch (error) {
+      throw Error(error.response.data.error);
+    };
+  };
+};
+
+//Reviews
+const getActiveReviews_A = () => {
+  const endpoint = '/reviews';
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.get(endpoint);
+      console.log(data);
+      dispatch({
+        type: GET_ACTIVE_REVIEWS,
+        payload: data
+      })
+    } catch (error) {
+      throw Error(error.response.data.error);
+    };
+  };
+};
+
+const getReviewsPendingConfirmation_A = () => {
+  const endpoint = '/reviews/pending';
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.get(endpoint);
+      console.log(data);
+      dispatch({
+        type: GET_REVIEWS_PENDING_CONFIRMATION,
+        payload: data
+      })
+    } catch (error) {
+      throw Error(error.response.data.error);
+    };
+  };
+};
+
+const getReviewsDisabled_A = () => {
+  const endpoint = '/reviews/pending';
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.get(endpoint);
+      console.log(data);
+      dispatch({
+        type: GET_REVIEWS_DISABLED,
+        payload: data
+      })
+    } catch (error) {
+      throw Error(error.response.data.error);
+    };
+  };
+};
 
 export {
   getAccommodations,
@@ -331,5 +603,24 @@ export {
   setReservationData,
   updateUserInfo,
   logOut,
-  getReservationById
+  getReservationById,
+  //_____ADMIN_____
+  getActiveAccommodation_A,
+  getAccommodationPendingConfirmation_A,
+  getDisabledAccommodation_A,
+  getAllAccommodation_A,
+  getAccommodationPercentage_A,
+  deleteAccommodation_A,
+  getAccommodationBy_A,
+  updateAccommodation_A,
+  getAllUers_A,
+  getUsersActives_A,
+  getUsersActivesFalse_A,
+  getUserById_A,
+  loginUser_A,
+  deleteUser_A,
+  updateUser_A,
+  getActiveReviews_A,
+  getReviewsPendingConfirmation_A,
+  getReviewsDisabled_A
 }
