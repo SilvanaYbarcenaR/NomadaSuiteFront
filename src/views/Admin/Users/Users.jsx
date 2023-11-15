@@ -1,120 +1,35 @@
-import { Button, Flex, Space, Table, Tag, Input } from 'antd';
-import React, { useRef, useState } from 'react';
+import { Button, Flex, Space, Table, Tag, notification, Input, Image, Tooltip, Switch, Modal, Form } from 'antd';
+import React, { useEffect, useRef, useState } from 'react';
 import Highlighter from "react-highlight-words";
-
+import { FaCircleUser } from "react-icons/fa6";
+import userStyles from "./User.module.css";
 import {
   EditOutlined,
   PlusOutlined,
-  SearchOutlined
+  SearchOutlined,
+  DeleteOutlined
 } from '@ant-design/icons';
-
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-  },
-  {
-    key: '2',
-    name: 'Joe Black',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-  },
-  {
-    key: '3',
-    name: 'Jim Green',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-  },
-  {
-    key: '4',
-    name: 'Jim Red',
-    age: 32,
-    address: 'London No. 2 Lake Park',
-  },
-];
-
-/* const columns = [
-    {
-      title: 'Avatar',
-      dataIndex: 'avatar',
-      key: 'avatar',
-      render: (text) => <a>{text}</a>,
-    },
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text) => <a>{text}</a>,
-    },
-    {
-      title: 'Nombres',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: 'Apellidos',
-      dataIndex: 'lastname',
-      key: 'lastname',
-    },
-    {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
-    },
-    {
-      title: 'Fecha de nacimiento',
-      dataIndex: 'birthdate',
-      key: 'birthdate',
-    },
-    {
-      title: 'Administrador',
-      dataIndex: 'admin',
-      key: 'admin',
-    },
-    {
-      title: 'Activo',
-      dataIndex: 'active',
-      key: 'active',
-    },
-    {
-      title: 'Etiquetas',
-      key: 'tags',
-      dataIndex: 'tags',
-      render: (_, { tags }) => (
-        <>
-          {tags.map((tag) => {
-            let color = tag.length > 5 ? 'geekblue' : 'green';
-            if (tag === 'loser') {
-              color = 'volcano';
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </>
-      ),
-    },
-    {
-      title: 'Acción',
-      key: 'action',
-      render: (_, record) => (
-        <Space size="middle">
-          <a>Invite {record.name}</a>
-          <a><EditOutlined /></a>
-          <a>Delete</a>
-        </Space>
-      ),
-    },
-  ]; */
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteUser_A, getAllUers_A, updateUser_A } from '../../../redux/Actions/actions';
 
 const Users = () => {
   const [searchText, setSearchText] = useState('');
   const [searchedColumn, setSearchedColumn] = useState('');
+  const [data, setData] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const users = useSelector((state) => state.allUsers_A);
   const searchInput = useRef(null);
+  const dispatch = useDispatch();
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -224,35 +139,144 @@ const Users = () => {
 
   const columns = [
     {
-      title: 'Name',
+      title: 'Avatar',
+      dataIndex: 'avatar',
+      key: 'avatar',
+    },
+    {
+      title: 'Nombres',
       dataIndex: 'name',
       key: 'name',
-      width: '30%',
       ...getColumnSearchProps('name'),
     },
     {
-      title: 'Age',
-      dataIndex: 'age',
-      key: 'age',
-      width: '20%',
-      ...getColumnSearchProps('age'),
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
+      ...getColumnSearchProps('email'),
     },
     {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
-      ...getColumnSearchProps('address'),
-      sorter: (a, b) => a.address.length - b.address.length,
-      sortDirections: ['descend', 'ascend'],
+      title: 'Administrador',
+      dataIndex: 'admin',
+      key: 'admin',
+    },
+    {
+      title: 'Activo',
+      dataIndex: 'active',
+      key: 'active',
+    },
+    {
+      title: 'Etiquetas',
+      key: 'tags',
+      dataIndex: 'tags',
+      render: (_, { tags }) => (
+        <>
+          {tags.map((tag) => {
+            let color = tag.length > 5 ? 'geekblue' : 'green';
+            if (tag === 'loser') {
+              color = 'volcano';
+            }
+            return (
+              <Tag color={color} key={tag}>
+                {tag.toUpperCase()}
+              </Tag>
+            );
+          })}
+        </>
+      ),
+    },
+    {
+      title: 'Acciones',
+      key: 'action',
+      dataIndex: 'action',
     },
   ];
 
+  const onChangeActive = (checked, userId) => {
+    dispatch(updateUser_A(userId, { "isActive": checked })).then(
+      notification.success({
+        description: 'Usuario actualizado exitosamente',
+        placement: 'bottomRight'
+      })
+    )
+  };
+
+  const onChangeAdmin = (checked, userId) => {
+    dispatch(updateUser_A(userId, { "isAdmin": checked })).then(
+      notification.success({
+        description: 'Usuario actualizado exitosamente',
+        placement: 'bottomRight'
+      })
+    )
+  };
+
+  const onDelete = () => {
+    dispatch(deleteUser_A()).then(
+      notification.success({
+        description: 'Usuario eliminado exitosamente',
+        placement: 'bottomRight'
+      })
+    );
+  };
+
+  useEffect(() => {
+    dispatch(getAllUers_A());
+    const dataColumns = [];
+    if(users.length > 0) {
+      users.reverse().map((user, index) => {
+        const tags = [];
+        const userId = user._id;
+        if(user.isActive) {
+          tags.push("Activo")
+        }
+        else {
+          tags.push("Inactivo")
+        }
+        if(user.isAdmin) {
+          tags.push("Admin")
+        }
+        dataColumns.push({
+          key: index,
+          avatar:
+          user.profileImage ?
+            <Image
+              width={30}
+              style={{ borderRadius: "50%" }}
+              src={user.profileImage}
+            />
+          :
+          <FaCircleUser style={{ fontSize: "30px", color: "#d3ceee" }}/>,
+          name: user.firstName + " " + user.lastName,
+          email: user.email,
+          admin: <Switch className={userStyles.toggle} defaultChecked={user.isAdmin} onChange={(checked) => onChangeAdmin(checked, userId)} />,
+          active: <Switch className={userStyles.toggle} defaultChecked={user.isActive} onChange={(checked) => onChangeActive(checked, userId)} />,
+          tags: tags,
+          action: 
+          <Space size="middle">
+            <a onClick={showModal}><EditOutlined /></a>
+            <Tooltip title="El usuario se eliminará de manera definitiva">
+              <DeleteOutlined onClick={onDelete}/>
+            </Tooltip>
+          </Space>
+        })
+      })
+
+    }
+    setData(dataColumns);
+  }, [users])
   return (
     <>
       <Flex justify='end' style={{ marginBottom: "1rem"}}>
         <Button><PlusOutlined /> Añadir usuario</Button>
       </Flex>
       <Table columns={columns} dataSource={data} />
+      <Modal title="Editar Usuario" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+        <Form>
+          <Form.Item>
+            <Input/>
+          </Form.Item>
+        </Form>
+      </Modal>
     </>
   )
 }

@@ -527,11 +527,11 @@ const deleteUser_A = (id) => {
   };
 };
 
-const updateUser_A = (id) => {
+const updateUser_A = (id, dataUser) => {
   const endpoint = `/user/update/${id}`;
   return async (dispatch) => {
     try {
-      const { data } = await axios.put(endpoint);
+      const { data } = await axios.put(endpoint, dataUser);
       dispatch({
         type: UPDATE_USER,
         payload: data
