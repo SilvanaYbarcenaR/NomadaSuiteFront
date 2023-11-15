@@ -18,7 +18,6 @@ let initialState = {
   userGoogle: {},
   reservationById: {},
   reservationData: {},
-
   activeAccommodation_A: [],
   accommodationPendingConfirmation_A: [],
   disabledAccommodation_A: [],
