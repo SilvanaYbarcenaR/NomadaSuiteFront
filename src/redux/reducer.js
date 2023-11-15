@@ -19,10 +19,10 @@ let initialState = {
   reservationById: {},
   reservationData: {},
 
-  activeAccommodation_A: {},
-  accommodationPendingConfirmation_A: {},
-  disabledAccommodation_A: {},
-  allAccommodations_A: {},
+  activeAccommodation_A: [],
+  accommodationPendingConfirmation_A: [],
+  disabledAccommodation_A: [],
+  allAccommodations_A: [],
   accommodationPercentage_A: {},
   deleteAccommodation_A: {},
   accommodationById_A: {},
@@ -201,126 +201,108 @@ const rootReducer = (state = initialState, { type, payload }) => {
     //TODO__________________________________ ADMIN __________________________________
 
     case GET_ACTIVE_ACCOMMODATION:
-      console.log(payload);
       return {
         ...state,
         activeAccommodation_A: payload
       }
 
     case GET_ACCOMMODATION_PENDING_CONFIRMATION:
-      console.log(payload);
       return {
         ...state,
         accommodationPendingConfirmation_A: payload
       }
 
     case GET_DISABLED_ACCOMMODATION:
-      console.log(payload);
       return {
         ...state,
         disabledAccommodation_A: payload
       }
 
     case GET_ALL_ACCOMMODATION:
-      console.log(payload);
       return {
         ...state,
         allAccommodations_A: payload
       }
 
     case GET_ACCOMMODATION_PERCENTAGE:
-      console.log(payload);
       return {
         ...state,
         accommodationPercentage_A: payload
       }
 
     case DELETE_ACCOMMODATION:
-      console.log(payload);
       return {
         ...state,
         deleteAccommodation_A: payload
       }
 
     case GET_ACCOMMODATION_BY_ID_A:
-      console.log(payload);
       return {
         ...state,
         accommodationById_A: payload
       }
 
     case UPDATE_ACCOMMODATION:
-      console.log(payload);
       return {
         ...state,
         updateAccommodation_A: payload
       }
 
     case GET_ALL_USERS:
-      console.log(payload);
       return {
         ...state,
         allUsers_A: payload
       }
 
     case GET_USERS_ACTIVES:
-      console.log(payload);
       return {
         ...state,
         usersActives_A: payload
       }
 
     case GET_USERS_ACTIVES_FALSE:
-      console.log(payload);
       return {
         ...state,
         usersActivesFalse_A: payload
       }
 
     case GET_USER_BY_ID:
-      console.log(payload);
       return {
         ...state,
         userById_A: payload
       }
 
     case LOGIN_USER_A:
-      console.log(payload);
       return {
         ...state,
         userLogged_A: payload
       }
 
     case DELETE_USER:
-      console.log(payload);
       return {
         ...state,
         userDeleted_A: payload
       }
 
     case UPDATE_USER:
-      console.log(payload);
       return {
         ...state,
         updatedUser_A: payload
       }
 
     case GET_ACTIVE_REVIEWS:
-      console.log(payload);
       return {
         ...state,
         activeReviews_A: payload
       }
 
     case GET_REVIEWS_PENDING_CONFIRMATION:
-      console.log(payload);
       return {
         ...state,
         reviewsPendingConfirmation_A: payload
       }
 
     case GET_REVIEWS_DISABLED:
-      console.log(payload);
       return {
         ...state,
         reviewsDisabled_A: payload

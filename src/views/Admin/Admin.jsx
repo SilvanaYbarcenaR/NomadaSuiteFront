@@ -19,7 +19,7 @@ import {
   Popover,
   theme,
 } from 'antd';
-import Accommodation from "../Register/Accommodation/Accommodation";
+import AccommodationAdmin from "./Accommodations/Accommodations";
 import stylesAdmin from "./Admin.module.css"
 import Dashboard from "../Dashboard/Dashboard";
 import Users from "./Users/Users";
@@ -180,7 +180,7 @@ const Admin = () => {
               >
                 {pathname === "/dashboard" && <Dashboard/>}
                 {pathname === "/users" && <Users/>}
-                {pathname === "/accommodations" && <Accommodation/>}
+                {pathname === "/accommodations" && <AccommodationAdmin/>}
               </ProCard>
             </PageContainer>
           </ProLayout>
