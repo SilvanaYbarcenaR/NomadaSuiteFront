@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import AccStyles from "./Accommodation.module.css"
 import CardsStyles from '../../components/CardsContainer/CardsContainer.module.css';
-import Cardbox from "../../components/CardBox/CardBox";
-import { Row, Col, Button } from 'antd';
+import { Row, Col } from 'antd';
 
 const Accommodation = ({ userId }) => {
   const [data, setData] = useState([]);
@@ -11,7 +9,7 @@ console.log(userId)
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`/accommodation/user/${userId}`);
+        const response = await axios.get(`/api/accomodation/user/${userId}`);
         setData(response.data);
       } catch (error) {
         console.error('Error al obtener las reservaciones:', error);

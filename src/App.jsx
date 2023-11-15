@@ -9,6 +9,7 @@ import Footer from './components/Footer/Footer.jsx';
 import Reservation from './views/Register/Reservations/Reservation/Reservation.jsx';
 import AccountPage from './views/UserPanel/AccountPage.jsx';
 import './App.css'
+import Admin from './views/Admin/Admin.jsx';
 function App() {
 
   return (
@@ -21,8 +22,8 @@ function App() {
         <Route path="/reservation" element={<Reservation />} />
         <Route path="/cancellation" element={<Cancellation />} />
         <Route path="/reservation/:checkoutId" element={<Checkout />} />
-        <Route path="/account" element={<AccountPage />} />
         <Route path="/account/:tab" element={<AccountPage />} />
+        <Route path="/admin" element={<Admin />} />
       </Routes>
       <Footer />
     </div>

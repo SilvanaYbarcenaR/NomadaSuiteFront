@@ -423,6 +423,7 @@ const AccommodationDetail = () => {
               },
             ]}
           />
+
           {isLoginModalVisible && (
             <Modal
               className="modalRegister"
@@ -434,6 +435,7 @@ const AccommodationDetail = () => {
               <Login closeModal={closeLoginModal} />
             </Modal>
           )}
+
         </Col>
       </Row>
     </>
