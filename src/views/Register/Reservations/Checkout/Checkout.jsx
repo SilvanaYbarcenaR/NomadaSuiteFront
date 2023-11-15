@@ -19,6 +19,8 @@ const Checkout = () => {
   const dispatch = useDispatch();
   const reservationById = useSelector((state) => state.reservationById);
   const userLogged = useSelector((state) => state.userLogged)
+  const accommodation = JSON.parse(localStorage.getItem('accommodationData'));
+  const checkout = JSON.parse(localStorage.getItem('checkoutData'));
   const userId = localStorage.getItem('userId');
   console.log(reservationById);
 
@@ -30,8 +32,6 @@ const Checkout = () => {
     }
   }, [])
 
-  const accommodation = JSON.parse(localStorage.getItem('accommodationData'));
-  const checkout = JSON.parse(localStorage.getItem('checkoutData'));
   console.log(accommodation);
   console.log(checkout);
 
@@ -47,7 +47,9 @@ const Checkout = () => {
   const habitacionService = accommodation?.idServices?.find(service => service.name === 'Habitación');
   const quantity = habitacionService ? habitacionService.quantity : null;
 
-  // const idpd = 'http://localhost:3001/api/reservation/checkout/:checkoutId'
+  const [date, hour] = reservationById?.billingInfo?.created?.split('T')
+  const checkoutDate = dayjs(date).format('DD-MM-YYYY');
+  const [checkoutHour] = hour.split('.')
 
   return (
     <div className={style.checkout}>
@@ -98,7 +100,7 @@ const Checkout = () => {
                 <p>{"Info. tarjeta"}</p>
                 <p>{reservationById?.reservation?.totalPrice} USD</p>
               </span>
-              <h6>{"Fecha de pago"}, {"hora de pago"}</h6>
+              <h6>{checkoutDate}, {checkoutHour}</h6>
               <Divider />
               <span style={{ justifyContent: 'space-between', display: 'flex' }}>
                 <h3>
