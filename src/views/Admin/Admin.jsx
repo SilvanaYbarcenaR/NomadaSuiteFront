@@ -98,7 +98,7 @@ const Admin = () => {
               alignItems: 'center',
             }}
           >
-            <span> 企业级资产中心</span>
+            <span></span>
             <CaretDownFilled />
           </div>
         </Popover>
@@ -123,7 +123,7 @@ const Admin = () => {
           <ProLayout
             className={stylesAdmin.adminLayout}
             title={"Nómada Suite"}
-            logo={<Link to="/"><img src={"/src/assets/image/favicon.png"} alt="Logo" style={{ width: '35px' }} /></Link>}
+            logo={<Link to="/"><img src={"https://nomadasuitefront-production-cf39.up.railway.app/assets/favicon-3e9afa0c.png"} alt="Logo" style={{ width: '35px' }} /></Link>}
             {...defaultProps}
             location={{
               pathname,
