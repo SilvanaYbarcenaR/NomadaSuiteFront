@@ -1,7 +1,6 @@
 import Cards from "../../components/CardsContainer/CardsContainer";
 import SecundaryFilters from '../../components/SecundaryFilters/SecundaryFilters';
 import banner from '../../assets/image/banner.png';
-import { QuestionCircleOutlined } from '@ant-design/icons';
 import { FloatButton } from 'antd';
 
 const Home = () => {
