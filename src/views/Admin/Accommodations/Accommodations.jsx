@@ -41,9 +41,6 @@ const AccommodationAdmin = () => {
   const [previewImage, setPreviewImage] = useState("");
   const [servicesGroup, setServicesGroup] = useState([]);
   const services = useSelector((state) => state.services);
-  const [formData, setFormData] = useState({
-    services: [],
-  });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -57,6 +54,10 @@ const AccommodationAdmin = () => {
   const [searchedColumn, setSearchedColumn] = useState('');
   const searchInput = useRef(null);
   const dispatch = useDispatch();
+  const [formData, setFormData] = useState({
+    name: 'Name',
+    price: ''
+  });
 
   useEffect(() => {
     dispatch(getActiveAccommodation_A());
@@ -220,18 +221,6 @@ const AccommodationAdmin = () => {
     setIsModalOpen(true);
     setPutAccommodationId(accommodationId);
     dispatch(getAccommodationById_A(accommodationId))
-      .then((response) => {
-        const accommodationDetails = response.data;
-        setFormData({
-          name: accommodationDetails.name,
-          services: accommodationDetails.services.map((service) => service._id),
-          description: accommodationDetails.description,
-          price: accommodationDetails.price,
-        });
-      })
-      .catch((error) => {
-        console.error('Error al obtener los detalles del alojamiento:', error);
-      });
   };
 
   const handleOk = () => {
