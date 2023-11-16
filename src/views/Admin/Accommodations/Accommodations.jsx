@@ -448,7 +448,7 @@ const AccommodationAdmin = () => {
     }
     if (values.description) dataToSend.append("description", values.description);
     if (values.price) dataToSend.append("price", values.price);
-    if (values.image.length > 0) {
+    if (values.image && values.image.length > 0) {
       values.image.forEach((image) => {
         dataToSend.append("images", image.originFileObj);
       })
@@ -461,6 +461,9 @@ const AccommodationAdmin = () => {
           description: 'El alojamiento se actualizó con éxito.',
           placement: 'bottomLeft'
         });
+        setTimeout(() => {
+          handleCancelModal()
+        }, "1000");
       })
       .catch((error) => {
         notification.error({
@@ -470,7 +473,6 @@ const AccommodationAdmin = () => {
         });
       });
   };
-
 
   return (
     <>

@@ -419,7 +419,7 @@ const AccommodationDetail = () => {
                       }}
                     />
                     <p></p>
-                    <Link to={userId ? '/reservation' : '#'}>
+                    <Link to={userId ? '/checkout' : '#'}>
                       <Button
                         type="reserv"
                         block
