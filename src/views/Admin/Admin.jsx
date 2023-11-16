@@ -12,7 +12,6 @@ import {
   UserOutlined,
   StarOutlined,
   ShopOutlined,
-  DoubleLeftOutlined
 } from '@ant-design/icons';
 
 import {
@@ -123,8 +122,8 @@ const Admin = () => {
         >
           <ProLayout
             className={stylesAdmin.adminLayout}
-            title={<span style={{ fontSize: '18px', marginTop: '50px' }}>Nómada Suite</span>}
-            logo={<Link to="/"><img src={"/src/assets/image/favicon.png"} alt="Logo" style={{ width: '70px', height: '70px' }} /></Link>}
+            title={"Nómada Suite"}
+            logo={<Link to="/"><img src={"/src/assets/image/favicon.png"} alt="Logo" style={{ width: '35px' }} /></Link>}
             {...defaultProps}
             location={{
               pathname,
