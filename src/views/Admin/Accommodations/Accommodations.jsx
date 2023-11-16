@@ -196,7 +196,6 @@ const AccommodationAdmin = () => {
   };
 
   const handleDesactive = (checked, accommodationId) => {
-    console.log(accommodationId);
     const dataToSend = {
       isActive: checked,
     };
@@ -447,7 +446,7 @@ const AccommodationAdmin = () => {
       ),
     },
   ];
-  console.log(putAccommodationId);
+
   const handleFormSubmit = async (values) => {
     let form = document.querySelector('form');
     let dataToSend = new FormData(form);
