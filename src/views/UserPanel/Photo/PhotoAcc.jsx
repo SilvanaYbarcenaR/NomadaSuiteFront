@@ -1,5 +1,4 @@
-  import React, { useState } from 'react';
-  import { PlusOutlined } from '@ant-design/icons';
+  import React, { useEffect, useState } from 'react';
   import ImgCrop from 'antd-img-crop';
   import { Button, Form, Modal, Upload, notification } from 'antd';
   import axios from 'axios';
@@ -23,19 +22,33 @@
     });
 
 
-    const Photo = ({ userId }) => {
+    const Photo = ({ userId, userImage }) => {
 
       const [fileList, setFileList] = useState([]);
       const [formDataToSend, setFormDataToSend] = useState(new FormData());
       const [previewOpen, setPreviewOpen] = useState(false);
       const [previewImage, setPreviewImage] = useState("");
+
+      useEffect(() => {
+        if (userImage) {
+          setFileList([
+            {
+              uid: '-1',
+              name: userImage.substring(userImage.lastIndexOf('/') + 1),
+              status: 'done',
+              url: userImage,
+            },
+          ]);
+        }
+      }, [userImage]);
+
+      
     
       const onChange = ({ fileList: newFileList }) => {
         setFileList(newFileList);
       };
       
       const beforeUpload = (file) => {
-        {console.log(file)}
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {
@@ -125,7 +138,7 @@
                   style={{
                     width: '100%',
                   }}
-                  src={previewImage}
+                  src={userImage}
                 />
               </Modal>
     

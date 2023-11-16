@@ -38,6 +38,8 @@ const AccountPage = () => {
 
 
   const userId=userLoggedInfoFromRedux._id;
+  const userImage=userLoggedInfoFromRedux.profileImage;
+
 
   const handleUpdateUserInfo = async () => {
     // Realiza una solicitud PUT para actualizar el nombre y apellido del usuario
@@ -98,7 +100,7 @@ const AccountPage = () => {
                     }}
                   >
                     <Flex justify="space-between">
-                      <Photo userId={userId} />
+                      <Photo userId={userId} userImage={userImage} />
                       <Flex
                         vertical
                         align="flex-end"
