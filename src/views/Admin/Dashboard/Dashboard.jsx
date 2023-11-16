@@ -11,24 +11,24 @@ const DashboardWithCharts = () => {
       <div>Dashboard</div>
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={24} md={12} lg={12}>
-          <Card title="Line Reservation" style={{ marginBottom: 16 }}>
+          <Card title="Reservaciones hechas por mes" style={{ marginBottom: 16 }}>
             <LineReservation />
           </Card>
         </Col>
         <Col xs={24} sm={24} md={12} lg={12}>
-          <Card title="Rating Bar Chart" style={{ marginBottom: 16 }}>
+          <Card title="Calificaciones a los alojamientos totales" style={{ marginBottom: 16 }}>
             <RatingBarChart />
           </Card>
         </Col>
       </Row>
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={24} md={12} lg={12}>
-          <Card title="Pie Chart User" style={{ marginBottom: 16 }}>
+          <Card title="Promedio de usuarios activos e inactivos" style={{ marginBottom: 16 }}>
             <PieChartUser />
           </Card>
         </Col>
         <Col xs={24} sm={24} md={12} lg={12}>
-          <Card title="Pie Chart Accommodation" style={{ marginBottom: 16 }}>
+          <Card title="Promedio alojamientos activos e inactivos" style={{ marginBottom: 16 }}>
             <PieChartAccommodation />
           </Card>
         </Col>
