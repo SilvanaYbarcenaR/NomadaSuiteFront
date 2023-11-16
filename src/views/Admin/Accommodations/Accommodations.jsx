@@ -48,6 +48,7 @@ const AccommodationAdmin = () => {
   const disabledAccommodation = useSelector((state) => state.disabledAccommodation_A)
   const accommodationPendingConfirmation = useSelector((state) => state.accommodationPendingConfirmation_A)
   const accommodationById = useSelector((state) => state.accommodationById_A)
+  console.log(accommodationById);
 
   const [putAccommodationId, setPutAccommodationId] = useState();
   const [searchText, setSearchText] = useState('');
@@ -55,8 +56,11 @@ const AccommodationAdmin = () => {
   const searchInput = useRef(null);
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
-    name: 'Name',
-    price: ''
+    name: accommodationById.name,
+    services: accommodationById.idServices,
+    image: '',
+    description: accommodationById.description,
+    price: accommodationById.price
   });
 
   useEffect(() => {
@@ -64,7 +68,14 @@ const AccommodationAdmin = () => {
     dispatch(getAccommodationPendingConfirmation_A());
     dispatch(getDisabledAccommodation_A());
     dispatch(getServices())
-  }, []);
+    setFormData({
+      name: accommodationById.name,
+      services: [],
+      image: '',
+      description: accommodationById.description,
+      price: accommodationById.price
+    });
+  }, [accommodationById]);
 
   const handleFormChange = (field, value) => {
     if (field === "bedroom" || field === "bathroom") {
@@ -226,11 +237,25 @@ const AccommodationAdmin = () => {
   const handleOk = () => {
     setIsModalOpen(false);
     setPutAccommodationId(null);
+    setFormData({
+      name: '',
+      services: '',
+      image: '',
+      description: '',
+      price: ''
+    });
   };
 
   const handleCancelModal = () => {
     setIsModalOpen(false);
     setPutAccommodationId(null);
+    setFormData({
+      name: '',
+      services: '',
+      image: '',
+      description: '',
+      price: ''
+    });
   };
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -440,14 +465,14 @@ const AccommodationAdmin = () => {
     let form = document.querySelector('form');
     let dataToSend = new FormData(form);
 
-    if (values.name) dataToSend.append("name", values.name);
-    if (values.services && values.services.length > 0) {
-      values.services.forEach((service, index) => {
-        dataToSend.append(`services[${index}]`, service);
-      });
+    if (formData.name) dataToSend.append("name", formData.name);
+    if (formData.services && formData.services.length > 0) {
+      formData.services.forEach((service) => {
+        dataToSend.append("services", service);
+      })
     }
-    if (values.description) dataToSend.append("description", values.description);
-    if (values.price) dataToSend.append("price", values.price);
+    if (formData.description) dataToSend.append("description", formData.description);
+    if (formData.price) dataToSend.append("price", formData.price);
     if (values.image && values.image.length > 0) {
       values.image.forEach((image) => {
         dataToSend.append("images", image.originFileObj);
@@ -503,7 +528,6 @@ const AccommodationAdmin = () => {
           <div>
             <Form.Item
               label="Nombre"
-              name="name"
               style={{ paddingTop: ".5rem" }}
             >
               <Input
@@ -523,7 +547,6 @@ const AccommodationAdmin = () => {
 
           <Form.Item
             label="Habitaciones: "
-            name="bedroom"
           >
             <Select
               style={{ width: '100%' }}
@@ -546,7 +569,6 @@ const AccommodationAdmin = () => {
           <Col span={12}>
             <Form.Item
               label="Baños: "
-              name="bathroom"
               labelCol={{ span: 12 }}
             >
               <Select
@@ -569,7 +591,7 @@ const AccommodationAdmin = () => {
             </Form.Item>
           </Col>
 
-          <Form.Item name="services">
+          <Form.Item>
             <Checkbox.Group
               style={{
                 width: '175%',
@@ -594,8 +616,8 @@ const AccommodationAdmin = () => {
           {/* Photos */}
 
           <Form.Item
-            label="Fotos"
             name='image'
+            label="Fotos"
             valuePropName="fileList"
             getValueFromEvent={normFile}
             wrapperCol={{
@@ -643,7 +665,6 @@ const AccommodationAdmin = () => {
 
           <Form.Item
             label="Despripción"
-            name="description"
           >
             <TextArea
               rows={4}
@@ -658,7 +679,6 @@ const AccommodationAdmin = () => {
 
           <Form.Item
             label="Precio"
-            name="price"
           >
             <InputNumber
               formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
