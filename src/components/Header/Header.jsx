@@ -15,7 +15,6 @@ function Header() {
   const [isUserModalVisible, setIsUserModalVisible] = useState(false);
   const [isLoginModalVisible, setIsLoginModalVisible] = useState(false);
   const userLoggedInfo = useSelector((state) => state.userLogged);
-  console.log(userLoggedInfo.isAdmin)
 
   const currentPath = useLocation();
 

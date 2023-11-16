@@ -151,6 +151,11 @@ const AccountPage = () => {
                                   setUserLoggedInfo({ ...userLoggedInfo, password: e.target.value });
                                 }
                               }}
+                              onClick={() => {
+                                if (!formDisabled) {
+                                  setUserLoggedInfo({ ...userLoggedInfo, password: '' }); // Establecer el campo de contraseña a una cadena vacía al hacer clic
+                                }
+                              }}
                               disabled={formDisabled}
                               placeholder="Password"
                             />
