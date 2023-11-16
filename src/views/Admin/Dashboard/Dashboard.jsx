@@ -1,62 +1,40 @@
-import { Line } from '@ant-design/plots'; 
+import React from 'react';
+import { Row, Col, Card } from 'antd';
+import LineReservation from './LineReservation'; 
+import PieChartUser from './PieChartUser'; 
+import PieChartAccommodation from './PieChartAccommodation';
+import RatingBarChart from './RatingBarChart';
 
-const data = [
-  { year: '1991', value: 3 },
-  { year: '1992', value: 4 },
-  { year: '1993', value: 3.5 },
-  { year: '1994', value: 5 },
-  { year: '1995', value: 4.9 },
-  { year: '1996', value: 6 },
-  { year: '1997', value: 7 },
-  { year: '1998', value: 9 },
-  { year: '1999', value: 13 },
-];
-
-const config = {
-  data,
-  width: 800,
-  height: 400,
-  autoFit: false,
-  xField: 'year',
-  yField: 'value',
-  point: {
-    size: 5,
-    shape: 'diamond',
-  },
-  label: {
-    style: {
-      fill: '#aaa',
-    },
-  },
-};
-
-let chart;
-
-// Export Image
-const downloadImage = () => {
-  chart?.downloadImage();
-};
-
-// Get chart base64 string
-const toDataURL = () => {
-  console.log(chart?.toDataURL());
-};
-
-const Dashboard = () => {
+const DashboardWithCharts = () => {
   return (
     <>
       <div>Dashboard</div>
-      <div>
-        <button type="button" onClick={downloadImage} style={{ marginRight: 24 }}>
-          Export Image
-        </button>
-        <button type="button" onClick={toDataURL}>
-          Get base64
-        </button>
-        <Line {...config} onReady={(chartInstance) => (chart = chartInstance)} />
-    </div>
+      <Row gutter={[16, 16]}>
+        <Col xs={24} sm={24} md={12} lg={12}>
+          <Card title="Reservaciones hechas por mes" style={{ marginBottom: 16 }}>
+            <LineReservation />
+          </Card>
+        </Col>
+        <Col xs={24} sm={24} md={12} lg={12}>
+          <Card title="Calificaciones a los alojamientos totales" style={{ marginBottom: 16 }}>
+            <RatingBarChart />
+          </Card>
+        </Col>
+      </Row>
+      <Row gutter={[16, 16]}>
+        <Col xs={24} sm={24} md={12} lg={12}>
+          <Card title="Promedio de usuarios activos e inactivos" style={{ marginBottom: 16 }}>
+            <PieChartUser />
+          </Card>
+        </Col>
+        <Col xs={24} sm={24} md={12} lg={12}>
+          <Card title="Promedio alojamientos activos e inactivos" style={{ marginBottom: 16 }}>
+            <PieChartAccommodation />
+          </Card>
+        </Col>
+      </Row>
     </>
-  )
+  );
 }
 
-export default Dashboard
+export default DashboardWithCharts;
