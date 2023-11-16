@@ -19,6 +19,7 @@ const Users = () => {
   const [searchedColumn, setSearchedColumn] = useState('');
   const [data, setData] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [reloadTable, setReloadTable] = useState(false);
   const [fileList, setFileList] = useState([]);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
@@ -286,6 +287,7 @@ const Users = () => {
         description: 'El usuario fue actualizado con éxito.',
         placement: 'bottomRight'
       });
+      setReloadTable(!reloadTable);
     } catch (error) {
       notification.error({
         message: 'Error',
@@ -343,12 +345,13 @@ const Users = () => {
       })
     }
     setData(dataColumns);
-  }, [users])
+  }, [])
+  
   return (
     <div className={userStyles.userContainer}>
-      <Flex justify='end' style={{ marginBottom: "1rem"}}>
+      {/* <Flex justify='end' style={{ marginBottom: "1rem"}}>
         <Button><PlusOutlined /> Añadir usuario</Button>
-      </Flex>
+      </Flex> */}
       <Table columns={columns} dataSource={data} className={userStyles.tableUser}/>
       <Modal title="Editar Usuario" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}
       footer={[
@@ -356,7 +359,7 @@ const Users = () => {
           Cancelar
         </Button>,
         <Button key="submit" type="primary" onClick={handleFormSubmit}>
-          Guardar
+          Actualizar
         </Button>
       ]}>
         <Form layout="horizontal">
