@@ -5,6 +5,7 @@ import { QuestionCircleOutlined } from '@ant-design/icons';
 import { FloatButton } from 'antd';
 
 const Home = () => {
+
   return (
     <div>
       <img style={{width:"100%"}} src={banner}/>
