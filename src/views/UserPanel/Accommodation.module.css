@@ -16,19 +16,8 @@
     border-color: red;
   }
 
-  .pageHeader{
-    font-weight: bold;
-    text-align: center;
-    line-height: 0.1;
-  }
-  .pageHeader2{
-    font-weight: bold;
-    text-align: center;
-    line-height: 0.5;
-    margin-Bottom: 30px;
-  }
-
   .accButton{
     text-align: center;
     font-weight: bold;
+    margin: 'auto',
   }

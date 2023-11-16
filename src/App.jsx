@@ -28,7 +28,6 @@ function App() {
   }, [userLoggedInfo]);
 
   const isAdmin = userLoggedInfo.isAdmin;
-  console.log(isAdmin)
 
   return (
     <div>

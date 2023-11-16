@@ -59,11 +59,9 @@ const AccommodationDetail = () => {
   useEffect(() => {
     const fetchUnavailableRanges = async () => {
       try {
-        console.log(AccommodationById._id);
         const response = await axios.get(`/reservation/disponibility/${AccommodationById._id}`);
         const data = response.data; // Asumiendo que la respuesta tiene el formato deseado
         setUnavailableRanges(data.unavailableRanges);
-        console.log(data);
       } catch (error) {
         console.error('Error al obtener las fechas no disponibles:', error);
       }
