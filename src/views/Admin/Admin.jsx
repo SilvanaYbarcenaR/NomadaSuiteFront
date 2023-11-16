@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from 'react-router-dom';
 import {
   PageContainer,
   ProCard,
@@ -10,7 +11,8 @@ import {
   DashboardOutlined,
   UserOutlined,
   StarOutlined,
-  ShopOutlined
+  ShopOutlined,
+  DoubleLeftOutlined
 } from '@ant-design/icons';
 
 import {
@@ -121,8 +123,8 @@ const Admin = () => {
         >
           <ProLayout
             className={stylesAdmin.adminLayout}
-            title={"Nómada Suite"}
-            logo={"/src/assets/image/favicon.png"}
+            title={<span style={{ fontSize: '18px', marginTop: '50px' }}>Nómada Suite</span>}
+            logo={<Link to="/"><img src={"/src/assets/image/favicon.png"} alt="Logo" style={{ width: '70px', height: '70px' }} /></Link>}
             {...defaultProps}
             location={{
               pathname,

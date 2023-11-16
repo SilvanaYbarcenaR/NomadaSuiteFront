@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import CardsStyles from '../../components/CardsContainer/CardsContainer.module.css';
 import Cardbox from "../../components/CardBox/CardBox";
-import { DatePicker, Space, Row, Col, Divider, Input, Rate, Button } from 'antd';
+import { DatePicker, Space, Row, Col, Divider, Alert, Input, Rate, Button } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import ResStyles from "./Reservations.module.css";
@@ -13,19 +13,25 @@ dayjs.extend(customParseFormat);
 const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY/MM/DD';
 
-const fechaActual = '2024/03/02';
+const fechaActual = '2024/03/05';
 
 const Reservation = ({ userId }) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [accommodationDataArray, setAccommodationDataArray] = useState([]);
   const [fechaActualizada, setFechaActualizada] = useState('');
-  const [showReviewForm, setShowReviewForm] = useState(false);
   const [rateValues, setRateValues] = useState(0);
   const [reviewTexts, setReviewTexts] = useState('');
   const [showReviewForms, setShowReviewForms] = useState({});
+  const [reviewButtonEnabled, setReviewButtonEnabled] = useState(true);
 
-  
+  useEffect(() => {
+    const enableTimer = setTimeout(() => {
+      setReviewButtonEnabled(false);
+    }, 48 * 60 * 60 * 1000); // 48 horas en milisegundos
+
+    return () => clearTimeout(enableTimer); // Limpia el temporizador al desmontar el componente
+  }, []);
   
   useEffect(() => {
     // Mueve la lógica para obtener la fecha actualizada aquí
@@ -38,7 +44,7 @@ const Reservation = ({ userId }) => {
       var dia = ('0' + fechaHoraInternet.getUTCDate()).slice(-2);
       var fechaActualizada = ano + '-' + mes + '-' + dia;
       
-      console.log('Fecha actual según Internet (formato YYYY-MM-DD):', fechaActualizada);
+      
       setFechaActualizada(fechaActualizada); // Actualiza el estado con la fecha actualizada
     })
     .catch(error => console.error('Error al obtener la fecha y hora desde Internet:', error));
@@ -62,7 +68,6 @@ const Reservation = ({ userId }) => {
   let idAccommodationArray;
   useEffect(() => {
     const idAccommodationArray = data.map(item => item.idAccommodation);
-    console.log('IdAccommodation Array:', idAccommodationArray);
   }, [data]);
   
   
@@ -83,7 +88,6 @@ const Reservation = ({ userId }) => {
         );
         setAccommodationDataArray(accommodationDataArray);
         // accommodationDataArray ahora contiene la información de todos los alojamientos asociados a las reservas
-        console.log('Accommodation Data Array:', accommodationDataArray);
       };
       
       fetchAccommodationData();
@@ -108,11 +112,13 @@ const Reservation = ({ userId }) => {
     };
 
     const handleButtonClick = (reservationId) => {
-      // Al hacer clic en el botón, establecer el estado para la reserva correspondiente
-      setShowReviewForms(prevState => ({
-        ...prevState,
-        [reservationId]: true,
-      }));
+      // Solo permite hacer clic en el botón si está habilitado
+      if (reviewButtonEnabled) {
+        setShowReviewForms((prevState) => ({
+          ...prevState,
+          [reservationId]: true,
+        }));
+      }
     };
   
     const handleTextAreaChange = (e, reservationId) => {
@@ -125,21 +131,16 @@ const Reservation = ({ userId }) => {
     const handleSubmitReview = async (reservationId) => {
       try {
         const idAccommodation = accommodationDataArray.find(item => item._id === reservationId)?._id;
-        console.log('ID del alojamiento antes de enviar la revisión:', idAccommodation);
     
         const comment = reviewTexts[reservationId];
         const rating = rateValues[reservationId];
     
-        console.log('Comment antes de enviar la revisión:', comment);
-        console.log('Rating antes de enviar la revisión:', rating);
         const response = await axios.post('/reviews/create', {
           idUser: userId,
           idAccommodation: idAccommodation,
           comment: reviewTexts[reservationId], // Utilizar el texto de revisión específico de esta reserva
           rating: rateValues[reservationId],
         });
-        console.log('ID del alojamiento después de enviar la revisión:', idAccommodation);
-        console.log('Respuesta del servidor al enviar la revisión:', response.data);
     
         setRateValues(prevState => ({
           ...prevState,
@@ -162,7 +163,26 @@ const Reservation = ({ userId }) => {
     };
 
   return (
+    
     <div className={CardsStyles.cardsContainer}>
+      <Space
+        direction="vertical"
+        style={{
+          width: '50%',
+          margin: 'auto',
+          // marginBottom: "40px",
+          // marginLeft: "305px",
+          textAlign: "flex-start",
+        }}
+      >        
+        <Alert
+          message="Nota Importante!"
+          description="No olvides dejar tu review, los proximos Nómadas te lo agradeceran."
+          type="info"
+          showIcon
+        />
+        
+      </Space>
       <div className={CardsStyles.noScroll}>
         <Row gutter={24} align={'stretch'}>
           {data.length &&
@@ -238,7 +258,7 @@ const Reservation = ({ userId }) => {
 
                       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                       <Button
-                        disabled={reservation.endDate > fechaActual}
+                        disabled={!reviewButtonEnabled || reservation.endDate > fechaActual}
                         className={ResStyles.buttonStyle}
                         onClick={() => handleButtonClick(reservationId)}
                       >

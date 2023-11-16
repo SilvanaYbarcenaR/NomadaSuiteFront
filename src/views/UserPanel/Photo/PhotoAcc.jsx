@@ -1,5 +1,4 @@
-  import React, { useState } from 'react';
-  import { PlusOutlined } from '@ant-design/icons';
+  import React, { useEffect, useState } from 'react';
   import ImgCrop from 'antd-img-crop';
   import { Button, Form, Modal, Upload, notification } from 'antd';
   import axios from 'axios';
@@ -9,6 +8,7 @@
     background: "#231CA7",
     color: "white",
     height: "3rem",
+    marginLeft: "1re"
   };
 
 
@@ -22,22 +22,37 @@
     });
 
 
-    const Photo = ({ userId }) => {
+    const Photo = ({ userId, userImage }) => {
 
       const [fileList, setFileList] = useState([]);
       const [formDataToSend, setFormDataToSend] = useState(new FormData());
       const [previewOpen, setPreviewOpen] = useState(false);
       const [previewImage, setPreviewImage] = useState("");
+
+      useEffect(() => {
+        if (userImage) {
+          setFileList([
+            {
+              uid: '-1',
+              name: userImage.substring(userImage.lastIndexOf('/') + 1),
+              status: 'done',
+              url: userImage,
+            },
+          ]);
+        }
+      }, [userImage]);
+
+      
     
       const onChange = ({ fileList: newFileList }) => {
         setFileList(newFileList);
       };
-    
+      
       const beforeUpload = (file) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {
-          setFileList(() => [{ url: reader.result }]);
+          setFileList(() => [{ url: reader.result, originFileObj: file }]);
         };
         return false;
       };
@@ -52,7 +67,6 @@
       };
     
       const handleFormSubmit = async () => {
-      
         try {
           formDataToSend.delete('images');
           formDataToSend.append('images', fileList[0].originFileObj);
@@ -124,7 +138,7 @@
                   style={{
                     width: '100%',
                   }}
-                  src={previewImage}
+                  src={userImage}
                 />
               </Modal>
     

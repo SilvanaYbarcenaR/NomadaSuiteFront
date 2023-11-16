@@ -38,6 +38,8 @@ const AccountPage = () => {
 
 
   const userId=userLoggedInfoFromRedux._id;
+  const userImage=userLoggedInfoFromRedux.profileImage;
+
 
   const handleUpdateUserInfo = async () => {
     // Realiza una solicitud PUT para actualizar el nombre y apellido del usuario
@@ -98,7 +100,7 @@ const AccountPage = () => {
                     }}
                   >
                     <Flex justify="space-between">
-                      <Photo userId={userId} />
+                      <Photo userId={userId} userImage={userImage} />
                       <Flex
                         vertical
                         align="flex-end"
@@ -149,6 +151,11 @@ const AccountPage = () => {
                               onChange={(e) => {
                                 if (!formDisabled) {
                                   setUserLoggedInfo({ ...userLoggedInfo, password: e.target.value });
+                                }
+                              }}
+                              onClick={() => {
+                                if (!formDisabled) {
+                                  setUserLoggedInfo({ ...userLoggedInfo, password: '' }); // Establecer el campo de contraseña a una cadena vacía al hacer clic
                                 }
                               }}
                               disabled={formDisabled}
