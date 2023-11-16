@@ -123,7 +123,7 @@ const Admin = () => {
         >
           <ProLayout
             className={stylesAdmin.adminLayout}
-            title={<span style={{ fontSize: '18px' }}>Nómada Suite</span>}
+            title={<span style={{ fontSize: '18px', marginTop: '50px' }}>Nómada Suite</span>}
             logo={<Link to="/"><img src={"/src/assets/image/favicon.png"} alt="Logo" style={{ width: '70px', height: '70px' }} /></Link>}
             {...defaultProps}
             location={{
