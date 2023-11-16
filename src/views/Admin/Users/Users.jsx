@@ -341,11 +341,9 @@ const Users = () => {
           </Space>
         })
       })
-
     }
     setData(dataColumns);
   }, [users])
-
   return (
     <div className={userStyles.userContainer}>
       <Flex justify='end' style={{ marginBottom: "1rem"}}>
