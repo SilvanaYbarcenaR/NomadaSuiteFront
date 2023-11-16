@@ -32,7 +32,7 @@ function App() {
   return (
     <div>
       <Header />
-      {/* <nav>
+      <nav>
         <ul>
           <li><NavLink to="/"></NavLink></li>
           <li><NavLink to="/detail/:id"></NavLink></li>
@@ -43,7 +43,7 @@ function App() {
           <li><NavLink to="/account/:tab"></NavLink></li>
           {isAdmin && <li><NavLink to="/admin"></NavLink></li>}
         </ul>
-      </nav> */}
+      </nav>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/detail/:id" element={<AccommodationDetail />} />
