@@ -260,10 +260,9 @@ const Users = () => {
           </Space>
         })
       })
-
     }
     setData(dataColumns);
-  }, [users])
+  }, [])
   return (
     <>
       <Flex justify='end' style={{ marginBottom: "1rem"}}>
