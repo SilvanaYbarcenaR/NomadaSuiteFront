@@ -32,7 +32,7 @@ function App() {
   return (
     <div>
       <Header />
-      {/* <nav>
+      <nav>
         <ul>
           <li><NavLink to="/"></NavLink></li>
           <li><NavLink to="/detail/:id"></NavLink></li>
@@ -43,12 +43,12 @@ function App() {
           <li><NavLink to="/account/:tab"></NavLink></li>
           {isAdmin && <li><NavLink to="/admin"></NavLink></li>}
         </ul>
-      </nav> */}
+      </nav>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/detail/:id" element={<AccommodationDetail />} />
         <Route path="/register-accommodation" element={<Accommodation />} />
-        <Route path="/reservation" element={<Reservation />} />
+        <Route path="/checkout" element={<Reservation />} />
         <Route path="/cancellation" element={<Cancellation />} />
         <Route path="/reservation/:checkoutId" element={<Checkout />} />
         <Route path="/account/:tab" element={<AccountPage />} />
