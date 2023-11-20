@@ -25,10 +25,13 @@ const AccommodationDetail = () => {
 
   const id = useParams().id;
   const dispatch = useDispatch();
-  let AccommodationById = useSelector((state) => state.accommodationById);
   const userId = localStorage.getItem('userId');
+  const AccommodationById = useSelector((state) => state.accommodationById);
   const [isLoginModalVisible, setIsLoginModalVisible] = useState(false);
   const [total, setTotal] = useState();
+  console.log(AccommodationById?.idLocation?.coordinates);
+  const coordinates = AccommodationById?.idLocation?.coordinates;
+  const [lat, lng] = coordinates ? coordinates.split(',') : [undefined, undefined];
 
   useEffect(() => {
     dispatch(getAccommodationById(id));
@@ -52,7 +55,7 @@ const AccommodationDetail = () => {
         console.error('Error al obtener la información del usuario:', error);
       }
     };
-  
+
     fetchUserData();
   }, [AccommodationById]);
 
@@ -232,7 +235,7 @@ const AccommodationDetail = () => {
         <Col span={16}>
           <div className={detailStyles.detailContent}>
             <Flex justify={"flex-start"} align={"flex-start"}>
-            <h1 style={style}>Anfitrion: {ownerFirst} {ownerLast}</h1>
+              <h1 style={style}>Anfitrion: {ownerFirst} {ownerLast}</h1>
 
               <Avatar style={{
                 backgroundColor: '#231CA7',
@@ -370,8 +373,8 @@ const AccommodationDetail = () => {
                 <GoogleMap
                   mapContainerStyle={mapStyle}
                   center={{
-                    lat: -34.60197580899001,
-                    lng: -58.387432843046234
+                    lat: lat*1,
+                    lng: lng*1
                   }}
                   id="map"
                   zoom={14}
