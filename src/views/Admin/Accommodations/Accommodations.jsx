@@ -501,7 +501,7 @@ const AccommodationAdmin = () => {
 
   return (
     <>
-      <Table columns={columns} dataSource={[...dataActive, ...dataPending, ...dataDisabled]} pagination={{ pageSize: 5 }} />
+      <Table columns={columns} dataSource={[...dataActive, ...dataPending, ...dataDisabled]} />
       <Modal
         title="Editar Alojamiento"
         open={isModalOpen}

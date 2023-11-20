@@ -345,7 +345,7 @@ const Users = () => {
       })
     }
     setData(dataColumns);
-  }, [])
+  }, [users])
   
   return (
     <div className={userStyles.userContainer}>
